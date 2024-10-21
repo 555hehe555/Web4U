@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic.base import View
 from django.views.generic import FormView
@@ -84,7 +84,9 @@ class RegisterView(FormView):
 class CreatePostView(View):
     # form_class = UserCreationForm
     # success_url = reverse_lazy("profile")
-    def get(self, request):
+    def get(self, request, pk):
+        post = U.objects.get(id=pk)
+        return render(request, "blog/blog_detail.html", {"post": post})
         return render(request, "profile/create-post.html")
 
 
@@ -94,7 +96,9 @@ class CreateUserPostView(View):
 #    def get(self, request):
 #        return render(request, "profile/create-post.html")
     def post(self, request):
-        form = CreateUserPostForm(request.POST)
+        # user_post = get_object_or_404(OwnUserPost, pk=pk)
+        form = CreateUserPostForm(request.POST, request.FILES)
+        print(form.is_valid())
         if form.is_valid():
             user_image = form.save(commit=False)
             user_image.user = request.user

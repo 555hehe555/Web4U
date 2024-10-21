@@ -27,5 +27,6 @@ urlpatterns = [
     path('accounts/logout/profile/', views.logout_user, name='logout'),
     path('register/', views.RegisterView.as_view(), name='register'),
     path('create-post/', views.CreatePostView.as_view(), name='create_post'),
-    path('create-post-user/', views.CreateUserPostView.as_view(), name='create_post_user')
+    path('create-post-user/', views.CreateUserPostView.as_view(), name='create_post_user'),
+    path('<int:uuid4>', views.PostDetail.as_view())
 ]

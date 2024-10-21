@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+import uuid
 
 
 class Post(models.Model):
@@ -23,6 +24,8 @@ class OwnUserPost(models.Model):
     author = models.CharField("імя автора", max_length=60)
     img = models.ImageField("зображеня", upload_to="image/", blank=True)
     date = models.DateField("дата публікації", default=timezone.now())
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=True)
+
 
 
 class Comments(models.Model):

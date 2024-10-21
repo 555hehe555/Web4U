@@ -5,7 +5,7 @@
 {% block create-post %}
 <section>
     <div class="container">
-        <main class="form-signin w-100 m-auto profile">
+        <main class="create-post-style form-signin w-100 m-auto profile">
             <div id="content" class="colM">
                 <h1>Додати Запис</h1>
                 <div id="content-main">
@@ -17,7 +17,7 @@
                                     <div>
                                         <div class="flex-container">
                                             <label class="required" for="id_title">Заголовок поста:</label>
-                                            <input type="text" name="title" class="vTextField" maxlength="70" required id="id_title">
+                                            <input type="text" name="title" class="input-style vTextField" maxlength="70" required id="id_title">
                                         </div>
                                     </div>
                                 </div>
@@ -25,7 +25,7 @@
                                     <div>
                                         <div class="flex-container">
                                             <label class="required" for="id_description">Текст поста:</label>
-                                            <textarea name="description" cols="40" rows="10" class="vLargeTextField" required id="id_description" spellcheck="false"></textarea>
+                                            <textarea name="description" cols="40" rows="10" class="textarea-style vLargeTextField" required id="id_description" spellcheck="false"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -33,7 +33,7 @@
                                     <div>
                                         <div class="flex-container">
                                             <label class="required" for="id_author">Ім'я автора:</label>
-                                            <input type="text" name="author" class="vTextField" maxlength="60" required id="id_author">
+                                            <input type="text" name="author" class="input-style vTextField" maxlength="60" required id="id_author">
                                         </div>
                                     </div>
                                 </div>
@@ -41,18 +41,15 @@
                                     <div>
                                         <div class="flex-container">
                                             <label for="id_img">Зображення:</label>
-                                            <input type="file" name="img" accept="image/*" id="id_img">
+                                            <input class="button-img" type="file" name="img" accept="image/*" id="id_img">
                                         </div>
                                     </div>
                                 </div>
                             </fieldset>
                         </div>
                         <div class="submit-row">
-                            <input type="submit" enctype="multipart/form-data" value="Зберегти" class="default" name="_save">
-                            <input type="submit" enctype="multipart/form-data" value="Зберегти і додати інше" name="_addanother">
-                            <input type="submit" enctype="multipart/form-data" value="Зберегти і продовжити редагування" name="_continue">
+                            <button type="submit" enctype="multipart/form-data" value="Зберегти" class="button-submit default" name="_save">Зберегти</button>
                         </div>
-                        <button type="submit" enctype="multipart/form-data">я кнопка</button>
                         <script id="django-admin-form-add-constants" src="/static/admin/js/change_form.js" data-model-name="post" async></script>
                         <script id="django-admin-prepopulated-fields-constants" src="/static/admin/js/prepopulate_init.js" data-prepopulated-fields="[]"></script>
                         {{ form.errors }}

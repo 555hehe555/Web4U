@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic.base import View
 from django.views.generic import FormView
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, UserModel
 
 from .form import CommentsForm, CreateUserPostForm
 from .models import Post, Likes, OwnUserPost
@@ -84,10 +84,9 @@ class RegisterView(FormView):
 class CreatePostView(View):
     # form_class = UserCreationForm
     # success_url = reverse_lazy("profile")
-    def get(self, request, pk):
-        post = U.objects.get(id=pk)
-        return render(request, "blog/blog_detail.html", {"post": post})
-        return render(request, "profile/create-post.html")
+    def get(self, request):
+        post = UserModel.objects.get()
+        return render(request, "profile/create-post.html", {"post": post})
 
 
 class CreateUserPostView(View):

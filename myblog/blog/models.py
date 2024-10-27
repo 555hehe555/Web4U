@@ -23,7 +23,7 @@ class OwnUserPost(models.Model):
     description = models.TextField("текст поста")
     author = models.CharField("імя автора", max_length=60)
     img = models.ImageField("зображеня", upload_to="image/", blank=True)
-    date = models.DateField("дата публікації", default=timezone.now())
+    date = models.DateField("дата публікації", default=timezone.now)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=True)
 
 

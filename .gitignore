@@ -1,3 +1,4 @@
-../.idea
-myblog/.vscode
-myblog/.env
+.idea
+.vscode
+.env
+venv

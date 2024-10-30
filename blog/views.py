@@ -1,3 +1,5 @@
+from functools import wraps
+
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
@@ -5,7 +7,7 @@ from django.views.generic.base import View
 from django.views.generic import FormView
 from django.contrib.auth.forms import UserCreationForm, UserModel
 
-from .form import CommentsForm, CreateUserPostForm
+from .form import CommentsForm, CreateUserPostForm, CreateUserForm
 from .models import Post, Likes, OwnUserPost
 
 
@@ -19,12 +21,12 @@ class PostView(View):
 class PostDetail(View):
     def get(self, request, pk):
         post = Post.objects.get(id=pk)
+        print(request.user, vars(request.user), request)
         return render(request, "blog/blog_detail.html", {"post": post})
 
 
 class AddComments(View):
-    def post(self, request, pk, pk1):
-        print(pk, pk1)
+    def post(self, request, pk):
         form = CommentsForm(request.POST)
         if form.is_valid():
             form = form.save(commit=False)
@@ -77,9 +79,13 @@ class RegisterView(FormView):
     template_name = "registration/registration.html"
     success_url = reverse_lazy("profile")
 
-    def form_valid(self, form):
-        form.save()
-        return super().form_valid(form)
+    def post(self, request):
+        global success_url
+        form = CreateUserForm(request.POST)
+        print(form.data)
+        if form.is_valid():
+            form.save()
+            return redirect(success_url)
 
 
 class CreatePostView(View):

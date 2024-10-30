@@ -23,10 +23,13 @@
                 </div>
                 <div class="comment">
                     <div class="comment-criete">
-                        <form class="comment-criete-item" action="{% url 'add_comments' post.id user.id %}" method="post">
+                        <form class="comment-criete-item" action="{% url 'add_comments' post.id %}" method="post">
                             {% csrf_token %}
-                            <p class="comment-criete-item-text-name">ваше імя</p>
-                            <input class="comment-criete-item-input-name" type="text" name="name">
+                            {% if request.user.is_active == 1 %}
+                                <p class="comment-criete-item-text-name">ваше імя - {{ request.user }}</p>
+                            {% else %}
+                                <p>no</p>
+                            {% endif %}
                             <p class="comment-criete-item-text-text-comments">Ваш коментар</p>
                             <textarea class="comment-criete-item-input-text-comments" name="text_comments"></textarea>
                             <input class="comment-criete-item-submit" type="submit">

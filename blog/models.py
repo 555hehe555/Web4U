@@ -1,7 +1,24 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import AbstractUser
 import uuid
 
+
+class CustomUser(AbstractUser):
+    groups = models.ManyToManyField(
+        'auth.Group',
+        related_name='customuser_groups',  # Зміна related_name
+        blank=True,
+        help_text='The groups this user belongs to.',
+        verbose_name='groups',
+    )
+    user_permissions = models.ManyToManyField(
+        'auth.Permission',
+        related_name='customuser_permissions',  # Зміна related_name
+        blank=True,
+        help_text='Specific permissions for this user.',
+        verbose_name='user permissions',
+    )
 
 class Post(models.Model):
     title = models.CharField('заголовок поста', max_length=70)

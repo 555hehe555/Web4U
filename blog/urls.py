@@ -22,7 +22,7 @@ urlpatterns = [
     path('', views.PostView.as_view(), name='main'),
     path('<int:pk>', views.PostDetail.as_view()),
     path('profile/', views.profile_view, name='profile'),
-    path('review/<int:pk>/<int:pk>/', views.AddComments.as_view(), name='add_comments'),
+    path('review/<int:pk>/', views.AddComments.as_view(), name='add_comments'),
     path('<int:pk>/add_likes/', views.AddLike.as_view(), name='add_likes'),
     path('accounts/logout/profile/', views.logout_user, name='logout'),
     path('register/', views.RegisterView.as_view(), name='register'),

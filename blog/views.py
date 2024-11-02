@@ -7,7 +7,7 @@ from django.views.generic.base import View
 from django.views.generic import FormView
 from django.contrib.auth.forms import UserCreationForm, UserModel
 
-from .form import CommentsForm, CreateUserPostForm, CreateUserForm
+from .form import CommentsForm, CreateUserPostForm
 from .models import Post, Likes, OwnUserPost
 
 
@@ -28,6 +28,10 @@ class PostDetail(View):
 class AddComments(View):
     def post(self, request, pk):
         form = CommentsForm(request.POST)
+        print(form.is_valid(),"    ", form.cleaned_data,"   ", request.user)
+        form.data = form.data.copy()  # Робимо копію, оскільки form.data є незмінним
+        form.data['name'] = request.user
+        print(form.data, form.errors)
         if form.is_valid():
             form = form.save(commit=False)
             form.post_id = pk
@@ -77,15 +81,17 @@ def logout_user(request):
 class RegisterView(FormView):
     form_class = UserCreationForm
     template_name = "registration/registration.html"
-    success_url = reverse_lazy("profile")
 
     def post(self, request):
-        global success_url
-        form = CreateUserForm(request.POST)
-        print(form.data)
+        success_url = reverse_lazy("profile")
+
+        form = self.get_form()
+        print(form.data, form.is_valid())
         if form.is_valid():
             form.save()
             return redirect(success_url)
+        else:
+            return redirect(reverse_lazy("register"))
 
 
 class CreatePostView(View):

@@ -6,7 +6,7 @@ from .models import Comments, OwnUserPost, CustomUser
 class CommentsForm(forms.ModelForm):
     class Meta():
         model = Comments
-        fields = ('name', 'text_comments')
+        fields = ['text_comments']
 
 
 class CreateUserPostForm(forms.ModelForm):

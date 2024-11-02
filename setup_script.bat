@@ -80,4 +80,3 @@ IF /I "%start_server%"=="yes" (
 
 
 endlocal
-

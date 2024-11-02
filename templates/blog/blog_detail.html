@@ -27,12 +27,14 @@
                             {% csrf_token %}
                             {% if request.user.is_active == 1 %}
                                 <p class="comment-criete-item-text-name">ваше імя - {{ request.user }}</p>
+                                <input type="text" name="nam" value="{{ request.user }}">
+
+                                <p class="comment-criete-item-text-text-comments">Ваш коментар</p>
+                                <textarea class="comment-criete-item-input-text-comments" name="text_comments"></textarea>
+                                <input class="comment-criete-item-submit" type="submit">
                             {% else %}
                                 <p>no</p>
                             {% endif %}
-                            <p class="comment-criete-item-text-text-comments">Ваш коментар</p>
-                            <textarea class="comment-criete-item-input-text-comments" name="text_comments"></textarea>
-                            <input class="comment-criete-item-submit" type="submit">
                         </form>
                     </div>
                     <div class="comment-finished">

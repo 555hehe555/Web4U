@@ -1,0 +1,36 @@
+{% extends '../index.html' %}
+
+{% block title %}World of words main {% endblock %}
+
+{% block profile %}
+<section>
+  <div class="container">
+      <main class="form-signin w-100 m-auto profile main-blog-style">
+        <div class="main-profile">
+          <div class="line-element">
+            <h1 class="h3 mb-3 fw-normal profile-title">Ваш акаунт</h1>
+            <a href="{% url 'create_post' pk=user.pk %}"><button type="button" 
+              class="btn btn-primary w-100 py-2 input secondary-btn">
+                <font style="vertical-align: inherit;">
+                  <font style="vertical-align: inherit;">Створити пост</font></font></button></a>
+          </div>
+            <ul>
+              <li><h3 class="profile-item profile-item-username input">Ваш нік - {{ user.username }}</h3></li>
+            {% if user.email %}
+              <li><h4 class="profile-item profile-item-email input">Ваша пошта - {{ user.email }}</h4></li>
+            {% endif %}
+            {% if user.first_name %}
+              <li><h5 class="profile-item profile-item-name-first input">Ваш імя - {{ user.first_name }}</h5></li>
+            {% endif %}
+            {% if user.last_name %}
+              <li><h5 class="profile-item profile-item-name-last input">Ваш призвіще - {{ user.last_name }}</h5></li>
+            {% endif %}
+          </ul>
+          <form method="post" action="{% url 'logout' %}?next=profile">
+            {% csrf_token %}
+            <button class="btn btn-primary w-100 py-2 input primary-btn" type="submit">Вийти</button>
+          </form> 
+        </div>
+      </main>
+    </section>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends '../index.html' %}
+
+{% block title %}World of words main {% endblock %}
+
+{% block login %}
+<section>
+<div class="container">
+    <main class="form-signin w-100 m-auto main-blog-style">
+      <form class="login-form" method="post">
+        {% csrf_token %}
+        <h1 class="h3 mb-3 fw-normal">Логін</h1>
+    
+        <div class="form-floating">
+          <input type="text" name="username" placeholder="Login" class="form-control login-form-name input" id="userName" id="floatingInput" >
+          <label class="label-input" for="floatingInput">Імя</label>
+        </div>
+        <div class="form-floating">
+          <input type="password" class="form-control login-form-pass input" name="password" id="pwd" id="floatingPassword" placeholder="Password">
+          <label class="label-input" for="floatingPassword ">Пароль</label>
+        </div>
+        
+        {{ form.errors }}
+        <button class="btn btn-primary w-100 py-2 input primary-btn" type="submit">Залогінитись</button>
+      </form>
+    </main>
+  </section>
+{% endblock %}

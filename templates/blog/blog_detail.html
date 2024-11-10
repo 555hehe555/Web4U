@@ -24,6 +24,36 @@
                     </div>
                 </div>
 
+                
+                <!-- <section class="content-item" id="comments">
+                    <div class="container">   
+                        <div class="row">
+                            <div class="col-sm-8">   
+                                <form>
+                                    <h3 class="pull-left">New Comment</h3>
+                                    <button type="submit" class="btn btn-normal pull-right">Submit</button>
+                                    <fieldset>
+                                        <div class="row">
+                                            <div class="col-sm-3 col-lg-2 hidden-xs">
+                                                <img class="img-responsive" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="">
+                                            </div>
+                                            <div class="form-group col-xs-12 col-sm-9 col-lg-10">
+                                                <textarea class="form-control" id="message" placeholder="Your message" required=""></textarea>
+                                            </div>
+                                        </div>  	
+                                    </fieldset>
+                                </form>
+                                <div class="comment-finished">
+                                    <h2 class="comment-finished-title"><br>comment<br></h2>
+                                    {% for comment in post.comments_set.all %}
+                                        <h4 class="comment-finished-user-name">{{ comment.name }}</h4>
+                                        <p class="comment-finished-user-text-comments">{{ comment.text_comments }}</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section> -->
 
                 <div class="comment">
                     <div class="comment-criete">
@@ -31,7 +61,7 @@
                             {% csrf_token %}
                             {% if request.user.is_active == 1 %}
                                 <p class="comment-criete-item-text-name">ваше імя - {{ request.user }}</p>
-                                <input type="text" name="nam" value="{{ request.user }}">
+                                <!-- <input type="text" name="nam" value="{{ request.user }}"> -->
 
                                 <p class="comment-criete-item-text-text-comments">Ваш коментар</p>
                                 <textarea class="comment-criete-item-input-text-comments" name="text_comments"></textarea>

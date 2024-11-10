@@ -60,7 +60,7 @@ quotes: "" "";
   --primary-hover:#0a58ca;
   --secondary: #F472B6;
   --secondary-hover: #E645B0;
-  --text: #F3F4F6;
+  --text: #52555c;
 }
 
 body{
@@ -213,7 +213,7 @@ footer {
 }
 
 .label-input{
-  color: #AAAAAA;
+  color: #000000;
 }
 
 /*                              Profile style                                     */

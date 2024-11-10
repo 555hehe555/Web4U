@@ -12,7 +12,7 @@ class CommentsForm(forms.ModelForm):
 class CreateUserPostForm(forms.ModelForm):
     class Meta():
         model = OwnUserPost
-        fields = ['title', 'description', 'img', 'author']
+        fields = ['title', 'description', 'img']
 
 
 class CreateUserForm(UserCreationForm):

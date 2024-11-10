@@ -16,6 +16,7 @@ from pathlib import Path
 from sys import base_prefix
 
 import environ
+from django.conf.global_settings import AUTH_USER_MODEL
 
 env = environ.Env(DEBUG=(bool, True))
 
@@ -38,6 +39,8 @@ ALLOWED_HOSTS = ['b903-188-163-120-213.ngrok-free.app',
                  '127.0.0.1',
                  '9ddf-188-163-120-213.ngrok-free.app']
 
+
+AUTH_USER_MODEL = "blog.CustomUser"
 
 # Application definition
 

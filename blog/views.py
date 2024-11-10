@@ -7,7 +7,7 @@ from django.views.generic.base import View
 from django.views.generic import FormView
 from django.contrib.auth.forms import UserCreationForm, UserModel
 
-from .form import CommentsForm, CreateUserPostForm
+from .form import CommentsForm, CreateUserPostForm, CreateUserForm
 from .models import Post, Likes, OwnUserPost
 
 
@@ -28,12 +28,10 @@ class PostDetail(View):
 class AddComments(View):
     def post(self, request, pk):
         form = CommentsForm(request.POST)
-        print(form.is_valid(),"    ", form.cleaned_data,"   ", request.user)
-        form.data = form.data.copy()  # Робимо копію, оскільки form.data є незмінним
-        form.data['name'] = request.user
-        print(form.data, form.errors)
         if form.is_valid():
             form = form.save(commit=False)
+            form.name = request.user.username
+            print(vars(form))
             form.post_id = pk
             form.save()
 
@@ -79,19 +77,24 @@ def logout_user(request):
 
 
 class RegisterView(FormView):
-    form_class = UserCreationForm
+    form_class = CreateUserForm
     template_name = "registration/registration.html"
+    success_url = reverse_lazy("profile")
 
-    def post(self, request):
-        success_url = reverse_lazy("profile")
+    def form_valid(self, form):
+        print(form.cleaned_data, form.is_valid())
+        form.save()
+        return super().form_valid(form)
 
-        form = self.get_form()
-        print(form.data, form.is_valid())
-        if form.is_valid():
-            form.save()
-            return redirect(success_url)
-        else:
-            return redirect(reverse_lazy("register"))
+    # def post(self, request):
+    #
+    #     form = self.get_form()
+    #     # print(form.data, form.is_valid())
+    #     if form.is_valid():
+    #         form.save()
+    #         return redirect(success_url)
+    #     else:
+    #         return redirect(reverse_lazy("register"))
 
 
 class CreatePostView(View):
@@ -104,19 +107,19 @@ class CreatePostView(View):
 
 
 class CreateUserPostView(View):
-    # form_class = CreateUserPostForm
+    form_class = CreateUserPostForm
     success_url = reverse_lazy("profile")
 #    def get(self, request):
 #        return render(request, "profile/create-post.html")
     def post(self, request):
-        # user_post = get_object_or_404(OwnUserPost, pk=pk)
-        form = CreateUserPostForm(request.POST, request.FILES)
+        form = self.form_class(request.POST, request.FILES)
         print(form.is_valid())
         if form.is_valid():
             user_image = form.save(commit=False)
-            user_image.user = request.user
+            user_image.author = request.user.username
             user_image.save()
-        return redirect("/profile")
+            return redirect(self.success_url)
+        return render(request, "profile/create-post.html",{"form":form})
 
 
 

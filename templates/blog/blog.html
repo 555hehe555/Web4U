@@ -5,6 +5,7 @@
 {% block blog %}
 <section>
     <ul class="all-post">
+        <h2 class="title-posts">Пости адміністрації</h2>
         <div class="own-container">
             {% for post in post_list %}
                 <div class="container-item">
@@ -20,7 +21,7 @@
             {% endfor %}
         </div>
 
-
+        <h2 class="title-posts">Пости користувачів</h2>
         <div class="own-container">
             {% for user_post in user_post_list %}
                 <div class="container-item">

@@ -5,7 +5,7 @@
 {% block create-post %}
 <section>
     <div class="container">
-        <main class="create-post-style form-signin w-100 m-auto profile">
+        <main class="create-post-style form-signin w-100 m-auto main-blog-style">
             <div id="content" class="colM">
                 <h1>Додати Запис</h1>
                 <div id="content-main">
@@ -16,39 +16,39 @@
                                 <div class="form-row field-title">
                                     <div>
                                         <div class="flex-container">
-                                            <label class="required" for="id_title">Заголовок поста:</label>
-                                            <input type="text" name="title" class="input-style vTextField" maxlength="70" required id="id_title">
+                                            <label class="required" for="id_title">Заголовок поста:</label><br><br>
+                                            <input type="text" name="title" class="form-control input-style vTextField" maxlength="70" required id="id_title"><br>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-row field-description">
                                     <div>
                                         <div class="flex-container">
-                                            <label class="required" for="id_description">Текст поста:</label>
-                                            <textarea name="description" cols="40" rows="10" class="textarea-style vLargeTextField" required id="id_description" spellcheck="false"></textarea>
+                                            <label class="required" for="id_description">Текст поста:</label><br><br>
+                                            <textarea name="description" cols="40" rows="10" class="form-control textarea-style vLargeTextField" required id="id_description" spellcheck="false"></textarea>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-row field-author">
                                     <div>
                                         <div class="flex-container">
-                                            <label class="required" for="id_author">Ім'я автора:</label>
-                                            <input type="text" name="author" class="input-style vTextField" maxlength="60" required id="id_author">
+                                            <label class="required" for="id_author">Ім'я автора:</label><br><br>
+                                            <input type="text" name="author" class="form-control input-style vTextField" maxlength="60" required id="id_author">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-row field-img">
                                     <div>
                                         <div class="flex-container">
-                                            <label for="id_img">Зображення:</label>
-                                            <input class="button-img" type="file" name="img" accept="image/*" id="id_img">
+                                            <label for="id_img">Зображення:</label><br>
+                                            <input class="button-img" type="file" name="img" accept="image/*" id="id_img"><br><br>
                                         </div>
                                     </div>
                                 </div>
                             </fieldset>
                         </div>
                         <div class="submit-row">
-                            <button type="submit" enctype="multipart/form-data" value="Зберегти" class="button-submit default" name="_save">Зберегти</button>
+                            <button type="submit" enctype="multipart/form-data" value="Зберегти" class="button-submit default primary-btn" name="_save">Зберегти</button>
                         </div>
                         <script id="django-admin-form-add-constants" src="/static/admin/js/change_form.js" data-model-name="post" async></script>
                         <script id="django-admin-prepopulated-fields-constants" src="/static/admin/js/prepopulate_init.js" data-prepopulated-fields="[]"></script>

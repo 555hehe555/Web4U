@@ -4,23 +4,27 @@
 
 {% block blog %}
 <section>
-        <main>
-            <div class="container container-detail">
+        <main class="main">
+            <div class="container container-detail container-item-deteil post">
                 <div class="container-item-deteil">
                     <div class="post-detail">
-                        <a class="post-title post-item" href="{{post.id}}"><h3>{{post.title}}</h3></a>
-                        <p class="post-description post-item">{{post.description}}</p>
-                        {% if post.img %}
-                            <img class="post-image post-item" src="{{post.img.url}}" width="400" style="border-radius: 20px;">
-                        {% endif %}
-                        <p class="post-author post-item">{{post.author}}</p>
-                        <p class="post-date post-item">{{post.date}}</p>
+                        <a class="post-title post-detail-title post-item" href="{{post.id}}"><h3>{{post.title}}</h3></a>
+                        <p class="post-description post-detail-description post-item">{{post.description}}</p>
+                        <p class="post-author post-detail-author post-item">{{post.author}}</p>
+                        <p class="post-date post-detail-date post-item">{{post.date}}</p>
+                        <div class="like">
+                            <a class="like-batton" href="{% url 'add_likes' post.id %}"><img src="../../media/favorite+.png" width="40"></a>
+                            <p class="like-count">{{ post.likes_set.all.count }}</p>
+                        </div>
                     </div>
-                    <div class="like">
-                        <a class="like-batton" href="{% url 'add_likes' post.id %}"><img src="../../media/favorite+.png" width="40"></a>
-                        <p class="like-count">{{ post.likes_set.all.count }}</p>
+                    <div class="img-container">
+                        {% if post.img %}
+                            <img class="post-image post-detail-image post-item" src="{{post.img.url}}" width="400" style="border-radius: 20px;">
+                        {% endif %}
                     </div>
                 </div>
+
+
                 <div class="comment">
                     <div class="comment-criete">
                         <form class="comment-criete-item" action="{% url 'add_comments' post.id %}" method="post">

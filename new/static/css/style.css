@@ -1,0 +1,180 @@
+/*                  Reset style                    */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+margin: 0;
+padding: 0;
+border: 0;
+outline: 0;
+font-weight: inherit;
+font-style: inherit;
+font-size: 100%;
+font-family: inherit;
+vertical-align: baseline;
+}
+/* remember to define focus styles! */
+:focus {
+outline: 0;
+}
+body {
+line-height: 1;
+color: black;
+background: white;
+}
+ol, ul {
+list-style: none;
+}
+/* tables still need 'cellspacing="0"' in the markup */
+table {
+border-collapse: separate;
+border-spacing: 0;
+}
+caption, th, td {
+text-align: left;
+font-weight: normal;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+content: "";
+}
+blockquote, q {
+quotes: "" "";
+}
+
+
+
+/*                    Main style                     */
+
+
+
+body {
+    font-family: 'Roboto Mono', monospace;
+    background-color: #f8f9fa;
+    color: #212529;
+    margin: 0;
+    padding: 0;
+}
+
+header, footer {
+    font-family: 'Roboto Mono', monospace;
+}
+
+header .nav-link, footer .nav-link {
+    font-weight: 500;
+}
+
+main {
+    min-height: 60vh;
+}
+
+/* Картки постів */
+.card {
+    border: none;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.2s ease-in-out;
+    background-color: #ffffff;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.card-img-top {
+    border-bottom: 1px solid #dee2e6;
+    object-fit: cover;
+    height: 200px;
+}
+
+.card-title a {
+    text-decoration: none;
+    color: #212529;
+    transition: color 0.2s;
+}
+
+.card-title a:hover {
+    color: #0d6efd;
+}
+
+.comment-list {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.comment-list .fw-bold {
+    margin-bottom: 5px;
+}
+
+.comment-list .mb-3 {
+    background: #f1f3f5;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* Форми */
+.form-floating label {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.form-control, .btn {
+    border-radius: 5px !important;
+}
+
+.btn-primary {
+    background-color: #0d6efd !important;
+    border-color: #0d6efd !important;
+}
+
+.btn-primary:hover {
+    background-color: #0b5ed7 !important;
+    border-color: #0a58ca !important;
+}
+
+.btn-secondary {
+    background-color: #6c757d !important;
+    border-color: #6c757d !important;
+}
+
+/* Профіль */
+.main-profile .card {
+    background-color: #ffffff;
+}
+
+.profile li {
+    margin-bottom: 10px;
+}
+
+/* Хедер та футер */
+header {
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+footer {
+    background: #f1f3f5;
+    border-top: 1px solid #dee2e6;
+    font-size: 0.9rem;
+}
+
+footer .text-muted {
+    font-size: 0.85rem;
+}
+
+/* Заголовки секцій */
+section h2, section h1, section h3 {
+    font-weight: 600;
+}
+
+/* Адаптивність */
+@media (max-width: 576px) {
+    .card-img-top {
+        height: 150px;
+    }
+}

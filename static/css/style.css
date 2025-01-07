@@ -59,8 +59,9 @@ quotes: "" "";
   --primary: #60A5FA;
   --primary-hover:#0a58ca;
   --secondary: #F472B6;
-  --secondary-hover: #E645B0;
+  --secondary-hover: #9c2575;
   --text: #52555c;
+  --text-on-black: #fff;
 }
 
 body{
@@ -68,7 +69,7 @@ body{
   
   display: flex;
   flex-direction: column;
-
+  margin-bottom: 150px;
 
   color: var(--text);
   font-family: "Roboto Mono", monospace;
@@ -79,6 +80,7 @@ body{
 
 footer {
   background-color: var(--background-color-header-and-footer);
+  margin-top: 150px;
   position: fixed;
   left: 0;
   bottom: 0;
@@ -90,21 +92,25 @@ footer {
 .primary-btn{
   background-color: var(--primary);
   border-color: var(--primary);
+  color: var(--text-on-black);
 }
 
 .primary-btn:hover{
   background-color: var(--primary-hover);
   border-color: var(--primary-hover);
+  color: var(--text-on-black);
 }
 
 .secondary-btn{
   background-color: var(--secondary);
   border-color: var(--secondary);
+  color: var(--text-on-black);
 }
 
 .secondary-btn:hover{
   background-color: var(--secondary-hover);
   border-color: var(--secondary-hover);
+  color: var(--text-on-black) !important;
 }
 
 
@@ -115,6 +121,9 @@ footer {
   padding: 15px;
   border-radius: 10px;
 }
+
+
+/*                  index style                    */
 
 
 /*                  Blog style                    */
@@ -141,6 +150,7 @@ footer {
   margin-right: 100%;
   margin-top: 2rem;
   margin-bottom: 2rem;
+  color: var(--text-on-black);
 }
 
 .own-container{
@@ -204,6 +214,16 @@ footer {
   align-items: center;
   justify-content: flex-end;
   margin-top: -35px;
+}
+
+.comment-finished-user-name{
+  text-align: center;
+  font-size: 20px;
+  margin-top: 20px;
+}
+
+.comment-finished-user-text-comments{
+  margin-top: 5px;
 }
 
 /*                        Login-Registration-Profile style                        */

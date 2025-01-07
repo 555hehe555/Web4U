@@ -1,0 +1,48 @@
+{% extends '../index.html' %}
+{% load static %}
+
+{% block title %}World of Words Main{% endblock %}
+
+{% block blog %}
+<section class="container">
+    <h2 class="mb-4">Пости адміністрації</h2>
+    <div class="row">
+        {% for post in post_list %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                {% if post.img %}
+                  <img src="{{ post.img.url }}" class="card-img-top" alt="{{ post.title }}">
+                {% else %}
+                  <img src="{% static 'images/default-placeholder.png' %}" class="card-img-top" alt="Placeholder">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title"><a href="{{ post.id }}">{{ post.title }}</a></h5>
+                    <p class="card-text">{{ post.description }}</p>
+                    <p class="text-muted">{{ post.author }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <h2 class="my-4">Пости користувачів</h2>
+    <div class="row">
+        {% for user_post in user_post_list %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                {% if user_post.img %}
+                  <img src="{{ user_post.img.url }}" class="card-img-top" alt="{{ user_post.title }}">
+                {% else %}
+                  <img src="{% static 'images/default-placeholder.png' %}" class="card-img-top" alt="Placeholder">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title"><a href="{{ user_post.id }}">{{ user_post.title }}</a></h5>
+                    <p class="card-text">{{ user_post.description }}</p>
+                    <p class="text-muted">{{ user_post.author }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

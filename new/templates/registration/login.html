@@ -1,0 +1,28 @@
+{% extends '../index.html' %}
+{% load static %}
+
+{% block title %}Логін{% endblock %}
+
+{% block login %}
+<section class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-4">
+            <form class="mt-5" method="post">
+                {% csrf_token %}
+                <h1 class="h3 mb-3 fw-normal text-center">Логін</h1>
+                <div class="form-floating mb-3">
+                  <input type="text" name="username" class="form-control" id="floatingInput" placeholder="Login">
+                  <label for="floatingInput">Ім'я</label>
+                </div>
+                <div class="form-floating mb-3">
+                  <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Password">
+                  <label for="floatingPassword">Пароль</label>
+                </div>
+                
+                {{ form.errors }}
+                <button class="btn btn-primary w-100 py-2" type="submit">Залогінитись</button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends '../index.html' %}
+{% load static %}
+
+{% block title %}Ваш акаунт{% endblock %}
+
+{% block profile %}
+<section class="container main-profile">
+    <div class="row justify-content-center">
+        <div class="col-lg-5">
+            <h1 class="h3 mb-3 fw-normal text-center">Ваш акаунт</h1>
+
+            <div class="card p-4 mb-4">
+                <ul class="list-unstyled mb-4">
+                    <li><strong>Ваш нік:</strong> {{ user.username }}</li>
+                    {% if user.email %}
+                    <li><strong>Ваша пошта:</strong> {{ user.email }}</li>
+                    {% endif %}
+                    {% if user.first_name %}
+                    <li><strong>Ваше ім'я:</strong> {{ user.first_name }}</li>
+                    {% endif %}
+                    {% if user.last_name %}
+                    <li><strong>Ваше прізвище:</strong> {{ user.last_name }}</li>
+                    {% endif %}
+                </ul>
+                <a href="{% url 'create_post' pk=user.pk %}" class="btn btn-secondary w-100 mb-3">Створити пост</a>
+                <form method="post" action="{% url 'logout' %}?next=profile">
+                    {% csrf_token %}
+                    <button class="btn btn-danger w-100" type="submit">Вийти</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

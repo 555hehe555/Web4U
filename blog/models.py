@@ -7,6 +7,7 @@ import uuid
 class CustomUser(AbstractUser):
     email = models.EmailField("email", blank=True, max_length=30)
 
+
 class Post(models.Model):
     title = models.CharField('заголовок поста', max_length=70)
     description = models.TextField("текст поста")
@@ -29,7 +30,6 @@ class OwnUserPost(models.Model):
     img = models.ImageField("зображеня", upload_to="image/", blank=True)
     date = models.DateField("дата публікації", default=timezone.now)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=True)
-
 
 
 class Comments(models.Model):

@@ -50,18 +50,29 @@ quotes: "" "";
 
 /*                    Main style                     */
 
+:root {
+    --primary-color: #0d6efd; /* Blue */
+    --secondary-color: #6c757d; /* Gray */
+    --light-color: #f8f9fa; /* Light Gray */
+    --text-color: #212529; /* Dark Gray/Black */
+    --border-color: #dee2e6; /* Light Gray Border */
+    --box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    --card-bg: #313131;
+    --comment-bg: #555555;
+    --font-family: 'Roboto Mono', monospace; /* Consistent font */
+}
 
 
 body {
-    font-family: 'Roboto Mono', monospace;
-    background-color: #f8f9fa;
-    color: #212529;
+    font-family: var(--font-family);
+    background-color: var(--light-color);
+    color: var(--text-color);
     margin: 0;
     padding: 0;
 }
 
 header, footer {
-    font-family: 'Roboto Mono', monospace;
+    font-family: var(--font-family);
 }
 
 header .nav-link, footer .nav-link {
@@ -78,32 +89,32 @@ main {
     border-radius: 8px;
     overflow: hidden;
     transition: transform 0.2s ease-in-out;
-    background-color: #ffffff;
+    background-color: var(--card-bg);
 }
 
 .card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    box-shadow: var(--box-shadow);
 }
 
 .card-img-top {
-    border-bottom: 1px solid #dee2e6;
+    border-bottom: 1px solid var(--border-color);
     object-fit: cover;
     height: 200px;
 }
 
 .card-title a {
     text-decoration: none;
-    color: #212529;
+    color: var(--text-color);
     transition: color 0.2s;
 }
 
 .card-title a:hover {
-    color: #0d6efd;
+    color: var(--primary-color);
 }
 
 .comment-list {
-    background: #ffffff;
+    background: var(--card-bg);
     padding: 20px;
     border-radius: 5px;
 }
@@ -113,7 +124,7 @@ main {
 }
 
 .comment-list .mb-3 {
-    background: #f1f3f5;
+    background: var(--comment-bg);
     padding: 10px;
     border-radius: 5px;
 }
@@ -121,7 +132,7 @@ main {
 /* Форми */
 .form-floating label {
     font-size: 0.9rem;
-    color: #6c757d;
+    color: var(--secondary-color);
 }
 
 .form-control, .btn {
@@ -129,23 +140,23 @@ main {
 }
 
 .btn-primary {
-    background-color: #0d6efd !important;
-    border-color: #0d6efd !important;
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
 }
 
 .btn-primary:hover {
-    background-color: #0b5ed7 !important;
-    border-color: #0a58ca !important;
+    background-color: #0b5ed7 !important; /* Slightly darker blue */
+    border-color: #0a58ca !important; /* Slightly darker blue */
 }
 
 .btn-secondary {
-    background-color: #6c757d !important;
-    border-color: #6c757d !important;
+    background-color: var(--secondary-color) !important;
+    border-color: var(--secondary-color) !important;
 }
 
 /* Профіль */
 .main-profile .card {
-    background-color: #ffffff;
+    background-color: var(--card-bg);
 }
 
 .profile li {
@@ -158,8 +169,8 @@ header {
 }
 
 footer {
-    background: #f1f3f5;
-    border-top: 1px solid #dee2e6;
+    background: var(--comment-bg);
+    border-top: 1px solid var(--border-color);
     font-size: 0.9rem;
 }
 

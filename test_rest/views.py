@@ -8,42 +8,24 @@ from rest_framework import renderers, viewsets, permissions, generics
 from .permissions import IsOwnerOrReadOnly
 from blog.models import CustomUser
 
-from .models import Snippet
-from .serializers import SnippetSerializer, UserSerializer
+from .models import Post
+from .serializers import GetPostsListSerializer, CreatePostsListSerializer, DeletePostsListSerializer
 
 
-class SnippetViewSet(viewsets.ModelViewSet):
-    """
-    This ViewSet automatically provides `list`, `create`, `retrieve`,
-    `update` and `destroy` actions.
+class PostModelViewSet(viewsets.ModelViewSet):
+    http_method_names = ['get', 'post', 'delete']
+    serializer_class = GetPostsListSerializer
+    queryset = Post.objects.all()
 
-    Additionally we also provide an extra `highlight` action.
-    """
-    queryset = Snippet.objects.all()
-    serializer_class = SnippetSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly,
-                          IsOwnerOrReadOnly]
+    def get_serializer_class(self):
+        if self.action == 'create':
+            return CreatePostsListSerializer
+        elif self.action == 'destroy':
+            return DeletePostsListSerializer
 
-    @action(detail=True, renderer_classes=[renderers.StaticHTMLRenderer])
-    def highlight(self, request, *args, **kwargs):
-        snippet = self.get_object()
-        return Response(snippet.highlighted)
-
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        elif self.action == 'retrieve':
+            return GetPostsListSerializer
+        elif self.action == 'list':
+            return GetPostsListSerializer
 
 
-@api_view(['GET'])
-def api_root(request, format=None):
-    return Response({
-        'users': reverse('user-list', request=request, format=format),
-        'snippets': reverse('snippet-list', request=request, format=format)
-    })
-
-
-class UserViewSet(viewsets.ReadOnlyModelViewSet):
-    """
-    This viewset automatically provides `list` and `retrieve` actions.
-    """
-    queryset = CustomUser.objects.all()
-    serializer_class = UserSerializer

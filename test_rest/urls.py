@@ -38,11 +38,14 @@ from rest_framework.routers import DefaultRouter
 from . import views
 
 # Create a router and register our ViewSets with it.
-router = DefaultRouter()
-router.register(r'snippets', views.SnippetViewSet, basename='snippet')
-router.register(r'users', views.UserViewSet, basename='user')
+# router = DefaultRouter()
+# router.register(r'posts/', views.PostModelViewSet.as_view({'get': 'list'}), basename='snippet')
+# router.register(r'posts/<int:pk>/', views.PostModelViewSet.as_view({'get': 'list'}), basename='snippet1')
+
+# router.register(r'users', views.UserViewSet, basename='user')
 
 # The API URLs are now determined automatically by the router.
-urlpatterns = [
-    path('', include(router.urls)),
-]
+urlpatterns = (
+    path(route='posts/', view=views.PostModelViewSet.as_view({'get': 'list', 'post': 'create'}), name='snippet'),
+    path(route='posts/<int:pk>/', view=views.PostModelViewSet.as_view({'get': 'retrieve', 'delete': 'destroy'}), name='snippet'),
+)

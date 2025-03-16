@@ -99,13 +99,14 @@ load_dotenv()
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'mydb',
-        'USER': 'myuser',
-        'PASSWORD': 'mypassword',
-        'HOST': 'db',  # контейнер з базою даних
-        'PORT': '5432',
+        'NAME': os.environ.get('DB_NAME', 'mydb'),
+        'USER': os.environ.get('DB_PASSWORD', 'root'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'root'),
+        'HOST': os.environ.get('DB_HOST', 'db'),
+        'PORT': os.environ.get('POSTGRES_PORT', '5432'),
     }
 }
+
 
 
 

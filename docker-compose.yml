@@ -1,15 +1,29 @@
 services:
   db:
-    image: postgres:latest
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
     environment:
-      POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: mypassword
-      POSTGRES_DB: mydb
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    restart: always
+
   app:
     build: .
+    environment:
+      - DB_HOST=db
+      - DB_NAME=mydb
+      - DB_USER=root
+      - DB_PASSWORD=root
     depends_on:
       - db
-
+    env_file:
+      .env
+    command: >
+      sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
 
   yt-django:
     build:
@@ -30,20 +44,19 @@ services:
       && python manage.py migrate
       && python manage.py runserver 0.0.0.0:8000"
 
-
-  nginx:
-    build:
-      context: ./docker/nginx
-      dockerfile: Dockerfile
-    image: yt_nginx:latest
-    container_name: yt_nginx
-    volumes:
-      - static_volume:/yt/static
-      - media_volume:/yt/media
-    depends_on:
-      - yt-django
-    ports:
-      - "80:80"
+#  nginx:
+#    build:
+#      context: ./docker/nginx
+#      dockerfile: Dockerfile
+#    image: yt_nginx:latest
+#    container_name: yt_nginx
+#    volumes:
+#      - static_volume:/yt/static
+#      - media_volume:/yt/media
+#    depends_on:
+#      - yt-django
+#    ports:
+#      - "80:80"
 
 volumes:
   static_volume:

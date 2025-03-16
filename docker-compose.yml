@@ -1,0 +1,51 @@
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydb
+  app:
+    build: .
+    depends_on:
+      - db
+
+
+  yt-django:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: yt_django:latest
+    container_name: yt
+    depends_on:
+      - app
+    volumes:
+      - static_volume:/yt/static
+      - media_volume:/yt/media
+    env_file:
+      - .env
+    command: >
+      sh -c "while ! python -c 'import socket; socket.create_connection(('db', 5432))' &> /dev/null; do sleep 1; done
+      && python manage.py makemigrations
+      && python manage.py migrate
+      && python manage.py runserver 0.0.0.0:8000"
+
+
+  nginx:
+    build:
+      context: ./docker/nginx
+      dockerfile: Dockerfile
+    image: yt_nginx:latest
+    container_name: yt_nginx
+    volumes:
+      - static_volume:/yt/static
+      - media_volume:/yt/media
+    depends_on:
+      - yt-django
+    ports:
+      - "80:80"
+
+volumes:
+  static_volume:
+  media_volume:
+  postgres_data:

@@ -74,7 +74,7 @@
                     <div class="comment-finished">
                         <h2 class="comment-finished-title"><br>comment<br></h2>
                         {% for comment in post.comments_set.all %}
-                            <h4 class="comment-finished-user-name">{{ comment.name }}</h4>
+                            <h3 class="comment-finished-user-name">{{ comment.name }}</h3>
                             <p class="comment-finished-user-text-comments">{{ comment.text_comments }}</p>
                         {% endfor %}
                     </div>

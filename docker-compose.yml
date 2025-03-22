@@ -1,5 +1,6 @@
 services:
   db:
+    hostname: db
     image: postgres:15
     volumes:
       - postgres_data:/var/lib/postgresql/data/
@@ -14,12 +15,14 @@ services:
   app:
     build: .
     environment:
-      - DB_HOST=db
-      - DB_NAME=mydb
-      - DB_USER=root
-      - DB_PASSWORD=root
+      DB_HOST:
+      DB_NAME:
+      DB_USER:
+      DB_PASSWORD:
     depends_on:
       - db
+    ports:
+      - "8000:8000"
     env_file:
       .env
     command: >
@@ -32,14 +35,16 @@ services:
     image: yt_django:latest
     container_name: yt
     depends_on:
+      - db
       - app
+
     volumes:
       - static_volume:/yt/static
       - media_volume:/yt/media
     env_file:
       - .env
     command: >
-      sh -c "while ! python -c 'import socket; socket.create_connection(('db', 5432))' &> /dev/null; do sleep 1; done
+      sh -c "until python -c 'import socket; socket.create_connection((\"db\", 5432))' > /dev/null 2>&1; do sleep 1; done
       && python manage.py makemigrations
       && python manage.py migrate
       && python manage.py runserver 0.0.0.0:8000"

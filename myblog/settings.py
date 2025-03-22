@@ -38,7 +38,8 @@ DEBUG = env("DEBUG")
 
 ALLOWED_HOSTS = ['b903-188-163-120-213.ngrok-free.app',
                  '127.0.0.1',
-                 '9ddf-188-163-120-213.ngrok-free.app']
+                 '9ddf-188-163-120-213.ngrok-free.app',
+                 'localhost']
 
 
 AUTH_USER_MODEL = "blog.CustomUser"
@@ -95,7 +96,6 @@ WSGI_APPLICATION = 'myblog.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 load_dotenv()
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',

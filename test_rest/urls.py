@@ -1,51 +1,30 @@
 from django.urls import path, include
-from rest_framework.urlpatterns import format_suffix_patterns
 from . import views
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
 
-# API endpoints
-# urlpatterns = format_suffix_patterns([
-#     path('', views.api_root),
-#     path('snippets/',
-#         views.SnippetList.as_view(),
-#         name='snippet-list'),
-#     path('snippets/<int:pk>/',
-#         views.SnippetDetail.as_view(),
-#         name='snippet-detail'),
-#     path('snippets/<int:pk>/highlight/',
-#         views.SnippetHighlight.as_view(),
-#         name='snippet-highlight'),
-#     path('users/',
-#         views.UserList.as_view(),
-#         name='user-list'),
-#     path('users/<int:pk>/',
-#         views.UserDetail.as_view(),
-#         name='user-detail')
-# ])
-
-# urlpatterns = format_suffix_patterns([
-#     path('', views.api_root),
-#     path('snippets/', views.snippet_list.as_view(), name='snippet-list'),
-#     path('snippets/<int:pk>/', views.snippet_detail.as_view(), name='snippet-detail'),
-#     path('snippets/<int:pk>/highlight/', views.snippet_highlight.as_view(), name='snippet-highlight'),
-#     path('users/', views.user_list.as_view(), name='user-list'),
-#     path('users/<int:pk>/', views.user_detail.as_view(), name='user-detail')
-# ])
-
-
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-
-from . import views
-
-# Create a router and register our ViewSets with it.
-# router = DefaultRouter()
-# router.register(r'posts/', views.PostModelViewSet.as_view({'get': 'list'}), basename='snippet')
-# router.register(r'posts/<int:pk>/', views.PostModelViewSet.as_view({'get': 'list'}), basename='snippet1')
-
-# router.register(r'users', views.UserViewSet, basename='user')
-
-# The API URLs are now determined automatically by the router.
-urlpatterns = (
-    path(route='posts/', view=views.PostModelViewSet.as_view({'get': 'list', 'post': 'create'}), name='snippet'),
-    path(route='posts/<int:pk>/', view=views.PostModelViewSet.as_view({'get': 'retrieve', 'delete': 'destroy'}), name='snippet'),
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Твій API",
+        default_version='v0',
+        description="Документація API",
+        terms_of_service="https://www.google.com/policies/terms/",
+        contact=openapi.Contact(email="contact@web4u.local"),
+        license=openapi.License(name="BSD License"),
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny,),
 )
+
+urlpatterns = [
+    path('posts/', views.PostModelViewSet.as_view({'get': 'list', 'post': 'create'})),
+    path('posts/<int:pk>/', views.PostModelViewSet.as_view({
+        'get': 'retrieve',
+        'delete': 'destroy',
+        'put': 'update',
+        'patch': 'partial_update'  # Додано PATCH
+    })),
+
+    path('swagger/schema/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+]

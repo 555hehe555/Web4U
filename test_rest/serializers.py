@@ -18,3 +18,15 @@ class DeletePostsListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ['id', 'title', 'description', 'author', 'date']
+
+
+class PutPostsListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ['id', 'title', 'description', 'author', 'date']
+
+
+class PatchPostsListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ['id', 'title', 'description', 'author', 'date']

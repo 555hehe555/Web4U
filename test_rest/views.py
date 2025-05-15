@@ -9,11 +9,12 @@ from .permissions import IsOwnerOrReadOnly
 from blog.models import CustomUser
 
 from .models import Post
-from .serializers import GetPostsListSerializer, CreatePostsListSerializer, DeletePostsListSerializer
+from .serializers import GetPostsListSerializer, CreatePostsListSerializer, DeletePostsListSerializer, \
+    PutPostsListSerializer, PatchPostsListSerializer
 
 
 class PostModelViewSet(viewsets.ModelViewSet):
-    http_method_names = ['get', 'post', 'delete']
+    http_method_names = ['get', 'post', 'delete', 'put', 'patch']
     serializer_class = GetPostsListSerializer
     queryset = Post.objects.all()
 
@@ -22,10 +23,10 @@ class PostModelViewSet(viewsets.ModelViewSet):
             return CreatePostsListSerializer
         elif self.action == 'destroy':
             return DeletePostsListSerializer
-
-        elif self.action == 'retrieve':
+        elif self.action == 'retrieve' or self.action == 'list':
             return GetPostsListSerializer
-        elif self.action == 'list':
-            return GetPostsListSerializer
-
-
+        elif self.action == 'update':
+            return PutPostsListSerializer
+        elif self.action == 'partial_update':
+            return PatchPostsListSerializer
+        return super().get_serializer_class()

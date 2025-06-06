@@ -25,6 +25,11 @@ urlpatterns = [
         'put': 'update',
         'patch': 'partial_update'
     })),
+    path('posts/<int:post_pk>/comments/', views.CommentModelViewSet.as_view({'get': 'list', 'post': 'create'})),
+    path('posts/<int:post_pk>/comments/<int:commint_pk>/', views.CommentModelViewSet.as_view({
+        'get': 'retrieve',
+        'delete': 'destroy'
+    })),
 
     path('swagger/schema/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 ]

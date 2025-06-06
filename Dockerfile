@@ -9,10 +9,12 @@ ENV PYTHONDONTWRITEBYTECODE=1
 # Install dependencies
 RUN pip install --upgrade pip
 
-RUN apt update && apt upgrade -y && \
-    apt install -qy gcc libjpeg-dev libxslt-dev \
-    libpq-dev libmariadb-dev libmariadb-dev-compat gettext cron openssh-client flake8 locales vim && \
+RUN apt update && apt install -qy \
+    gcc libjpeg-dev libxslt-dev libpq-dev \
+    libmariadb-dev libmariadb-dev-compat \
+    gettext cron openssh-client flake8 locales vim netcat-traditional && \
     apt clean && rm -rf /var/lib/apt/lists/*
+
 
 
 # Set the locale
@@ -29,5 +31,3 @@ RUN pip install -r requirements.txt
 RUN apt-get update && apt-get install -y netcat-traditional
 
 USER yt
-
-CMD ["python", "manage.py", "runserver"]

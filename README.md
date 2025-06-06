@@ -22,7 +22,7 @@
 ### 1. Клонувати репозиторій
 
 ```bash
-git clone https://github.com/your-username/web4u.git
+git clone https://github.com/555hehe555/Web4U.git
 cd web4u
 ````
 
@@ -40,6 +40,12 @@ DB_HOST=db
 DB_NAME=web4u
 DB_USER=web4u_user
 DB_PASSWORD=your_secure_password
+```
+
+Або межете вести команду:
+
+```bash
+copy .env.example .env
 ```
 
 > **Примітка:** `DB_*` змінні потрібні для зв’язку Django з базою, `POSTGRES_*` — для ініціалізації самої бази.

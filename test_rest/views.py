@@ -8,9 +8,10 @@ from rest_framework import renderers, viewsets, permissions, generics
 from .permissions import IsOwnerOrReadOnly
 from blog.models import CustomUser
 
-from .models import Post
+from .models import Post, Comments
 from .serializers import GetPostsListSerializer, CreatePostsListSerializer, DeletePostsListSerializer, \
     PutPostsListSerializer, PatchPostsListSerializer
+from .serializers import GetCommentListSerializer, CreateCommentListSerializer, DeleteCommentListSerializer
 
 
 class PostModelViewSet(viewsets.ModelViewSet):
@@ -29,4 +30,19 @@ class PostModelViewSet(viewsets.ModelViewSet):
             return PutPostsListSerializer
         elif self.action == 'partial_update':
             return PatchPostsListSerializer
+        return super().get_serializer_class()
+
+
+class CommentModelViewSet(viewsets.ModelViewSet):
+    http_method_names = ['get', 'post', 'delete']
+    serializer_class = GetCommentListSerializer
+    queryset = Comments.objects.all()
+
+    def get_serializer_class(self):
+        if self.action == 'create':
+            return CreateCommentListSerializer
+        elif self.action == 'destroy':
+            return DeleteCommentListSerializer
+        elif self.action == 'retrieve' or self.action == 'list':
+            return GetCommentListSerializer
         return super().get_serializer_class()

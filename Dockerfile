@@ -26,8 +26,6 @@ COPY --chown=yt:yt . .
 
 RUN pip install -r requirements.txt
 
-RUN pip install psycopg2
-
 RUN apt-get update && apt-get install -y netcat-traditional
 
 USER yt

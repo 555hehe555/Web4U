@@ -23,7 +23,7 @@ urlpatterns = [
         'get': 'retrieve',
         'delete': 'destroy',
         'put': 'update',
-        'patch': 'partial_update'  # Додано PATCH
+        'patch': 'partial_update'
     })),
 
     path('swagger/schema/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),

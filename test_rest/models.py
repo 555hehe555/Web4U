@@ -1,4 +1,5 @@
 from django.db import models
+from blog.models import CustomUser
 
 
 class Post(models.Model):
@@ -7,6 +8,8 @@ class Post(models.Model):
     author = models.CharField("імя автора", max_length=60)
     # img = models.ImageField("зображеня", upload_to="image/%Y", blank=True)
     date = models.DateField("дата публікації")
+
+    liked_by = models.ManyToManyField(CustomUser, related_name='liked_posts', blank=True)
 
     def __str__(self):
         return f'{self.title},{self.author}'

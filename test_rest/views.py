@@ -14,6 +14,8 @@ from .serializers import GetPostsListSerializer, CreatePostsListSerializer, Dele
     PutPostsListSerializer, PatchPostsListSerializer
 from .serializers import GetCommentListSerializer, CreateCommentListSerializer, DeleteCommentListSerializer\
     , PutCommentListSerializer, PatchCommentListSerializer
+from .serializers import (GetUserLikeSerializer, GetAllUserLikeSerializer, \
+                          CreateUserLikeSerializer, DeleteUserLikeSerializer)
 
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
@@ -87,5 +89,28 @@ class CommentModelViewSet(viewsets.ModelViewSet):
         return super().partial_update(request, pk)
 
     swagger_schema = CommentsAutoSchema
+
+
+class LikeAutoSchema(SwaggerAutoSchema):
+    def get_tags(self, operation_keys=None):
+        return ['Like']
+
+
+class LikePostViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated]
+    http_method_names = ['get', 'post', 'delete']
+    serializer_class = GetUserLikeSerializer
+    queryset = Post.objects.all()
+
+    def get_serializer_class(self):
+        if self.action == 'create':
+            return CreateUserLikeSerializer
+        elif self.action == 'destroy':
+            return DeleteUserLikeSerializer
+        elif self.action == 'retrieve' or self.action == 'list': #self.action == 'retrieve' or
+            return GetAllUserLikeSerializer
+        return super().get_serializer_class()
+
+    swagger_schema = LikeAutoSchema
 
 

@@ -32,6 +32,13 @@ urlpatterns = [
         'put': 'update',
         'patch': 'partial_update'
     })),
+    path('posts/<int:post_pk>/likes/', views.LikePostViewSet.as_view({'get': 'list', 'post': 'create'})),
+    path('posts/<int:post_pk>/likes/<int:pk>/', views.LikePostViewSet.as_view({
+        'get': 'retrieve',
+        'delete': 'destroy'
+    })),
 
     path('swagger/schema/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 ]
+
+

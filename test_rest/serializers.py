@@ -63,3 +63,28 @@ class PatchCommentListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comments
         fields = ['id', 'name', 'text_comments', 'post']
+
+
+
+class GetUserLikeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ['liked_by']
+
+
+class GetAllUserLikeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ['liked_by']
+
+
+class CreateUserLikeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ['liked_by']
+
+
+class DeleteUserLikeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ['liked_by']

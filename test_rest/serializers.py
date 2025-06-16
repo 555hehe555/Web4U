@@ -51,3 +51,15 @@ class DeleteCommentListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comments
         fields = ['id', 'name', 'text_comments', 'post']
+
+
+class PutCommentListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comments
+        fields = ['id', 'name', 'text_comments', 'post']
+
+
+class PatchCommentListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comments
+        fields = ['id', 'name', 'text_comments', 'post']

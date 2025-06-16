@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from drf_yasg.inspectors import SwaggerAutoSchema
 
 from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
@@ -11,7 +12,25 @@ from blog.models import CustomUser
 from .models import Post, Comments
 from .serializers import GetPostsListSerializer, CreatePostsListSerializer, DeletePostsListSerializer, \
     PutPostsListSerializer, PatchPostsListSerializer
-from .serializers import GetCommentListSerializer, CreateCommentListSerializer, DeleteCommentListSerializer
+from .serializers import GetCommentListSerializer, CreateCommentListSerializer, DeleteCommentListSerializer\
+    , PutCommentListSerializer, PatchCommentListSerializer
+
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+
+post_pk_param = openapi.Parameter(
+    'post_pk',
+    openapi.IN_PATH,
+    description="ID поста",
+    type=openapi.TYPE_INTEGER
+)
+
+pk_param = openapi.Parameter(
+    'id',
+    openapi.IN_PATH,
+    description="ID коментаря",
+    type=openapi.TYPE_INTEGER
+)
 
 
 class PostModelViewSet(viewsets.ModelViewSet):
@@ -33,16 +52,40 @@ class PostModelViewSet(viewsets.ModelViewSet):
         return super().get_serializer_class()
 
 
+class CommentsAutoSchema(SwaggerAutoSchema):
+    def get_tags(self, operation_keys=None):
+        return ['Comments']
+
+
 class CommentModelViewSet(viewsets.ModelViewSet):
-    http_method_names = ['get', 'post', 'delete']
+    http_method_names = ['get', 'post', 'delete', 'put', 'patch']
     serializer_class = GetCommentListSerializer
     queryset = Comments.objects.all()
 
-    def get_serializer_class(self):
-        if self.action == 'create':
-            return CreateCommentListSerializer
-        elif self.action == 'destroy':
-            return DeleteCommentListSerializer
-        elif self.action == 'retrieve' or self.action == 'list':
-            return GetCommentListSerializer
-        return super().get_serializer_class()
+    @swagger_auto_schema(manual_parameters=[post_pk_param])
+    def list(self, request, post_pk=None):
+        return super().list(request)
+
+    @swagger_auto_schema(manual_parameters=[post_pk_param])
+    def create(self, request, post_pk=None):
+        return super().create(request)
+
+    @swagger_auto_schema(manual_parameters=[post_pk_param, pk_param])
+    def retrieve(self, request, post_pk=None, pk=None):
+        return super().retrieve(request, pk)
+
+    @swagger_auto_schema(manual_parameters=[post_pk_param, pk_param])
+    def destroy(self, request, post_pk=None, pk=None):
+        return super().destroy(request, pk)
+
+    @swagger_auto_schema(manual_parameters=[post_pk_param, pk_param])
+    def update(self, request, post_pk=None, pk=None):
+        return super().update(request, pk)
+
+    @swagger_auto_schema(manual_parameters=[post_pk_param, pk_param])
+    def partial_update(self, request, post_pk=None, pk=None):
+        return super().partial_update(request, pk)
+
+    swagger_schema = CommentsAutoSchema
+
+

@@ -59,7 +59,7 @@ INSTALLED_APPS = [
 
     'blog.apps.BlogConfig',
     'quiz.apps.QuizConfig',
-    'test_rest.apps.TestRestConfig'
+    'rest_api.apps.TestRestConfig'
 ]
 
 MIDDLEWARE = [

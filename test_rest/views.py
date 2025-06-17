@@ -30,7 +30,7 @@ post_pk_param = openapi.Parameter(
 pk_param = openapi.Parameter(
     'id',
     openapi.IN_PATH,
-    description="ID коментаря",
+    description="ID",
     type=openapi.TYPE_INTEGER
 )
 
@@ -102,14 +102,21 @@ class LikePostViewSet(viewsets.ModelViewSet):
     serializer_class = GetUserLikeSerializer
     queryset = Post.objects.all()
 
-    def get_serializer_class(self):
-        if self.action == 'create':
-            return CreateUserLikeSerializer
-        elif self.action == 'destroy':
-            return DeleteUserLikeSerializer
-        elif self.action == 'retrieve' or self.action == 'list': #self.action == 'retrieve' or
-            return GetAllUserLikeSerializer
-        return super().get_serializer_class()
+    @swagger_auto_schema(manual_parameters=[post_pk_param])
+    def list(self, request, post_pk=None):
+        return super().list(request)
+
+    @swagger_auto_schema(manual_parameters=[post_pk_param])
+    def create(self, request, post_pk=None):
+        return super().create(request)
+
+    @swagger_auto_schema(manual_parameters=[post_pk_param, pk_param])
+    def retrieve(self, request, post_pk=None, pk=None):
+        return super().retrieve(request, pk)
+
+    @swagger_auto_schema(manual_parameters=[post_pk_param, pk_param])
+    def destroy(self, request, post_pk=None, pk=None):
+        return super().destroy(request, pk)
 
     swagger_schema = LikeAutoSchema
 

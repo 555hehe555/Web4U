@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Post, Comments
+from .models import Post, Comments, Like
 
 
 class GetPostsListSerializer(serializers.ModelSerializer):
@@ -66,25 +66,27 @@ class PatchCommentListSerializer(serializers.ModelSerializer):
 
 
 
+
+
 class GetUserLikeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Post
-        fields = ['liked_by']
+        model = Like
+        fields = ['id', 'post', 'user']
 
 
 class GetAllUserLikeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Post
-        fields = ['liked_by']
+        model = Like
+        fields = ['id', 'post', 'user']
 
 
 class CreateUserLikeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Post
-        fields = ['liked_by']
+        model = Like
+        fields = ['id', 'post', 'user']
 
 
 class DeleteUserLikeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Post
-        fields = ['liked_by']
+        model = Like
+        fields = ['id', 'post', 'user']

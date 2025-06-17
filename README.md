@@ -72,13 +72,13 @@ docker-compose up --build
 Після запуску перейдіть за адресою:
 
 ```
-http://localhost:8000/swagger/
+http://localhost:8000/api/swagger/schema/
 ```
 
 або
 
 ```
-http://127.0.0.1:8000/swagger/
+http://127.0.0.1:8000/api/swagger/schema/
 ```
 
 ---

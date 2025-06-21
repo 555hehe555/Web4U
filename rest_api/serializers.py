@@ -32,9 +32,6 @@ class PatchPostsListSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'description', 'author', 'date']
 
 
-
-
-
 class GetCommentListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comments
@@ -63,9 +60,6 @@ class PatchCommentListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comments
         fields = ['id', 'name', 'text_comments', 'post']
-
-
-
 
 
 class GetUserLikeSerializer(serializers.ModelSerializer):

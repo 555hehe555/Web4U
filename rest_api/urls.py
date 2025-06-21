@@ -22,8 +22,15 @@ urlpatterns = [
     })),
     path('posts/<int:post_pk>/likes/', views.LikePostViewSet.as_view({'get': 'list', 'post': 'create'})),
     path('posts/<int:post_pk>/likes/<int:pk>/', views.LikePostViewSet.as_view({
-        'get': 'retrieve',
+        # 'get': 'retrieve',
         'delete': 'destroy'
+    })),
+    path('users/', views.CustomUserViewSet.as_view({'get': 'list', 'post': 'create'})),
+    path('users/<int:pk>/', views.CustomUserViewSet.as_view({
+        'get': 'retrieve',
+        'delete': 'destroy',
+        'put': 'update',
+        'patch': 'partial_update'
     })),
 
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),

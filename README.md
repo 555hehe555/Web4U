@@ -94,7 +94,7 @@ http://localhost:8000/api/v1/docs/
 або
 
 ```
-http://127.0.0.1:8000/api/swagger/schema/
+http://127.0.0.1:8000/api/v1/docs/
 ```
 
 ---

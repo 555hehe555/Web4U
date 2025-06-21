@@ -1,5 +1,9 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
-from blog.models import CustomUser
+
+
+class CustomUser(AbstractUser):
+    email = models.EmailField("email", blank=True, max_length=30)
 
 
 class Post(models.Model):
@@ -28,6 +32,7 @@ class Comments(models.Model):
     class Meta:
         verbose_name = 'коментар'
         verbose_name_plural = 'коментарi'
+
 
 class Like(models.Model):
     user = models.ForeignKey(CustomUser, verbose_name='користувач', on_delete=models.CASCADE)

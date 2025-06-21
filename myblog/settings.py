@@ -4,6 +4,7 @@ import environ
 
 from dotenv import load_dotenv
 
+
 env = environ.Env(DEBUG=(bool, True))
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -21,13 +22,10 @@ SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env("DEBUG")
 
-ALLOWED_HOSTS = ['b903-188-163-120-213.ngrok-free.app',
-                 '127.0.0.1',
-                 '9ddf-188-163-120-213.ngrok-free.app',
-                 'localhost']
+ALLOWED_HOSTS = env('ALLOWED_HOSTS').split(',')
 
 
-AUTH_USER_MODEL = "blog.CustomUser"
+AUTH_USER_MODEL = "rest_api.CustomUser"
 
 # Application definition
 
@@ -95,8 +93,6 @@ if USE_DOCKER:
             'PORT': os.environ.get('POSTGRES_PORT', '5432'),
         }
     }
-
-
 else:
     DATABASES = {
         'default': {
@@ -164,6 +160,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = 'media'
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+
 
 # Documentations settings
 SPECTACULAR_SETTINGS = {

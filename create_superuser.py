@@ -5,12 +5,17 @@ User = get_user_model()
 # username = "admin"
 # email = "admin@example.com"
 # password = "admin123"
-username = os.getenv("DJANGO_SUPERUSER_USERNAME", "admin")
-email = os.getenv("DJANGO_SUPERUSER_EMAIL", "admin@example.com")
-password = os.getenv("DJANGO_SUPERUSER_PASSWORD", "admin")
+username = os.getenv("ADMIN_NAME", "admin")
+email = os.getenv("ADMIN_EMAIL", "admin@localhost")
+password = os.getenv("ADMIN_PASSWORD", "admin")
 
-if not User.objects.filter(username=username).exists():
-    User.objects.create_superuser(username=username, email=email, password=password)
-    print("Superuser created.")
-else:
-    print("Superuser already exists.")
+def create_superuser():
+    """
+    Create a superuser if it does not already exist.
+    """
+    if not User.objects.filter(username=username).exists():
+        User.objects.create_superuser(username=username, email=email, password=password)
+        print("Superuser created.")
+    else:
+        print("Superuser already exists.")
+

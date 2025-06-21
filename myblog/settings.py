@@ -24,7 +24,7 @@ env = environ.Env(DEBUG=(bool, True))
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
+environ.Env.read_env(os.path.join(BASE_DIR, ".env"), encoding='utf-8')
 print(BASE_DIR)
 
 # Quick-start development settings - unsuitable for production
@@ -96,27 +96,27 @@ WSGI_APPLICATION = 'myblog.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-load_dotenv()
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME', 'mydb'),
-        'USER': os.environ.get('DB_PASSWORD', 'root'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', 'root'),
-        'HOST': os.environ.get('DB_HOST', 'db'),
-        'PORT': os.environ.get('POSTGRES_PORT', '5432'),
+USE_DOCKER = os.environ.get('USE_DOCKER', '0') == '1'
+
+if USE_DOCKER:
+    load_dotenv()
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ.get('POSTGRES_DB', 'mydb'),
+            'USER': os.environ.get('POSTGRES_USER', 'root'),
+            'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'root'),
+            'HOST': os.environ.get('POSTGRES_HOST', 'db'),
+            'PORT': os.environ.get('POSTGRES_PORT', '5432'),
+        }
     }
-}
-
-
-
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.getenv(BASE_DIR / 'DATABASE_NAME'),
-#     }
-# }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation

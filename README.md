@@ -11,7 +11,7 @@
 - REST API
 - Swagger-документація
 - Docker + Docker Compose
-- Postgres база даних
+- база даний PostgreSQL (у Docker) або SQLite (локально)
 - Автоматичне застосування міграцій
 - Підтримка media/static файлів через volume
 
@@ -101,6 +101,7 @@ http://127.0.0.1:8000/api/swagger/schema/
 
 ## Примітки
 
-* Якщо порт 8000 уже зайнятий, змініть його в `docker-compose.yml` у секції `ports`.
-* За замовчуванням всі дані зберігаються в тому `./postgres_data` на вашій машині.
-* Усі сервіси запускаються разом (Postgres, Django app, yt-django). Якщо не потрібен `yt-django`, можна закоментувати його у `docker-compose.yml`.
+* Якщо порт 8000 уже зайнятий, змініть його в `docker-compose.yml` у секції `ports`
+* За замовчуванням всі дані зберігаються в тому `./postgres_data` на вашій машині
+* Усі сервіси запускаються разом (Postgres, Django app, yt-django). Якщо не потрібен `yt-django`, можна закоментувати його у `docker-compose.yml`
+* Ви можете швидко перемикатися між Docker та локальним режимом, змінюючи лише змінну USE_DOCKER у .env

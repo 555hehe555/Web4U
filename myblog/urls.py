@@ -25,7 +25,7 @@ urlpatterns = [
     path('', include('blog.urls')),
     path('accounts/', include(urls)),
     path('api-auth/', include('rest_framework.urls')),
-    path('api/', include('test_rest.urls')),
+    path('api/', include('rest_api.urls')),
     # path('quizzes/', include('quiz.urls', namespace='quiz'))
 ]
 

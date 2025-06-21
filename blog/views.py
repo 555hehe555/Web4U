@@ -121,5 +121,3 @@ class CreateUserPostView(View):
             return redirect(self.success_url)
         return render(request, "profile/create-post.html",{"form":form})
 
-
-

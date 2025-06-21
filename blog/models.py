@@ -4,8 +4,8 @@ from django.contrib.auth.models import AbstractUser
 import uuid
 
 
-class CustomUser(AbstractUser):
-    email = models.EmailField("email", blank=True, max_length=30)
+# class CustomUser(AbstractUser):
+#     email = models.EmailField("email", blank=True, max_length=30)
 
 
 class Post(models.Model):

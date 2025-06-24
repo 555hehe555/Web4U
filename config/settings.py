@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'rest_framework',
 
     'blog.apps.BlogConfig',
-    'quiz.apps.QuizConfig',
     'rest_api.apps.TestRestConfig'
 ]
 
@@ -55,7 +54,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'myblog.urls'
+ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
     {
@@ -73,7 +72,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'myblog.wsgi.application'
+WSGI_APPLICATION = 'config.wsgi.application'
 
 
 # Database

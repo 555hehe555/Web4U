@@ -126,6 +126,14 @@ class LikePostViewSet(viewsets.ModelViewSet):
     #     return super().destroy(request, pk)
 
 
+@extend_schema_view(
+    list=user_list_doc,
+    retrieve=user_list_doc,
+    create=user_list_doc,
+    destroy=user_list_doc,
+    update=user_list_doc,
+    partial_update=user_list_doc
+)
 class CustomUserViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     http_method_names = ['get', 'post', 'delete', 'put', 'patch']

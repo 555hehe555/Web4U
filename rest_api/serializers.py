@@ -77,7 +77,7 @@ class GetAllUserLikeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Like
         fields = ['id', 'post', 'user']
-        # [id лайка, завжди +1,   id поста куди поставили лайк,    id юзера]
+        # [id лайка (завжди +1), id поста куди поставили лайк, id юзера]
 
 
 class CreateUserLikeSerializer(serializers.ModelSerializer):
@@ -95,7 +95,7 @@ class DeleteUserLikeSerializer(serializers.ModelSerializer):
 class GetCustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['id', 'username','password', 'email']
+        fields = ['id', 'username', 'password', 'email']
 
 
 class CreateCustomUserSerializer(serializers.ModelSerializer):

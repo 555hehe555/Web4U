@@ -1,0 +1,50 @@
+# IDE / Editor
+.idea/
+.vscode/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.sqlite3
+*.log
+
+# Virtual environment
+venv/
+ENV/
+
+# Environment
+.env
+*.env
+
+# Migrations
+blog/migrations/
+rest_api/migrations/
+config/migrations/
+!*/migrations/__init__.py
+
+# Static / Media (якщо генерується або динамічно додається)
+media/
+# /static/  <- залиш коментованим, якщо стилі статичні й потрібні
+
+# Docker / DB
+postgres_data/
+db.sqlite3
+
+# Local cache or temp
+*.bak
+*.swp
+*.tmp
+*.DS_Store
+Thumbs.db
+
+# Docker-related
+*.pid
+*.sock
+docker/nginx/*.log
+docker/nginx/*.pid
+
+# Others
+.cadence/

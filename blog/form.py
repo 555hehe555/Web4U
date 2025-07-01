@@ -1,6 +1,8 @@
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from .models import Comments, OwnUserPost, CustomUser
+from .models import Comments, OwnUserPost
+
+from rest_api.models import CustomUser
 
 
 class CommentsForm(forms.ModelForm):

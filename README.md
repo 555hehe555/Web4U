@@ -1,6 +1,6 @@
 # Web4U
 
-**Web4U** — це невелика соціальна мережа, створена на Django, як pet-проєкт. Користувачі можуть створювати акаунти, додавати пости, залишати коментарі, ставити лайки. У проєкті реалізовано REST API з автоматичною документацією через Swagger, є база даних PostgreSQL, система контейнеризації Docker та підтримка статичних/медійних файлів.
+**Web4U** — це проста соціальна мережа, створена на Django як pet-проєкт. Користувачі можуть створювати акаунти, додавати пости, залишати коментарі, ставити лайки. Проєкт містить REST API з автоматичною документацією через Swagger, базу даних PostgreSQL, контейнеризацію через Docker, а також підтримку статичних і медійних файлів.
 
 ## Основні можливості
 
@@ -11,7 +11,7 @@
 - REST API
 - Swagger-документація
 - Docker + Docker Compose
-- Postgres база даних
+- база даний PostgreSQL (у Docker) або SQLite (локально)
 - Автоматичне застосування міграцій
 - Підтримка media/static файлів через volume
 
@@ -24,67 +24,50 @@
 ```bash
 git clone https://github.com/555hehe555/Web4U.git
 cd web4u
-````
+```
 
 ### 2. Створити `.env` файл у корені проєкту
 
 Використай шаблон нижче або створюй власний:
 
 ```
-POSTGRES_DB=web4u
-POSTGRES_USER=web4u_user
-POSTGRES_PASSWORD=your_secure_password
+DEBUG=True
+SECRET_KEY='your_secret_key'
+
+# Database
+POSTGRES_DB=mydb
+POSTGRES_USER=root
+POSTGRES_PASSWORD=root
+POSTGRES_HOST=db
 POSTGRES_PORT=5432
 
-DB_HOST=db
-DB_NAME=web4u
-DB_USER=web4u_user
-DB_PASSWORD=your_secure_password
+# Admin user
+ADMIN_NAME=admin
+ADMIN_EMAIL=admin@example.com
+ADMIN_PASSWORD=admin
+
+DJANGO_SETTINGS_MODULE='config.settings'
+NGINX_PORT='80'
+
+WEBSITE_DOMAIN=localhost:8000
+DJANGO_SECRET_KEY='your-secret-key'
+DJANGO_DEBUG='True'
+DJANGO_ALLOWED_HOSTS='localhost 127.0.0.1 [::1]'
+POSTGRES_DB='your-db-name'
+POSTGRES_USER='your-db-user'
+POSTGRES_PASSWORD='your-db-password'
 ```
 
-Або межете вести команду:
+Або можете вести команду:
 
 ```bash
+# Windows
 copy .env.example .env
 ```
 
-> **Примітка:** `DB_*` змінні потрібні для зв’язку Django з базою, `POSTGRES_*` — для ініціалізації самої бази.
-
----
-
-### 3. Запустити проєкт через Docker Compose
-
 ```bash
-docker-compose up --build
+# Linux / macOS
+cp .env.example .env
 ```
 
-> Після цього автоматично:
->
-> * створиться база даних PostgreSQL
-> * застосуються всі міграції
-> * створиться суперкористувач (якщо реалізовано в `create_superuser.py`)
-> * сервер Django буде доступний на `http://localhost:8000/`
-
----
-
-## Swagger / API документація
-
-Після запуску перейдіть за адресою:
-
-```
-http://localhost:8000/swagger/
-```
-
-або
-
-```
-http://127.0.0.1:8000/swagger/
-```
-
----
-
-## Примітки
-
-* Якщо порт 8000 уже зайнятий, змініть його в `docker-compose.yml` у секції `ports`.
-* За замовчуванням всі дані зберігаються в тому `./postgres_data` на вашій машині.
-* Усі сервіси запускаються разом (Postgres, Django app, yt-django). Якщо не потрібен `yt-django`, можна закоментувати його у `docker-compose.yml`.
+> **Примітка:** `DB_*` змінні потрібні для зв'язку Django з базою, `POSTGRES_*`

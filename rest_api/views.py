@@ -5,7 +5,7 @@ from documentation.comments import comments_list_doc
 from documentation.likes import like_list_doc
 from documentation.posts import post_list_doc
 from documentation.custom_user import user_list_doc
-from .models import Post, Comments
+from .models import Post, Comments, CustomUser
 from .permissions import IsOwner
 from .serializers import (
     GetPostsListSerializer,
@@ -138,7 +138,7 @@ class CustomUserViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     http_method_names = ['get', 'post', 'delete', 'put', 'patch']
     serializer_class = GetCustomUserSerializer
-    queryset = Post.objects.all()
+    queryset = CustomUser.objects.all()
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve', 'create']:

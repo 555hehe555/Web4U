@@ -39,6 +39,7 @@ from .serializers import (
     partial_update=post_list_doc
 )
 class PostModelViewSet(viewsets.ModelViewSet):
+    template_settings_list = 'blog.html'
     http_method_names = ['get', 'post', 'delete', 'put', 'patch']
     serializer_class = GetPostsListSerializer
     queryset = Post.objects.all()

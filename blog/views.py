@@ -1,11 +1,9 @@
-from functools import wraps
-
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic.base import View
 from django.views.generic import FormView
-from django.contrib.auth.forms import UserCreationForm, UserModel
+from django.contrib.auth.forms import UserModel
 
 from .form import CommentsForm, CreateUserPostForm, CreateUserForm
 from .models import Post, Likes, OwnUserPost
@@ -20,9 +18,7 @@ class PostView(View):
 
 class PostDetail(View):
     def get(self, request, pk):
-        post = Post.objects.get(id=pk)
-        print(request.user, vars(request.user), request)
-        return render(request, "blog/blog_detail.html", {"post": post})
+        return render(request, "blog/blog_detail.html")
 
 
 class AddComments(View):

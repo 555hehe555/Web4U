@@ -1,12 +1,23 @@
 from django.apps import AppConfig
-import sys
+from django.db.models.signals import post_migrate
+from django.db.utils import OperationalError
 
 class BlogConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
     name = 'blog'
 
     def ready(self):
-        # Запускаємо тільки при `runserver`
-        if 'runserver' in sys.argv and not ('makemigrations' in sys.argv or 'migrate' in sys.argv):
-            from create_superuser import create_superuser  # ← шлях до твого скрипта
-            create_superuser()
+        from django.contrib.auth import get_user_model
+
+        def create_superuser(sender, **kwargs):
+            User = get_user_model()
+            try:
+                if not User.objects.filter(is_superuser=True).exists():
+                    User.objects.create_superuser(
+                        username="admin",
+                        email='admin@example.com',
+                        password='admin123'
+                    )
+            except OperationalError:
+                pass
+
+        post_migrate.connect(create_superuser, sender=self)

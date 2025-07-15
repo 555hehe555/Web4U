@@ -5,15 +5,15 @@ from django.views.generic.base import View
 from django.views.generic import FormView
 from django.contrib.auth.forms import UserModel
 
-from .form import CommentsForm, CreateUserPostForm, CreateUserForm
+from .form import CreateUserForm
 from .models import Post, Likes, OwnUserPost
 
 
 class PostView(View):
     def get(self, request):
-        posts = Post.objects.all()
-        user_post = OwnUserPost.objects.all()
-        return render(request, "blog/blog.html", {"post_list": posts, "user_post_list": user_post})
+        # posts = Post.objects.all()
+        # user_post = OwnUserPost.objects.all()
+        return render(request, "blog/blog.html")
 
 
 class PostDetail(View):
@@ -21,17 +21,17 @@ class PostDetail(View):
         return render(request, "blog/blog_detail.html")
 
 
-class AddComments(View):
-    def post(self, request, pk):
-        form = CommentsForm(request.POST)
-        if form.is_valid():
-            form = form.save(commit=False)
-            form.name = request.user.username
-            print(vars(form))
-            form.post_id = pk
-            form.save()
-
-        return redirect(f"/{pk}")
+# class AddComments(View):
+#     def post(self, request, pk):
+#         form = CommentsForm(request.POST)
+#         if form.is_valid():
+#             form = form.save(commit=False)
+#             form.name = request.user.username
+#             print(vars(form))
+#             form.post_id = pk
+#             form.save()
+#
+#         return redirect(f"/{pk}")
 
 
 def get_client_ip(request):
@@ -102,18 +102,18 @@ class CreatePostView(View):
         return render(request, "profile/create-post.html", {"post": post})
 
 
-class CreateUserPostView(View):
-    form_class = CreateUserPostForm
-    success_url = reverse_lazy("profile")
-#    def get(self, request):
-#        return render(request, "profile/create-post.html")
-    def post(self, request):
-        form = self.form_class(request.POST, request.FILES)
-        print(form.is_valid())
-        if form.is_valid():
-            user_image = form.save(commit=False)
-            user_image.author = request.user.username
-            user_image.save()
-            return redirect(self.success_url)
-        return render(request, "profile/create-post.html",{"form":form})
+# class CreateUserPostView(View):
+#     form_class = CreateUserPostForm
+#     success_url = reverse_lazy("profile")
+# #    def get(self, request):
+# #        return render(request, "profile/create-post.html")
+#     def post(self, request):
+#         form = self.form_class(request.POST, request.FILES)
+#         print(form.is_valid())
+#         if form.is_valid():
+#             user_image = form.save(commit=False)
+#             user_image.author = request.user.username
+#             user_image.save()
+#             return redirect(self.success_url)
+#         return render(request, "profile/create-post.html",{"form":form})
 

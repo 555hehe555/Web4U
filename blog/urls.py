@@ -30,3 +30,5 @@ urlpatterns = [
     # path('create-post-user/', views.CreateUserPostView.as_view(), name='create_post_user'),
     path('post-info/<int:pk>', views.PostDetail.as_view())
 ]
+
+

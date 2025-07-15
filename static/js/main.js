@@ -1,4 +1,4 @@
-import {getAllPosts, getPostByID} from "./api.js"
+import {getAllPosts, getPostByID, getCommentsByPostID} from "./api.js"
 
 //TODO: need refactoring
 
@@ -14,21 +14,35 @@ function renderBlogPosts(posts) {
       const imageSrc = img ? img : "/media/image/standart/dfault.png";
       return `
         <div class="container-item">
-          <li class="post">
+          <div class="post">
               <a class="post-title post-item" href="post-info/${id}"><h3>${title}</h3></a>
               <img class="post-image post-item" src="${imageSrc}" width="200px" height="200px" style="border-radius: 20px;">
               <p class="post-description post-item">${description}</p>
               <p class="post-author post-item">${author}</p>
-          </li>
+          </div>
         </div>
       `;
     })
     .join("");
 }
 
-//TODO: change corner templates markup, their have wrong semantics
-function renderPostInfo(post){
+function renderCommentsPost(comments) {
+  console.log(comments);
+  return comments.results
+    .map(({ id, name, text_comments, post }) => {
+      return `
+      <div>
+          <p class="comment-finished-user-text-comments">${text_comments}: ${name}</p>
+      </div>
+      `;
+    })
+    .join("");
+}
+
+function renderPostInfo(post, comments){
     const { id, title, img, description, author, date } = post
+    const commentsMarkup = renderCommentsPost(comments)
+    console.log(commentsMarkup)
     const imageSrc = img ? img : "/media/image/standart/dfault.png";
     return `
         <div class="container-item-detail">
@@ -41,6 +55,10 @@ function renderPostInfo(post){
             <div class="img-container">
                 <img class="post-image post-detail-image post-item" src="${imageSrc}" width="400" style="border-radius: 20px;">
             </div>
+        </div>
+        <div class="comment-finished">
+          <h2 class="comment-finished-title"><br>Comment<br></h2> 
+          ${commentsMarkup}
         </div>
     `
 }
@@ -55,26 +73,31 @@ async function showBlogPage() {
   console.log(document.querySelectorAll(".post-title"));
 }
 
-//TODO: add new func in this listener
-document.addEventListener("DOMContentLoaded", async function () {
+async function showPostInfo(id) {
+  try {
     const postInfoContainer = document.querySelector(".container-item-detail");
+    const post = await getPostByID(id);
+    const comments = await getCommentsByPostID(id);
+    console.log(comments)
+    postInfoContainer.innerHTML = renderPostInfo(post, comments);
+  } catch (error) {
+    console.error("Не вдалося завантажити пост:", error);
+  }
+}
+
+
+document.addEventListener("DOMContentLoaded", async function () {
     const path = window.location.pathname;
     const parts = path.split("/").filter(Boolean); // розіб'є /post/42 => ['post', '42']
+    console.log(parts)
 
     const pageType = parts[0]; // 'post' або 'category' або 'user'
     const id = parts[1];
 
-    if (pageType === "post-info" && id) {
-        try {
-            const post = await getPostByID(id);
-            console.log(post)
-            console.log(postInfoContainer)
-            postInfoContainer.innerHTML = renderPostInfo(post);
-        } catch (error) {
-            console.error("Не вдалося завантажити пост:", error);
-        }
+    if (parts.length === 0){
+      showBlogPage();
+    }
+    else if (pageType === "post-info" && id) {
+      showPostInfo(id)
     }
 });
-
-//TODO: use func only into first page
-showBlogPage();

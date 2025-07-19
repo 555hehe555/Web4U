@@ -1,6 +1,6 @@
 import {getAllPosts, getPostByID, getCommentsByPostID} from "./api.js"
 
-//TODO: need refactoring
+//TODO: need refactoring and dividing to extra modules
 
 
 function deleteMarkup(el) {

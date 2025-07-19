@@ -8,7 +8,7 @@ User = get_user_model()
 username = os.getenv("ADMIN_NAME", "admin")
 email = os.getenv("ADMIN_EMAIL", "admin@localhost")
 password = os.getenv("ADMIN_PASSWORD", "admin")
-#TODO: remove creating super user
+#TODO: remove creating superuser
 def create_superuser():
     """
     Create a superuser if it does not already exist.

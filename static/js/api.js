@@ -1,3 +1,4 @@
+///Add another endpoints there
 export async function getAllPosts() {
   try {
     const response = await fetch("/api/posts/");

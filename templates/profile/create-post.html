@@ -10,7 +10,7 @@
             <div id="content" class="colM">
                 <h1 class="mb-4">Додати Запис</h1>
                 <div id="content-main">
-                    <form enctype="multipart/form-data" method="post" id="post_form" action="{% url 'create_post_user' %}" novalidate>
+                    <form id="post_form">
                         {% csrf_token %}
                         {{ form.errors }}
                         <div>

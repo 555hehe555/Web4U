@@ -1,4 +1,5 @@
-import {getAllPosts, getPostByID, getCommentsByPostID} from "./api.js"
+import {getAllPosts, getPostByID, getCommentsByPostID, createPost} from "./api.js"
+import getCookie from "./get_csrf_token.js";
 
 //TODO: need refactoring and dividing to extra modules
 
@@ -47,7 +48,7 @@ function renderPostInfo(post, comments){
     return `
         <div class="container-item-detail">
             <div class="post-detail">
-                <a class="post-title post-detail-title post-item" href="/daun"><h3>${title}</h3></a>
+                <h3 class="post-title post-detail-title post-item">${title}</h3>
                 <p class="post-description post-detail-description post-item">${description}</p>
                 <p class="post-author post-detail-author post-item">${author}</p>
                 <p class="post-date post-detail-date post-item">${date}</p>
@@ -86,6 +87,13 @@ async function showPostInfo(id) {
 }
 
 
+function testCreatePost(){
+  const csrfToken = getCookie('csrftoken');
+
+  createPost(csrfToken, "api_test", "api_testapi_testapi_testapi_testapi_testapi_testapi_", "a", "2025-07-22")
+}
+
+
 document.addEventListener("DOMContentLoaded", async function () {
     const path = window.location.pathname;
     const parts = path.split("/").filter(Boolean); // розіб'є /post/42 => ['post', '42']
@@ -101,3 +109,6 @@ document.addEventListener("DOMContentLoaded", async function () {
       showPostInfo(id)
     }
 });
+
+
+testCreatePost()

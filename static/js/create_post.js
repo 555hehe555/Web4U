@@ -1,6 +1,7 @@
-document.getElementById('post_form').addEventListener('submit', function(e) {
-  console.log('aaaaaaaaaaaaa')
-  e.preventDefault(); // щоб не перезавантажувалась сторінка
+createPostForm = document.querySelector(".post_form")
+
+createPostForm.addEventListener('submit', function(e) {
+  e.preventDefault();
 
   const formData = new FormData(this);
   const title = formData.get('title');
@@ -10,4 +11,7 @@ document.getElementById('post_form').addEventListener('submit', function(e) {
   console.log(`title ${title}`)
   console.log(`description ${description}`)
   console.log(`autor ${author}`)
+
+  const csrfToken = getCookie('csrftoken');
+  createPost(csrfToken, title, description, author)
 });

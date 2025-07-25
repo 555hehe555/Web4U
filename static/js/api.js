@@ -35,7 +35,7 @@ export async function getCommentsByPostID(id) {
   }
 }
 
-export async function createPost(csrfToken, title, description, author, date) {
+export async function createPost(csrfToken, title, description, author) {
   const response = fetch(`/api/posts/`, 
   {
     method: 'POST',
@@ -47,7 +47,6 @@ export async function createPost(csrfToken, title, description, author, date) {
       "title": title,
       "description": description,
       "author": author,
-      "date": date
     })
   })
   .then(response => {

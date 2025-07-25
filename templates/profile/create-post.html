@@ -10,7 +10,7 @@
             <div id="content" class="colM">
                 <h1 class="mb-4">Додати Запис</h1>
                 <div id="content-main">
-                    <form id="post_form">
+                    <form id="post_form" class="post_form">
                         {% csrf_token %}
                         {{ form.errors }}
                         <div>
@@ -52,9 +52,7 @@
                         <div class="submit-row mt-4">
                             <button id="submit-create-post" value="Зберегти" class="button-submit default primary-btn" name="_save">Зберегти</button>
                         </div>
-                        <script>document.getElementById("submit-create-post").addEventListener("click", function(){
-                            console.log("/dau")
-                        })</script>
+                        <script src="{% static 'js/create_post.js' %}" defer></script>
                         <script id="django-admin-form-add-constants" src="/static/admin/js/change_form.js" data-model-name="post" async></script>
                         <script id="django-admin-prepopulated-fields-constants" src="/static/admin/js/prepopulate_init.js" data-prepopulated-fields="[]"></script>
                     </form>

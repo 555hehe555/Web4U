@@ -1,6 +1,7 @@
 import {getAllPosts, getPostByID, getCommentsByPostID, createPost} from "./api.js"
 import getCookie from "./get_csrf_token.js";
 
+
 //TODO: need refactoring and dividing to extra modules
 
 
@@ -94,6 +95,39 @@ function testCreatePost(){
 }
 
 
+document.getElementById('post_form').addEventListener('submit', function(e) {
+  console.log('aaaaaaaaaaaaa')
+  e.preventDefault(); // щоб не перезавантажувалась сторінка
+
+  const formData = new FormData(this);
+  const title = formData.get('title');
+  const description = formData.get('description');
+  const author = "admin"
+
+  console.log(`title ${title}`)
+  console.log(`description ${description}`)
+  console.log(`autor ${author}`)
+});
+
+
+document.addEventListener('submit', function(e) {
+  console.log('l 1')
+  if (e.target.matches("#post_form")) {
+    console.log('l 2')
+    e.preventDefault(); // щоб не перезавантажувалась сторінка
+
+    const form = document.getElementById("post_form")
+    const formData = new FormData(form);
+    const title = formData.get('title');
+    const description = formData.get('description');
+    const author = "admin"
+
+    console.log(`title ${title}`)
+    console.log(`description ${description}`)
+    console.log(`autor ${author}`)
+  }
+});
+
 document.addEventListener("DOMContentLoaded", async function () {
     const path = window.location.pathname;
     const parts = path.split("/").filter(Boolean); // розіб'є /post/42 => ['post', '42']
@@ -104,11 +138,28 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     if (parts.length === 0){
       showBlogPage();
-    }
-    else if (pageType === "post-info" && id) {
+    } else if (pageType === "post-info" && id) {
       showPostInfo(id)
+    } else if (pageType === "create-post") {
+
     }
 });
 
+console.log('l 0')
+document.addEventListener('submit', function(e) {
+  console.log('l 1')
+  if (e.target.matches("#post_form")) {
+    console.log('l 2')
+    e.preventDefault(); // щоб не перезавантажувалась сторінка
 
-testCreatePost()
+    const form = document.getElementById("post_form")
+    const formData = new FormData(form);
+    const title = formData.get('title');
+    const description = formData.get('description');
+    const author = "admin"
+
+    console.log(`title ${title}`)
+    console.log(`description ${description}`)
+    console.log(`autor ${author}`)
+  }
+});

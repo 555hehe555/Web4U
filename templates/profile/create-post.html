@@ -39,19 +39,22 @@
                                         </div>
                                     </div>
                                 </div> -->
-                                <div class="form-row field-img mb-3">
+                                <!-- <div class="form-row field-img mb-3">
                                     <div>
                                         <div class="flex-container">
                                             <label for="id_img">Зображення:</label>
                                             <input class="button-img mt-2" type="file" name="img" accept="image/*" id="id_img">
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                             </fieldset>
                         </div>
                         <div class="submit-row mt-4">
-                            <button type="submit" enctype="multipart/form-data" value="Зберегти" class="button-submit default primary-btn" name="_save">Зберегти</button>
+                            <button id="submit-create-post" value="Зберегти" class="button-submit default primary-btn" name="_save">Зберегти</button>
                         </div>
+                        <script>document.getElementById("submit-create-post").addEventListener("click", function(){
+                            console.log("/dau")
+                        })</script>
                         <script id="django-admin-form-add-constants" src="/static/admin/js/change_form.js" data-model-name="post" async></script>
                         <script id="django-admin-prepopulated-fields-constants" src="/static/admin/js/prepopulate_init.js" data-prepopulated-fields="[]"></script>
                     </form>

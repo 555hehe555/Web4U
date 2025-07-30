@@ -1,4 +1,4 @@
-import {getAllPosts, getPostByID, getCommentsByPostID} from "./api.js"
+import {getAllPosts, getPostByID, getCommentsByPostID, postCreatePost} from "./api.js"
 import getCookie from "./get_csrf_token.js";
 
 
@@ -89,11 +89,20 @@ async function showPostInfo(id) {
 }
 
 
-// function testCreatePost(){
-//   const csrfToken = getCookie('csrftoken');
+async function createPost(){
+  const createPostForm = document.querySelector(".post_form")
+  createPostForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
 
-//   createPost(csrfToken, "api_test", "api_testapi_testapi_testapi_testapi_testapi_testapi_", "a", "2025-07-22")
-// }
+    const formData = new FormData(this);
+    const title = formData.get('title');
+    const description = formData.get('description');
+    const author = "admin";
+
+    const csrfToken = getCookie('csrftoken');
+    await postCreatePost(csrfToken, title, description, author);
+    });
+}
 
 
 document.addEventListener("DOMContentLoaded", async function () {
@@ -105,10 +114,10 @@ document.addEventListener("DOMContentLoaded", async function () {
     const id = parts[1];
 
     if (parts.length === 0){
-      showBlogPage();
+      await showBlogPage();
     } else if (pageType === "post-info" && id) {
-      showPostInfo(id)
+      await showPostInfo(id)
     } else if (pageType === "create-post") {
-        console.log("we are in create-post page")
+      await createPost()
     }
 });

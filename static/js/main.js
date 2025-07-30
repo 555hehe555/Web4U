@@ -1,4 +1,4 @@
-import {getAllPosts, getPostByID, getCommentsByPostID, createPost} from "./api.js"
+import {getAllPosts, getPostByID, getCommentsByPostID} from "./api.js"
 import getCookie from "./get_csrf_token.js";
 
 
@@ -89,11 +89,11 @@ async function showPostInfo(id) {
 }
 
 
-function testCreatePost(){
-  const csrfToken = getCookie('csrftoken');
+// function testCreatePost(){
+//   const csrfToken = getCookie('csrftoken');
 
-  createPost(csrfToken, "api_test", "api_testapi_testapi_testapi_testapi_testapi_testapi_", "a", "2025-07-22")
-}
+//   createPost(csrfToken, "api_test", "api_testapi_testapi_testapi_testapi_testapi_testapi_", "a", "2025-07-22")
+// }
 
 
 document.addEventListener("DOMContentLoaded", async function () {

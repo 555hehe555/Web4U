@@ -34,35 +34,3 @@ export async function getCommentsByPostID(id) {
     return [];
   }
 }
-
-export async function createPost(csrfToken, title, description, author) {
-  const response = fetch(`/api/posts/`, 
-  {
-    method: 'POST',
-    headers: {
-        'X-CSRFToken': csrfToken,
-        'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      "title": title,
-      "description": description,
-      "author": author,
-    })
-  })
-  .then(response => {
-    if (!response.ok) {
-        return response.json().then(errorData => {
-            form.querySelector('.form-errors').innerText = JSON.stringify(errorData.errors);
-            throw new Error('Network response was not ok');
-        });
-    }
-    return response.json();
-  })
-  .then(data => {
-    console.log(data);
-  })
-  .catch(error => {
-      console.error('Error:', error);
-      alert('An error occurred while updating the data.');
-  });
-}

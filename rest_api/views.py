@@ -1,5 +1,8 @@
 from rest_framework import viewsets, permissions
 from drf_spectacular.utils import extend_schema_view
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
 from documentation.comments import comments_list_doc
 from documentation.likes import like_list_doc
@@ -26,7 +29,8 @@ from .serializers import (
     CreateCustomUserSerializer,
     DeleteCustomUserSerializer,
     PutCustomUserSerializer,
-    PatchCustomUserSerializer
+    PatchCustomUserSerializer,
+    GetMeSerializer
 )
 
 
@@ -158,3 +162,12 @@ class CustomUserViewSet(viewsets.ModelViewSet):
         elif self.action == 'partial_update':
             return PatchCustomUserSerializer
         return super().get_serializer_class()
+
+
+class ManagerViewSet(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated]
+
+    @action(methods=["get"], detail=False, url_path="me")
+    def me(self, request):
+        serializer = GetMeSerializer(self.request.user)
+        return Response(serializer.data)

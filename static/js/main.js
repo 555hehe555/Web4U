@@ -92,15 +92,15 @@ async function showPostInfo(id) {
 async function createPost(){
   const createPostForm = document.querySelector(".post_form")
   createPostForm.addEventListener('submit', async function(e) {
-    e.preventDefault();
+    e.preventDefault()
 
-    const formData = new FormData(this);
-    const title = formData.get('title');
-    const description = formData.get('description');
-    const author = "admin";
+    const formData = new FormData(this)
+    const title = formData.get('title')
+    const description = formData.get('description')
+    const author = "admin"
 
-    const csrfToken = getCookie('csrftoken');
-    await postCreatePost(csrfToken, title, description, author);
+    const csrfToken = getCookie('csrftoken')
+    await postCreatePost(csrfToken, title, description, author)
     });
 }
 

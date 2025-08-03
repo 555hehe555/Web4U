@@ -1,9 +1,12 @@
-from django.urls import path
+from django.urls import path, include
 from django.shortcuts import redirect
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+from rest_framework.routers import DefaultRouter
 
 from . import views
 
+router = DefaultRouter()
+router.register(r'', views.ManagerViewSet, basename='manager')
 
 urlpatterns = [
     path('posts/', views.PostModelViewSet.as_view({'get': 'list', 'post': 'create'})),
@@ -33,8 +36,10 @@ urlpatterns = [
         'patch': 'partial_update'
     })),
 
+
+    path('', include(router.urls)),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
-    path("", lambda request: redirect("swagger-ui")),
+    path('', lambda request: redirect("swagger-ui")),
     path(route='v1/docs/', view=SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
 ]
 

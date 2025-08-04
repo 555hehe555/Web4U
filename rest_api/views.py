@@ -1,6 +1,6 @@
 from rest_framework import viewsets, permissions
 from drf_spectacular.utils import extend_schema_view
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -9,7 +9,7 @@ from documentation.likes import like_list_doc
 from documentation.posts import post_list_doc
 from documentation.custom_user import user_list_doc
 from .models import Post, Comments, CustomUser
-from .permissions import IsOwner
+from .permissions import IsOwner, IsOwnerOrReadOnly
 from .serializers import (
     GetPostsListSerializer,
     CreatePostsListSerializer,
@@ -44,6 +44,7 @@ from .serializers import (
 )
 class PostModelViewSet(viewsets.ModelViewSet):
     template_settings_list = 'blog.html'
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     http_method_names = ['get', 'post', 'delete', 'put', 'patch']
     serializer_class = GetPostsListSerializer
     queryset = Post.objects.all().order_by('-date')
@@ -61,6 +62,9 @@ class PostModelViewSet(viewsets.ModelViewSet):
             return PatchPostsListSerializer
         return super().get_serializer_class()
 
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
+
 
 @extend_schema_view(
     list = comments_list_doc,
@@ -72,6 +76,7 @@ class PostModelViewSet(viewsets.ModelViewSet):
 )
 class CommentModelViewSet(viewsets.ModelViewSet):
     http_method_names = ['get', 'post', 'delete', 'put', 'patch']
+    permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     serializer_class = GetCommentListSerializer
     queryset = Comments.objects.all()
 
@@ -89,6 +94,9 @@ class CommentModelViewSet(viewsets.ModelViewSet):
         elif self.action == 'partial_update':
             return PatchCommentListSerializer
         return super().get_serializer_class()
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 
 @extend_schema_view(

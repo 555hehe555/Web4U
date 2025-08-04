@@ -36,12 +36,11 @@ export async function getCommentsByPostID(id) {
   }
 }
 
-export async function postCreatePost(csrfToken, title, description, author) {
+export async function postCreatePost(csrfToken, title, description) {
   console.warn("createPost function called");
   console.log(`csrfToken ${csrfToken}`);
   console.log(`title ${title}`);
   console.log(`description ${description}`);
-  console.log(`author ${author}`);
 
 
   try {
@@ -53,8 +52,7 @@ export async function postCreatePost(csrfToken, title, description, author) {
       },
       body: JSON.stringify({
         title: title,
-        description: description,
-        author: author,
+        description: description
       })
     });
 

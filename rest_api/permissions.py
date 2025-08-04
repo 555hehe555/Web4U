@@ -19,3 +19,21 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
 class IsOwner(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         return obj == request.user
+
+
+class IsAuthenticated(permissions.BasePermission):
+    """
+    Custom permission to only allow authenticated users to access the view.
+    """
+
+    def has_permission(self, request, view):
+        return request.user and request.user.is_authenticated
+
+
+class IsThisUser(permissions.BasePermission):
+    """
+    Custom permission to only allow the user to access their own data.
+    """
+
+    def has_permission(self, request, view):
+        return request.user and request.user.is_authenticated and request.user.id == view.kwargs.get('pk')

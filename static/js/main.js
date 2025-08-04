@@ -109,10 +109,9 @@ async function createPost(){
         const formData = new FormData(this)
         const title = formData.get('title')
         const description = formData.get('description')
-        const author = (await getCurrentUser()).username;
 
         const csrfToken = getCookie('csrftoken')
-        await postCreatePost(csrfToken, title, description, author)
+        await postCreatePost(csrfToken, title, description)
         alert("Пост успішно створено")
       } catch (error) {
         console.error("Не вдалося створити пост:", error);

@@ -11,7 +11,7 @@ class Post(models.Model):
     description = models.TextField("текст поста")
     author = models.CharField("імя автора", max_length=60)
     # img = models.ImageField("зображеня", upload_to="image/%Y", blank=True)
-    date = models.DateField("дата публікації")
+    date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'{self.title},{self.author}'

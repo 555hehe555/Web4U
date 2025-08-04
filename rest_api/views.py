@@ -46,7 +46,7 @@ class PostModelViewSet(viewsets.ModelViewSet):
     template_settings_list = 'blog.html'
     http_method_names = ['get', 'post', 'delete', 'put', 'patch']
     serializer_class = GetPostsListSerializer
-    queryset = Post.objects.all()
+    queryset = Post.objects.all().order_by('-date')
 
     def get_serializer_class(self):
         if self.action == 'create':

@@ -1,7 +1,8 @@
 ///Add another endpoints there
-export async function getAllPosts() {
+export async function getAllPosts(page = 1) {
   try {
-    const response = await fetch("/api/posts/");
+    console.warn("getAllPosts function called", page);
+    const response = await fetch(`/api/posts/?page=${page}`);
     const data = await response.json();
     console.log(data);
     return data;
@@ -54,7 +55,6 @@ export async function postCreatePost(csrfToken, title, description, author) {
         title: title,
         description: description,
         author: author,
-        date: "2000-01-10"
       })
     });
 
@@ -72,5 +72,17 @@ export async function postCreatePost(csrfToken, title, description, author) {
   } catch (error) {
     console.error("Помилка при створенні поста:", error);
     alert("Сталася помилка при збереженні. Спробуйте ще раз.");
+  }
+}
+
+export async function getCurrentUser() {
+  try {
+    const response = await fetch("/api/me/");
+    const data = await response.json();
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.error("Error:", error);
+    return null;
   }
 }

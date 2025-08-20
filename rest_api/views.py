@@ -1,6 +1,6 @@
 from rest_framework import viewsets, permissions
 from drf_spectacular.utils import extend_schema_view
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -8,7 +8,7 @@ from documentation.comments import comments_list_doc
 from documentation.likes import like_list_doc
 from documentation.posts import post_list_doc
 from documentation.custom_user import user_list_doc
-from .models import Post, Comments, CustomUser
+from .models import Post, Comments, Like, CustomUser
 from .permissions import IsOwner, IsOwnerOrReadOnly
 from .serializers import (
     GetPostsListSerializer,
@@ -106,14 +106,14 @@ class CommentModelViewSet(viewsets.ModelViewSet):
     destroy=like_list_doc
 )
 class LikePostViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated]
     http_method_names = ['get', 'post', 'delete']
     serializer_class = GetAllUserLikeSerializer
-    queryset = Post.objects.all()
+
+    def get_queryset(self):
+        post_pk = self.kwargs.get("post_pk")  # беремо id поста з url
+        return Like.objects.filter(post_id=post_pk)
 
     def get_serializer_class(self):
-        # if self.action == 'retrieve':
-        #     return GetUserLikeSerializer
         if self.action == 'list':
             return GetAllUserLikeSerializer
         elif self.action == 'create':
@@ -121,6 +121,15 @@ class LikePostViewSet(viewsets.ModelViewSet):
         elif self.action == 'destroy':
             return DeleteUserLikeSerializer
         return super().get_serializer_class()
+
+    def perform_create(self, serializer):
+        if self.action == 'list':  # GET /api/posts/{id}/likes/
+            return [permissions.AllowAny()]
+        elif self.action in ['create', 'destroy']:
+            return [IsOwnerOrReadOnly()]
+        post_pk = self.kwargs.get("post_pk")  # щоб лайк завжди був до цього поста
+        serializer.save(user=self.request.user, post_id=post_pk)
+
 
     # @swagger_auto_schema(manual_parameters=[post_pk_param])
     # def list(self, request, post_pk=None):

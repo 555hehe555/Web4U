@@ -80,11 +80,11 @@ class PatchCommentListSerializer(serializers.ModelSerializer):
 
 ### === LIKES === ###
 class GetAllUserLikeSerializer(serializers.ModelSerializer):
-    user = serializers.CharField(source='user.username', read_only=True)
+    author = serializers.CharField(source="user.username", read_only=True)
 
     class Meta:
         model = Like
-        fields = ['id', 'post', 'user']
+        fields = ['id', 'author', 'post']
 
 
 class CreateUserLikeSerializer(serializers.ModelSerializer):

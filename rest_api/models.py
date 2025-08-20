@@ -47,7 +47,6 @@ class Comments(models.Model):
         verbose_name_plural = 'коментарі'
 
 
-
 class Like(models.Model):
     user = models.ForeignKey(CustomUser, verbose_name='користувач', on_delete=models.CASCADE)
     post = models.ForeignKey(Post, verbose_name='публікація', on_delete=models.CASCADE)

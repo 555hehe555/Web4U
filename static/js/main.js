@@ -1,4 +1,4 @@
-import {getAllPosts, getPostByID, getCommentsByPostID, postCreatePost, getCurrentUser} from "./api.js"
+import {getAllPosts, getPostByID, getCommentsByPostID, postCreatePost, getCurrentUser, getLikesByPostID} from "./api.js"
 import getCookie from "./get_csrf_token.js";
 
 
@@ -40,20 +40,34 @@ function renderBlogPosts(posts) {
 }
 
 function renderCommentsPost(comments) {
-  console.log(comments);
+  console.log(comments.results);
   return comments.results
-    .map(({ id, name, text_comments, post }) => {
+    .map(({ id, user, text_comments, post }) => {
       return `
       <div>
-          <p class="comment-finished-user-text-comments">${text_comments}: ${name}</p>
+          <p class="comment-finished-user-text-comments">${user}: ${text_comments}</p>
       </div>
       `;
     })
     .join("");
 }
 
-function renderPostInfo(post, comments){
+function renderLikes(likes) {
+  const countLikes = likes.count;
+  return likes.results
+    .map(({ id, author, post }) => {
+      return `
+      <div>
+
+      </div>
+      `;
+    })
+    .join("");
+}
+
+function renderPostInfo(post, comments, likes) {
     const { id, title, img, description, author, date } = post
+    const countLikes = likes.count;
     const commentsMarkup = renderCommentsPost(comments)
     console.log(commentsMarkup)
     const imageSrc = img ? img : "/media/image/standart/dfault.png";
@@ -69,6 +83,10 @@ function renderPostInfo(post, comments){
             <div class="img-container">
                 <img class="post-image post-detail-image post-item" src="${imageSrc}" width="400" style="border-radius: 20px;">
             </div>
+        </div>
+        <div class="like">
+            <button class="like-img" width="20px" height="20px">батони</button>
+            <p>${countLikes}</p>
         </div>
         <div class="comment-finished">
           <h2 class="comment-finished-title"><br>Comment<br></h2> 
@@ -93,8 +111,10 @@ async function showPostInfo(id) {
     const postInfoContainer = document.querySelector(".container-item-detail");
     const post = await getPostByID(id);
     const comments = await getCommentsByPostID(id);
+    const likes = await getLikesByPostID(id);
     console.log(comments)
-    postInfoContainer.innerHTML = renderPostInfo(post, comments);
+    console.log(likes)
+    postInfoContainer.innerHTML = renderPostInfo(post, comments, likes);
   } catch (error) {
     console.error("Не вдалося завантажити пост:", error);
   }

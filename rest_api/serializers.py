@@ -90,7 +90,7 @@ class GetAllUserLikeSerializer(serializers.ModelSerializer):
 class CreateUserLikeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Like
-        fields = ['id', 'post']
+        fields = ['id']
         read_only_fields = ['id']  # user призначається через perform_create()
 
 

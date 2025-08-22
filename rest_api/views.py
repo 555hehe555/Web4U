@@ -33,7 +33,6 @@ from .serializers import (
     GetMeSerializer
 )
 
-
 @extend_schema_view(
     list=post_list_doc,
     retrieve=post_list_doc,
@@ -78,7 +77,10 @@ class CommentModelViewSet(viewsets.ModelViewSet):
     http_method_names = ['get', 'post', 'delete', 'put', 'patch']
     permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     serializer_class = GetCommentListSerializer
-    queryset = Comments.objects.all()
+
+    def get_queryset(self):
+        post_pk = self.kwargs.get("post_pk")  # беремо id поста з url
+        return Comments.objects.filter(post_id=post_pk)
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -96,7 +98,8 @@ class CommentModelViewSet(viewsets.ModelViewSet):
         return super().get_serializer_class()
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        post_pk = self.kwargs.get("post_pk")  # щоб коментар завжди був до цього поста
+        serializer.save(user=self.request.user, post_id=post_pk)
 
 
 @extend_schema_view(
@@ -113,6 +116,13 @@ class LikePostViewSet(viewsets.ModelViewSet):
         post_pk = self.kwargs.get("post_pk")  # беремо id поста з url
         return Like.objects.filter(post_id=post_pk)
 
+    def get_permissions(self):
+        if self.action == 'list':
+            return [permissions.AllowAny()]
+        elif self.action in ['create', 'destroy']:
+            return [IsOwnerOrReadOnly()]
+        return super().get_permissions()
+
     def get_serializer_class(self):
         if self.action == 'list':
             return GetAllUserLikeSerializer
@@ -123,29 +133,11 @@ class LikePostViewSet(viewsets.ModelViewSet):
         return super().get_serializer_class()
 
     def perform_create(self, serializer):
-        if self.action == 'list':  # GET /api/posts/{id}/likes/
-            return [permissions.AllowAny()]
-        elif self.action in ['create', 'destroy']:
-            return [IsOwnerOrReadOnly()]
-        post_pk = self.kwargs.get("post_pk")  # щоб лайк завжди був до цього поста
-        serializer.save(user=self.request.user, post_id=post_pk)
-
-
-    # @swagger_auto_schema(manual_parameters=[post_pk_param])
-    # def list(self, request, post_pk=None):
-    #     return super().list(request)
-    #
-    # @swagger_auto_schema(manual_parameters=[post_pk_param])
-    # def create(self, request, post_pk=None):
-    #     return super().create(request)
-    #
-    # @swagger_auto_schema(manual_parameters=[post_pk_param, pk_param])
-    # def retrieve(self, request, post_pk=None, pk=None):
-    #     return super().retrieve(request, pk)
-    #
-    # @swagger_auto_schema(manual_parameters=[post_pk_param, pk_param])
-    # def destroy(self, request, post_pk=None, pk=None):
-    #     return super().destroy(request, pk)
+        post_pk = self.kwargs.get("post_pk")  # id поста з url
+        serializer.save(
+            user_id=self.request.user.id,
+            post_id=post_pk
+        )
 
 
 @extend_schema_view(

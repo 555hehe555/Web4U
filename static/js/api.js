@@ -4,7 +4,7 @@ export async function getAllPosts(page = 1) {
     console.warn("getAllPosts function called", page);
     const response = await fetch(`/api/posts/?page=${page}`);
     const data = await response.json();
-    console.log(data);
+    console.log("All post" + data);
     return data;
   } catch (error) {
     console.error("Error:", error);
@@ -16,7 +16,7 @@ export async function getPostByID(id) {
   try {
     const response = await fetch(`/api/posts/${id}`);
     const data = await response.json();
-    console.log(data);
+    console.log("post by id" + data);
     return data;
   } catch (error) {
     console.error("Error:", error);
@@ -28,7 +28,7 @@ export async function getCommentsByPostID(id) {
   try {
     const response = await fetch(`/api/posts/${id}/comments/`);
     const data = await response.json();
-    console.log(data);
+    console.log("comment" + data);
     return data;
   } catch (error) {
     console.error("Error:", error);
@@ -77,10 +77,22 @@ export async function getCurrentUser() {
   try {
     const response = await fetch("/api/me/");
     const data = await response.json();
-    console.log(data);
+    console.log("get me" + data);
     return data;
   } catch (error) {
     console.error("Error:", error);
     return null;
+  }
+}
+
+export async function getLikesByPostID(id) {
+  try {
+    const response = await fetch(`/api/posts/${id}/likes/`);
+    const data = await response.json();
+    console.log("like" + data);
+    return data;
+  } catch (error) {
+    console.error("Error:", error);
+    return [];
   }
 }

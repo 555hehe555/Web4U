@@ -1,4 +1,5 @@
-import {getAllPosts, getPostByID, getCommentsByPostID, postCreatePost, getCurrentUser, getLikesByPostID} from "./api.js"
+import {getAllPosts, getPostByID, getCommentsByPostID, postCreatePost, getCurrentUser,
+  getLikesByPostID, postCreateLike, deleteLike} from "./api.js"
 import getCookie from "./get_csrf_token.js";
 
 
@@ -17,6 +18,18 @@ const first = document.getElementById('first')
 const prev = document.getElementById('prev')
 const next = document.getElementById('next')
 const last = document.getElementById('last')
+
+
+function getPage(){
+  const path = window.location.pathname;
+  const parts = path.split("/").filter(Boolean); // розіб'є /post/42 => ['post', '42']
+  console.log(parts)
+
+  const pageType = parts[0]; // 'post' або 'category' або 'user'
+  const id = parts[1];
+
+  return { pageType, id }
+}
 
 
 function renderBlogPosts(posts) {
@@ -52,28 +65,19 @@ function renderCommentsPost(comments) {
     .join("");
 }
 
-function renderLikes(likes) {
-  const countLikes = likes.count;
-  return likes.results
-    .map(({ id, author, post }) => {
-      return `
-      <div>
-
-      </div>
-      `;
-    })
-    .join("");
-}
 
 function renderPostInfo(post, comments, likes) {
-    const { id, title, img, description, author, date } = post
-    const countLikes = likes.count;
-    const commentsMarkup = renderCommentsPost(comments)
-    console.log(commentsMarkup)
-    const imageSrc = img ? img : "/media/image/standart/dfault.png";
-    const shortDate = date.split("T")[0];
-    return `
-        <div class="container-item-detail">
+  const { id, title, img, description, author, date } = post;
+  const countLikes = likes.count || 0;
+  const commentsMarkup = renderCommentsPost(comments);
+  const imageSrc = img ? img : "/media/image/standart/dfault.png";
+  const likeImgSrc = likes.user_liked
+    ? "./../../media/like_v2.png"
+    : "./../../media/no_like_v2.png";
+  const shortDate = date.split("T")[0];
+
+  return `
+        <div class="container-item-detail" data-post-id="${id}">
             <div class="post-detail">
                 <h3 class="post-title post-detail-title post-item">${title}</h3>
                 <p class="post-description post-detail-description post-item">${description}</p>
@@ -83,17 +87,22 @@ function renderPostInfo(post, comments, likes) {
             <div class="img-container">
                 <img class="post-image post-detail-image post-item" src="${imageSrc}" width="400" style="border-radius: 20px;">
             </div>
+            
+            <div class="like">
+              <a href="#" class="like-btn">
+                <img src="${likeImgSrc}" width="20" height="20">
+              </a>
+              <span class="like-count">${countLikes}</span>
+            </div>
         </div>
-        <div class="like">
-            <button class="like-img" width="20px" height="20px">батони</button>
-            <p>${countLikes}</p>
-        </div>
+
         <div class="comment-finished">
           <h2 class="comment-finished-title"><br>Comment<br></h2> 
           ${commentsMarkup}
         </div>
-    `
+    `;
 }
+
 
 
 async function showBlogPage() {
@@ -113,7 +122,7 @@ async function showPostInfo(id) {
     const comments = await getCommentsByPostID(id);
     const likes = await getLikesByPostID(id);
     console.log(comments)
-    console.log(likes)
+    console.error(likes)
     postInfoContainer.innerHTML = renderPostInfo(post, comments, likes);
   } catch (error) {
     console.error("Не вдалося завантажити пост:", error);
@@ -139,16 +148,59 @@ async function createPost(){
     });
 }
 
+document.addEventListener("DOMContentLoaded", function() {
+  const container = document.querySelector(".container-detail");
+  if (!container) return; // якщо контейнера нема, нічого не робимо
+
+  container.addEventListener("click", async function(e) {
+    const likeBtn = e.target.closest(".like-btn");
+    if (!likeBtn) return;
+
+    const postElem = likeBtn.closest(".container-item-detail");
+    if (!postElem) return;
+
+    const postId = postElem.dataset.postId;
+    if (!postId) return;
+
+    console.log("Like button clicked for post", postId); // <- перевірка
+
+    try {
+      const likes = await getLikesByPostID(postId);
+      const currentUser = await getCurrentUser();
+      const userLike = likes.results.find(like => like.author === currentUser.username);
+      const csrfToken = getCookie("csrftoken");
+
+      if (currentUser?.detail) {
+        alert("Щоб поставити лайк, будь ласка, увійдіть або зареєструйтесь.");
+        return;
+      }
+
+      if (userLike) {
+        await deleteLike(csrfToken, postId, userLike.id);
+      } else {
+        await postCreateLike(csrfToken, postId);
+      }
+
+      // оновлюємо UI
+      const updatedLikes = await getLikesByPostID(postId);
+      const img = likeBtn.querySelector("img");
+      const userLiked = updatedLikes.results.some(like => like.author === currentUser.username);
+      img.src = userLiked ? "./../../media/like_v2.png" : "./../../media/no_like_v2.png";
+
+      const countElem = postElem.querySelector(".like-count");
+      if (countElem) countElem.textContent = updatedLikes.count || 0;
+    } catch (err) {
+      console.error("Не вдалося оновити лайк:", err);
+    }
+  });
+});
+
+
 
 document.addEventListener("DOMContentLoaded", async function () {
-    const path = window.location.pathname;
-    const parts = path.split("/").filter(Boolean); // розіб'є /post/42 => ['post', '42']
-    console.log(parts)
+    const { pageType, id } = getPage();
 
-    const pageType = parts[0]; // 'post' або 'category' або 'user'
-    const id = parts[1];
-
-    if (parts.length === 0){
+    if (pageType === undefined) {
       await showBlogPage();
 
       for (let i of [first, prev, next, last]) {

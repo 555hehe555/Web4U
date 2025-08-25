@@ -113,7 +113,7 @@ class LikePostViewSet(viewsets.ModelViewSet):
     serializer_class = GetAllUserLikeSerializer
 
     def get_queryset(self):
-        post_pk = self.kwargs.get("post_pk")  # беремо id поста з url
+        post_pk = self.kwargs.get("post_pk")  # id поста з url
         return Like.objects.filter(post_id=post_pk)
 
     def get_permissions(self):
@@ -138,6 +138,21 @@ class LikePostViewSet(viewsets.ModelViewSet):
             user_id=self.request.user.id,
             post_id=post_pk
         )
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True, context={'request': request})
+
+        data = {
+            "count": queryset.count(),
+            "results": serializer.data,
+            "user_liked": (
+                request.user.is_authenticated
+                and queryset.filter(user_id=request.user.id).exists()
+            )
+        }
+        return Response(data)
+
 
 
 @extend_schema_view(

@@ -25,6 +25,7 @@ ENV/
 
 # Static / Media (якщо генерується або динамічно додається)
 media/
+!media/image/standart/
 # /static/  <- залиш коментованим, якщо стилі статичні й потрібні
 
 # Docker / DB

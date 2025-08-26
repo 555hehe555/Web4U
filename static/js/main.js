@@ -37,7 +37,7 @@ function renderBlogPosts(posts) {
   totalPages = Math.ceil(posts.count / 10);
   return posts.results
     .map(({ id, title, img, description, author, date }) => {
-      const imageSrc = img ? img : "/media/image/standart/dfault.png";
+      const imageSrc = img ? img : "/media/image/standart/img_placeholder.png";
       return `
         <div class="container-item">
           <div class="post">
@@ -70,10 +70,10 @@ function renderPostInfo(post, comments, likes) {
   const { id, title, img, description, author, date } = post;
   const countLikes = likes.count || 0;
   const commentsMarkup = renderCommentsPost(comments);
-  const imageSrc = img ? img : "/media/image/standart/dfault.png";
+  const imageSrc = img ? img : "/media/image/standart/img_placeholder.png";
   const likeImgSrc = likes.user_liked
-    ? "./../../media/like_v2.png"
-    : "./../../media/no_like_v2.png";
+    ? "/media/image/standart/like.png"
+    : "/media/image/standart/no_like.png";
   const shortDate = date.split("T")[0];
 
   return `
@@ -190,7 +190,7 @@ document.addEventListener("DOMContentLoaded", function() {
       const updatedLikes = await getLikesByPostID(postId);
       const img = likeBtn.querySelector("img");
       const userLiked = updatedLikes.results.some(like => like.author === currentUser.username);
-      img.src = userLiked ? "./../../media/like_v2.png" : "./../../media/no_like_v2.png";
+      img.src = userLiked ? "/media/image/standart/like.png" : "/media/image/standart/no_like.png";
 
       const countElem = postElem.querySelector(".like-count");
       if (countElem) countElem.textContent = updatedLikes.count || 0;
@@ -233,8 +233,9 @@ document.addEventListener("DOMContentLoaded", function() {
     if (!commentText) {
       alert("Коментар не може бути порожнім.");
       return;
+    }
 
-      try {
+    try {
         const csrfToken = getCookie("csrftoken");
         console.warn(csrfToken, postId, commentText);
         await postCreateComment(csrfToken, postId, commentText);
@@ -245,7 +246,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const commentsContainer = document.querySelector(".comment-finished");
         if (commentsContainer) {
           commentsContainer.innerHTML = `
-            <h2 class="comment-finished-title"><br>Comment<br></h2> 
+            <h2 class="comment-finished-title"><br>Comment<br></h2>
             ${renderCommentsPost(comments)}
           `;
         }
@@ -253,7 +254,6 @@ document.addEventListener("DOMContentLoaded", function() {
         console.error("Не вдалося додати коментар:", err);
         alert("Сталася помилка при додаванні коментаря. Спробуйте ще раз.");
       }
-    }
   });
 });
 

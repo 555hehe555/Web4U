@@ -9,7 +9,7 @@ class CustomUser(AbstractUser):
 
 class Post(models.Model):
     title = models.CharField('заголовок поста', max_length=70)
-    description = models.TextField("текст поста")
+    description = models.TextField("текст поста", max_length=500)
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         verbose_name="автор",
@@ -29,7 +29,7 @@ class Post(models.Model):
 
 class Comments(models.Model):
     id = models.AutoField(primary_key=True)
-    text_comments = models.TextField('текст коментаря', max_length=240)
+    text_comments = models.TextField('текст коментаря', max_length=500)
     date = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,

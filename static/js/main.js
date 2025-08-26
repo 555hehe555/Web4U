@@ -1,4 +1,4 @@
-import {getAllPosts, getPostByID, getCommentsByPostID, postCreatePost, getCurrentUser,
+import {getAllPosts, getPostByID, getCommentsByPostID, postCreateComment, postCreatePost, getCurrentUser,
   getLikesByPostID, postCreateLike, deleteLike} from "./api.js"
 import getCookie from "./get_csrf_token.js";
 
@@ -93,6 +93,11 @@ function renderPostInfo(post, comments, likes) {
                 <img src="${likeImgSrc}" width="20" height="20">
               </a>
               <span class="like-count">${countLikes}</span>
+            </div>
+            
+            <div class="comment-form">
+                <textarea type="text" class="comment-input" placeholder="Write a comment..."></textarea>
+                <button class="comment-submit-btn">Submit</button>
             </div>
         </div>
 
@@ -191,6 +196,63 @@ document.addEventListener("DOMContentLoaded", function() {
       if (countElem) countElem.textContent = updatedLikes.count || 0;
     } catch (err) {
       console.error("Не вдалося оновити лайк:", err);
+    }
+  });
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  console.warn("111")
+  const container = document.querySelector(".container-detail");
+  if (!container) return; // якщо контейнера нема, нічого не робимо
+  console.warn("222")
+
+  container.addEventListener("click", async function(e) {
+    console.warn("333")
+    const commentSubmitBtn = e.target.closest(".comment-submit-btn");
+    if (!commentSubmitBtn) return;
+
+    const commentInput = document.querySelector(".comment-input");
+    console.log(commentInput, commentSubmitBtn); // <- перевірка
+    console.warn("444")
+
+    const postElem = commentSubmitBtn.closest(".container-item-detail");
+    if (!postElem) return;
+    console.warn("555")
+
+    const postId = postElem.dataset.postId;
+    if (!postId) return;
+    console.log("666")
+
+    console.log("Comment button clicked for post", postId); // <- перевірка
+
+    console.log("Submit comment clicked"); // <- перевірка
+    e.preventDefault();
+    const commentText = commentInput.value;
+    console.error(commentText);
+    if (!commentText) {
+      alert("Коментар не може бути порожнім.");
+      return;
+
+      try {
+        const csrfToken = getCookie("csrftoken");
+        console.warn(csrfToken, postId, commentText);
+        await postCreateComment(csrfToken, postId, commentText);
+        commentInput.value = ""; // очищаємо поле вводу
+
+        // Оновлюємо список коментарів
+        const comments = await getCommentsByPostID(postId);
+        const commentsContainer = document.querySelector(".comment-finished");
+        if (commentsContainer) {
+          commentsContainer.innerHTML = `
+            <h2 class="comment-finished-title"><br>Comment<br></h2> 
+            ${renderCommentsPost(comments)}
+          `;
+        }
+      } catch (err) {
+        console.error("Не вдалося додати коментар:", err);
+        alert("Сталася помилка при додаванні коментаря. Спробуйте ще раз.");
+      }
     }
   });
 });

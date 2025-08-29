@@ -1,11 +1,11 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.generic.base import View
+from django.views.generic.base import View, TemplateView
 from django.views.generic import FormView
 from django.contrib.auth.forms import UserModel
 
-from .form import CreateUserForm
+# from .form import CreateUserForm
 from .models import Post, Likes, OwnUserPost
 
 
@@ -72,25 +72,16 @@ def logout_user(request):
     return redirect("/profile")
 
 
-class RegisterView(FormView):
-    form_class = CreateUserForm
-    template_name = "registration/registration.html"
-    success_url = reverse_lazy("profile")
-
-    def form_valid(self, form):
-        print(form.cleaned_data, form.is_valid())
-        form.save()
-        return super().form_valid(form)
-
+class RegisterView(View):
+    def get(self, request):
+        print("get in blog register")
+        return render(request, "registration/registration.html")
     # def post(self, request):
-    #
-    #     form = self.get_form()
-    #     # print(form.data, form.is_valid())
-    #     if form.is_valid():
-    #         form.save()
-    #         return redirect(success_url)
-    #     else:
-    #         return redirect(reverse_lazy("register"))
+    #     print("post in blog register")
+    #     pass
+
+# def register_view(request):
+#     return render(request, 'profile/register.html')
 
 
 class CreatePostView(View):

@@ -17,7 +17,7 @@ from rest_api.models import CustomUser
 #         fields = ['title', 'description', 'img']
 
 
-class CreateUserForm(UserCreationForm):
-    class Meta(UserCreationForm):
-        model = CustomUser
-        fields = ['username', 'password1', 'password2', 'email']
+# class CreateUserForm(UserCreationForm):
+#     class Meta(UserCreationForm):
+#         model = CustomUser
+#         fields = ['username', 'password1', 'password2', 'email']

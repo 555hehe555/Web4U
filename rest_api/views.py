@@ -1,3 +1,4 @@
+from django.contrib.auth import authenticate, login
 from rest_framework import viewsets, permissions
 from drf_spectacular.utils import extend_schema_view
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
@@ -30,7 +31,8 @@ from .serializers import (
     DeleteCustomUserSerializer,
     PutCustomUserSerializer,
     PatchCustomUserSerializer,
-    GetMeSerializer
+    GetMeSerializer,
+    LoginCustomUserSerializer
 )
 
 @extend_schema_view(
@@ -195,3 +197,28 @@ class ManagerViewSet(viewsets.ViewSet):
     def me(self, request):
         serializer = GetMeSerializer(self.request.user)
         return Response(serializer.data)
+
+
+class LoginViewSet(viewsets.ViewSet):
+    permission_classes = [permissions.AllowAny]
+    http_method_names = ['post']
+    serializer_class = LoginCustomUserSerializer
+    queryset = CustomUser.objects.all()
+
+    def create(self, request, *args, **kwargs):  # create → POST
+        serializer = LoginCustomUserSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        # звідси можна дістати поля:
+        username = serializer.validated_data['username']
+        password = serializer.validated_data['password']
+
+        # аутентифікація
+        user = authenticate(username=username, password=password)
+        if user is None:
+            return Response({"detail": "Invalid credentials"}, status=400)
+
+        print(request, user)
+        login(request, user)  # створюємо сесію
+        return Response({"detail": "login successful"})
+

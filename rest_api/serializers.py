@@ -163,3 +163,11 @@ class GetMeSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['id', 'username']
+
+
+class LoginCustomUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'password']
+        extra_kwargs = {'password': {'write_only': True}}
+

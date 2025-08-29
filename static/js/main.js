@@ -1,5 +1,7 @@
-import {getAllPosts, getPostByID, getCommentsByPostID, postCreateComment, postCreatePost, getCurrentUser,
-  getLikesByPostID, postCreateLike, deleteLike} from "./api.js"
+import {
+  getAllPosts, getPostByID, getCommentsByPostID, postCreateComment, postCreatePost, getCurrentUser,
+  getLikesByPostID, postCreateLike, deleteLike, postCreateUser, postLoginUser
+} from "./api.js"
 import getCookie from "./get_csrf_token.js";
 
 
@@ -258,6 +260,41 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 
+async function createUser(){
+  console.log("createUser function called");
+  const registerForm = document.querySelector(".login-form")
+
+  registerForm.addEventListener('submit', async function(e) {
+    e.preventDefault()
+    console.log("createUser event listener called");
+
+      try {
+        const formData = new FormData(this)
+        const username = formData.get('username')
+        const password = formData.get('password1')
+        const password2 = formData.get('password2')
+        const email = formData.get('email')
+
+        if (password !== password2) {
+          alert("Паролі не співпадають")
+          return
+        }
+
+        const csrfToken = getCookie('csrftoken')
+        console.warn(csrfToken, username, password, email)
+        await postCreateUser(csrfToken, username, password, email)
+        alert("Користувача успішно створено")
+        await postLoginUser(csrfToken, username, password)
+        window.location.href = "/profile/";
+        
+
+      } catch (error) {
+        console.error("Не вдалося створити користувача:", error);
+      }
+    });
+}
+
+
 
 document.addEventListener("DOMContentLoaded", async function () {
     const { pageType, id } = getPage();
@@ -285,5 +322,11 @@ document.addEventListener("DOMContentLoaded", async function () {
       await showPostInfo(id)
     } else if (pageType === "create-post") {
       await createPost()
+    } else if (pageType === "register") {
+      await createUser()
+    }
+
+    else {
+      console.error("Unknown page type or missing ID");
     }
 });

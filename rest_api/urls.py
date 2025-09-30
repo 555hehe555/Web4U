@@ -35,7 +35,8 @@ urlpatterns = [
         'put': 'update',
         'patch': 'partial_update'
     })),
-    path('accounts/login/', views.LoginViewSet.as_view({'post': 'create'})),
+    path('accounts/login/', views.AuthViewSet.as_view({'post': 'login'}), name='login'),
+    path('accounts/logout/', views.AuthViewSet.as_view({'post': 'logout'}), name='logout'),
 
     path('', include(router.urls)),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),

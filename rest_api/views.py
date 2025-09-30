@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from rest_framework import viewsets, permissions
 from drf_spectacular.utils import extend_schema_view
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
@@ -7,6 +7,7 @@ from rest_framework.response import Response
 
 from documentation.comments import comments_list_doc
 from documentation.likes import like_list_doc
+from documentation.login_user import login_user_list_doc, logout_user_list_doc
 from documentation.posts import post_list_doc
 from documentation.custom_user import user_list_doc
 from .models import Post, Comments, Like, CustomUser
@@ -34,6 +35,7 @@ from .serializers import (
     GetMeSerializer,
     LoginCustomUserSerializer
 )
+import colorama
 
 @extend_schema_view(
     list=post_list_doc,
@@ -190,6 +192,7 @@ class CustomUserViewSet(viewsets.ModelViewSet):
         return super().get_serializer_class()
 
 
+@extend_schema_view(me=login_user_list_doc)
 class ManagerViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
 
@@ -199,26 +202,28 @@ class ManagerViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 
 
-class LoginViewSet(viewsets.ViewSet):
+@extend_schema_view(login=login_user_list_doc,
+                    logout=logout_user_list_doc)
+class AuthViewSet(viewsets.ViewSet):
     permission_classes = [permissions.AllowAny]
-    http_method_names = ['post']
-    serializer_class = LoginCustomUserSerializer
-    queryset = CustomUser.objects.all()
 
-    def create(self, request, *args, **kwargs):  # create → POST
+    @action(detail=False, methods=["post"])
+    def login(self, request):
         serializer = LoginCustomUserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        # звідси можна дістати поля:
-        username = serializer.validated_data['username']
-        password = serializer.validated_data['password']
+        username = serializer.validated_data["username"]
+        password = serializer.validated_data["password"]
 
-        # аутентифікація
         user = authenticate(username=username, password=password)
         if user is None:
             return Response({"detail": "Invalid credentials"}, status=400)
 
-        print(request, user)
-        login(request, user)  # створюємо сесію
-        return Response({"detail": "login successful"})
+        logout(request)  # закриває попередню сесію, якщо є
+        login(request, user)
+        return Response({"detail": "Login successful"})
 
+    @action(detail=False, methods=["post"])
+    def logout(self, request):
+        logout(request)
+        return Response({"detail": "Logout successful"})

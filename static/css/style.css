@@ -298,6 +298,11 @@ footer {
   justify-content: space-between;
 }
 
+.profile-info-item{
+  margin: 7px 0;
+  overflow-wrap: break-word;
+}
+
 /*                                 Create post style                               */
 
 .flex-container{

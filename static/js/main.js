@@ -1,6 +1,6 @@
 import {
   getAllPosts, getPostByID, getCommentsByPostID, postCreateComment, postCreatePost, getCurrentUser,
-  getLikesByPostID, postCreateLike, deleteLike, postCreateUser, postLoginUser
+  getLikesByPostID, postCreateLike, deleteLike, postCreateUser, postLoginUser, postLogoutUser
 } from "./api.js"
 import getCookie from "./get_csrf_token.js";
 
@@ -294,7 +294,78 @@ async function createUser(){
     });
 }
 
+async function loginUser(){
+  console.log("loginUser function called");
+  const loginForm = document.querySelector(".login-form")
 
+  loginForm.addEventListener('submit', async function(e) {
+    e.preventDefault()
+    console.log("loginUser event listener called");
+
+      try {
+        const formData = new FormData(this)
+        const username = formData.get('username')
+        const password = formData.get('password')
+
+        const csrfToken = getCookie('csrftoken')
+        console.warn(csrfToken, username, password)
+        await postLoginUser(csrfToken, username, password)
+        alert("Вхід успішний")
+        window.location.href = "/profile/";
+
+      } catch (error) {
+        console.error("Не вдалося увійти:", error);
+      }
+    });
+}
+
+async function logoutUser(){
+  const logoutBtn = document.querySelector(".logout-btn")
+  if (!logoutBtn) return;
+
+  logoutBtn.addEventListener('click', async function(e) {
+    e.preventDefault()
+    console.log("logoutUser event listener called");
+
+      try {
+        const csrfToken = getCookie('csrftoken')
+        console.warn(csrfToken)
+        await postLogoutUser(csrfToken)
+        alert("Вихід успішний")
+        window.location.href = "/";
+
+      } catch (error) {
+        console.error("Не вдалося вийти:", error);
+      }
+    });
+}
+
+
+async function profileUser(){
+  const profileContainer = document.querySelector(".main-profile")
+  if (!profileContainer) return;
+  const infoUserContainer = document.querySelector(".profile-info")
+
+  const currentUser = await getCurrentUser();
+  console.log(currentUser)
+
+  let infoUser = [
+    `Ваш id - ${currentUser.id}`,
+    `Ваш нік - ${currentUser.username}`,
+    `Ваш пароль - ${currentUser.password}`,
+    `Ваша пошта ${currentUser.email}`,
+    `Ваша дата рерістрації - ${currentUser.date_joined}`,
+    `Ваше імя - ${currentUser.first_name}`,
+    `Ваше прізвіще - ${currentUser.last_name}`,
+    `Ваш останній логін ${currentUser.last_login}`,
+    `Ваш стан акаунта - ${currentUser.is_active}`,
+    `Чи ви адмін - ${currentUser.is_superuser}`,
+    `Чи ви персонал - ${currentUser.is_staff}`,
+  ]
+
+  infoUserContainer.innerHTML = infoUser.map(i => `<li class="profile-info-item"><p>${i}</p></li>`).join("")
+
+}
 
 document.addEventListener("DOMContentLoaded", async function () {
     const { pageType, id } = getPage();
@@ -324,6 +395,11 @@ document.addEventListener("DOMContentLoaded", async function () {
       await createPost()
     } else if (pageType === "register") {
       await createUser()
+    } else if (pageType === "login") {
+      await loginUser()
+    } else if (pageType === "profile") {
+      await profileUser()
+      await logoutUser()
     }
 
     else {

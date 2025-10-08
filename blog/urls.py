@@ -26,6 +26,7 @@ urlpatterns = [
     path('<int:pk>/add_likes/', views.AddLike.as_view(), name='add_likes'),
     path('accounts/logout/profile/', views.logout_user, name='logout'),
     path('register/', views.RegisterView.as_view(), name='register'),
+    path('login/', views.LoginView.as_view(), name='login'),
     path('create-post/<int:pk>/', views.CreatePostView.as_view(), name='create_post'),
     # path('create-post-user/', views.CreateUserPostView.as_view(), name='create_post_user'),
     path('post-info/<int:pk>', views.PostDetail.as_view())

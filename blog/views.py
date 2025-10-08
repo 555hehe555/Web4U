@@ -63,7 +63,7 @@ class AddLike(View):
             return redirect(f"/{pk}")
 
 
-@login_required
+@login_required(login_url="/login/")
 def profile_view(request):
     return render(request, 'profile/profile.html')
 
@@ -79,6 +79,12 @@ class RegisterView(View):
     # def post(self, request):
     #     print("post in blog register")
     #     pass
+
+class LoginView(View):
+    def get(self, request):
+        print("get in blog login")
+        return render(request, "registration/login.html")
+
 
 # def register_view(request):
 #     return render(request, 'profile/register.html')

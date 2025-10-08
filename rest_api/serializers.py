@@ -105,7 +105,7 @@ class DeleteUserLikeSerializer(serializers.ModelSerializer):
 class GetCustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'email']
+        fields = ['id', 'username', 'password', 'email', 'date_joined', 'first_name', 'last_name', 'last_login', 'is_active', 'is_staff', 'is_superuser', ]
 
 
 class CreateCustomUserSerializer(serializers.ModelSerializer):
@@ -162,7 +162,7 @@ class PatchCustomUserSerializer(serializers.ModelSerializer):
 class GetMeSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['id', 'username']
+        fields = ['id', 'username', 'email', 'is_staff', 'is_superuser', 'date_joined', 'last_login', 'is_active', 'first_name', 'last_name', 'password']
 
 
 class LoginCustomUserSerializer(serializers.Serializer):

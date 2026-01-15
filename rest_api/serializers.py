@@ -2,7 +2,10 @@ from rest_framework import serializers
 from .models import Post, Comments, Like, CustomUser
 
 
+### === POST === ###
 class GetPostsListSerializer(serializers.ModelSerializer):
+    author = serializers.CharField(source='author.username', read_only=True)
+
     class Meta:
         model = Post
         fields = ['id', 'title', 'description', 'author', 'date']
@@ -11,10 +14,13 @@ class GetPostsListSerializer(serializers.ModelSerializer):
 class CreatePostsListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        fields = ['id', 'title', 'description', 'author', 'date']
+        fields = ['title', 'description']
+        read_only_fields = ['id']  # author не передається, додається в perform_create()
 
 
 class DeletePostsListSerializer(serializers.ModelSerializer):
+    author = serializers.CharField(source='author.username', read_only=True)
+
     class Meta:
         model = Post
         fields = ['id', 'title', 'description', 'author', 'date']
@@ -23,79 +29,83 @@ class DeletePostsListSerializer(serializers.ModelSerializer):
 class PutPostsListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        fields = ['id', 'title', 'description', 'author', 'date']
+        fields = ['id', 'title', 'description']
+        read_only_fields = ['id']
 
 
 class PatchPostsListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        fields = ['id', 'title', 'description', 'author', 'date']
+        fields = ['id', 'title', 'description']
+        read_only_fields = ['id']
 
 
+### === COMMENTS === ###
 class GetCommentListSerializer(serializers.ModelSerializer):
+    user = serializers.CharField(source='user.username', read_only=True)
+
     class Meta:
         model = Comments
-        fields = ['id', 'name', 'text_comments', 'post']
+        fields = ['id', 'text_comments', 'date', 'user', 'post']
 
 
 class CreateCommentListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comments
-        fields = ['id', 'name', 'text_comments', 'post']
+        fields = ['id', 'text_comments', 'post']
+        read_only_fields = ['id']  # user додається через perform_create()
 
 
 class DeleteCommentListSerializer(serializers.ModelSerializer):
+    user = serializers.CharField(source='user.username', read_only=True)
+
     class Meta:
         model = Comments
-        fields = ['id', 'name', 'text_comments', 'post']
+        fields = ['id', 'text_comments', 'date', 'user', 'post']
 
 
 class PutCommentListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comments
-        fields = ['id', 'name', 'text_comments', 'post']
+        fields = ['id', 'text_comments', 'post']
+        read_only_fields = ['id']
 
 
 class PatchCommentListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comments
-        fields = ['id', 'name', 'text_comments', 'post']
+        fields = ['id', 'text_comments']
+        read_only_fields = ['id']
 
 
-# class GetUserLikeSerializer(serializers.ModelSerializer):
-#     # тут в теорії отримається чи лайкнув наш юзер цей пост
-#     class Meta:
-#         model = Like
-#         fields = ['id', 'post', 'user']
-#         # [id лайка, завжди +1,   id поста куди поставили лайк,    id юзера]
-
-# переробити, у фронта буде for з перевіркою накшталт id == user.id
-
-
+### === LIKES === ###
 class GetAllUserLikeSerializer(serializers.ModelSerializer):
-    # тут в теорії отримається список всіх лайків під постом
+    author = serializers.CharField(source="user.username", read_only=True)
+
     class Meta:
         model = Like
-        fields = ['id', 'post', 'user']
-        # [id лайка (завжди +1), id поста куди поставили лайк, id юзера]
+        fields = ['id', 'author', 'post']
 
 
 class CreateUserLikeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Like
-        fields = ['id', 'post', 'user']
+        fields = ['id']
+        read_only_fields = ['id']  # user призначається через perform_create()
 
 
 class DeleteUserLikeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Like
-        fields = ['id', 'post', 'user']
+        fields = ['id', 'post']
+        read_only_fields = ['id']
 
 
+### === USERS === ###
 class GetCustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'password', 'email']
+        fields = ['id', 'username', 'password', 'email', 'date_joined', 'first_name', 'last_name', 'last_login', 'is_active', 'is_staff', 'is_superuser', ]
 
 
 class CreateCustomUserSerializer(serializers.ModelSerializer):
@@ -114,12 +124,7 @@ class CreateCustomUserSerializer(serializers.ModelSerializer):
 class DeleteCustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'password', 'email']
-        extra_kwargs = {'password': {'write_only': True}}
-
-    def delete(self, instance):
-        instance.delete()
-        return instance
+        fields = ['id', 'username', 'email']
 
 
 class PutCustomUserSerializer(serializers.ModelSerializer):
@@ -152,3 +157,15 @@ class PatchCustomUserSerializer(serializers.ModelSerializer):
             instance.set_password(password)
         instance.save()
         return instance
+
+
+class GetMeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['id', 'username', 'email', 'is_staff', 'is_superuser', 'date_joined', 'last_login', 'is_active', 'first_name', 'last_name', 'password']
+
+
+class LoginCustomUserSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField(write_only=True)
+

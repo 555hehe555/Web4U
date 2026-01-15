@@ -1,12 +1,17 @@
+from django.contrib.auth import authenticate, login, logout
 from rest_framework import viewsets, permissions
 from drf_spectacular.utils import extend_schema_view
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
 from documentation.comments import comments_list_doc
 from documentation.likes import like_list_doc
+from documentation.login_user import login_user_list_doc, logout_user_list_doc
 from documentation.posts import post_list_doc
 from documentation.custom_user import user_list_doc
-from .models import Post, Comments
-from .permissions import IsOwner
+from .models import Post, Comments, Like, CustomUser
+from .permissions import IsOwner, IsOwnerOrReadOnly
 from .serializers import (
     GetPostsListSerializer,
     CreatePostsListSerializer,
@@ -26,9 +31,11 @@ from .serializers import (
     CreateCustomUserSerializer,
     DeleteCustomUserSerializer,
     PutCustomUserSerializer,
-    PatchCustomUserSerializer
+    PatchCustomUserSerializer,
+    GetMeSerializer,
+    LoginCustomUserSerializer
 )
-
+import colorama
 
 @extend_schema_view(
     list=post_list_doc,
@@ -39,9 +46,11 @@ from .serializers import (
     partial_update=post_list_doc
 )
 class PostModelViewSet(viewsets.ModelViewSet):
+    template_settings_list = 'blog.html'
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     http_method_names = ['get', 'post', 'delete', 'put', 'patch']
     serializer_class = GetPostsListSerializer
-    queryset = Post.objects.all()
+    queryset = Post.objects.all().order_by('-date')
 
     def get_serializer_class(self):
         if self.action == 'create':
@@ -56,6 +65,9 @@ class PostModelViewSet(viewsets.ModelViewSet):
             return PatchPostsListSerializer
         return super().get_serializer_class()
 
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
+
 
 @extend_schema_view(
     list = comments_list_doc,
@@ -67,8 +79,12 @@ class PostModelViewSet(viewsets.ModelViewSet):
 )
 class CommentModelViewSet(viewsets.ModelViewSet):
     http_method_names = ['get', 'post', 'delete', 'put', 'patch']
+    permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     serializer_class = GetCommentListSerializer
-    queryset = Comments.objects.all()
+
+    def get_queryset(self):
+        post_pk = self.kwargs.get("post_pk")  # беремо id поста з url
+        return Comments.objects.filter(post_id=post_pk)
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -85,6 +101,10 @@ class CommentModelViewSet(viewsets.ModelViewSet):
             return PatchCommentListSerializer
         return super().get_serializer_class()
 
+    def perform_create(self, serializer):
+        post_pk = self.kwargs.get("post_pk")  # щоб коментар завжди був до цього поста
+        serializer.save(user=self.request.user, post_id=post_pk)
+
 
 @extend_schema_view(
     list=like_list_doc,
@@ -93,14 +113,21 @@ class CommentModelViewSet(viewsets.ModelViewSet):
     destroy=like_list_doc
 )
 class LikePostViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated]
     http_method_names = ['get', 'post', 'delete']
     serializer_class = GetAllUserLikeSerializer
-    queryset = Post.objects.all()
+
+    def get_queryset(self):
+        post_pk = self.kwargs.get("post_pk")  # id поста з url
+        return Like.objects.filter(post_id=post_pk)
+
+    def get_permissions(self):
+        if self.action == 'list':
+            return [permissions.AllowAny()]
+        elif self.action in ['create', 'destroy']:
+            return [IsOwnerOrReadOnly()]
+        return super().get_permissions()
 
     def get_serializer_class(self):
-        # if self.action == 'retrieve':
-        #     return GetUserLikeSerializer
         if self.action == 'list':
             return GetAllUserLikeSerializer
         elif self.action == 'create':
@@ -109,21 +136,27 @@ class LikePostViewSet(viewsets.ModelViewSet):
             return DeleteUserLikeSerializer
         return super().get_serializer_class()
 
-    # @swagger_auto_schema(manual_parameters=[post_pk_param])
-    # def list(self, request, post_pk=None):
-    #     return super().list(request)
-    #
-    # @swagger_auto_schema(manual_parameters=[post_pk_param])
-    # def create(self, request, post_pk=None):
-    #     return super().create(request)
-    #
-    # @swagger_auto_schema(manual_parameters=[post_pk_param, pk_param])
-    # def retrieve(self, request, post_pk=None, pk=None):
-    #     return super().retrieve(request, pk)
-    #
-    # @swagger_auto_schema(manual_parameters=[post_pk_param, pk_param])
-    # def destroy(self, request, post_pk=None, pk=None):
-    #     return super().destroy(request, pk)
+    def perform_create(self, serializer):
+        post_pk = self.kwargs.get("post_pk")  # id поста з url
+        serializer.save(
+            user_id=self.request.user.id,
+            post_id=post_pk
+        )
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True, context={'request': request})
+
+        data = {
+            "count": queryset.count(),
+            "results": serializer.data,
+            "user_liked": (
+                request.user.is_authenticated
+                and queryset.filter(user_id=request.user.id).exists()
+            )
+        }
+        return Response(data)
+
 
 
 @extend_schema_view(
@@ -138,7 +171,7 @@ class CustomUserViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     http_method_names = ['get', 'post', 'delete', 'put', 'patch']
     serializer_class = GetCustomUserSerializer
-    queryset = Post.objects.all()
+    queryset = CustomUser.objects.all()
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve', 'create']:
@@ -157,3 +190,40 @@ class CustomUserViewSet(viewsets.ModelViewSet):
         elif self.action == 'partial_update':
             return PatchCustomUserSerializer
         return super().get_serializer_class()
+
+
+@extend_schema_view(me=login_user_list_doc)
+class ManagerViewSet(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated]
+
+    @action(methods=["get"], detail=False, url_path="me")
+    def me(self, request):
+        serializer = GetMeSerializer(self.request.user)
+        return Response(serializer.data)
+
+
+@extend_schema_view(login=login_user_list_doc,
+                    logout=logout_user_list_doc)
+class AuthViewSet(viewsets.ViewSet):
+    permission_classes = [permissions.AllowAny]
+
+    @action(detail=False, methods=["post"])
+    def login(self, request):
+        serializer = LoginCustomUserSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        username = serializer.validated_data["username"]
+        password = serializer.validated_data["password"]
+
+        user = authenticate(username=username, password=password)
+        if user is None:
+            return Response({"detail": "Invalid credentials"}, status=400)
+
+        logout(request)  # закриває попередню сесію, якщо є
+        login(request, user)
+        return Response({"detail": "Login successful"})
+
+    @action(detail=False, methods=["post"])
+    def logout(self, request):
+        logout(request)
+        return Response({"detail": "Logout successful"})

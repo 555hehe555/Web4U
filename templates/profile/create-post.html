@@ -6,11 +6,11 @@
 {% block create-post %}
 <section>
     <div class="container">
-        <main class="create-post-style form-signin w-100 m-auto main-blog-style">
+        <div class="create-post-style form-signin w-100 m-auto main-blog-style">
             <div id="content" class="colM">
                 <h1 class="mb-4">Додати Запис</h1>
                 <div id="content-main">
-                    <form enctype="multipart/form-data" method="post" id="post_form" action="{% url 'create_post_user' %}" novalidate>
+                    <form id="post_form" class="post_form">
                         {% csrf_token %}
                         {{ form.errors }}
                         <div>
@@ -39,25 +39,25 @@
                                         </div>
                                     </div>
                                 </div> -->
-                                <div class="form-row field-img mb-3">
+                                <!-- <div class="form-row field-img mb-3">
                                     <div>
                                         <div class="flex-container">
                                             <label for="id_img">Зображення:</label>
                                             <input class="button-img mt-2" type="file" name="img" accept="image/*" id="id_img">
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                             </fieldset>
                         </div>
                         <div class="submit-row mt-4">
-                            <button type="submit" enctype="multipart/form-data" value="Зберегти" class="button-submit default primary-btn" name="_save">Зберегти</button>
+                            <button id="submit-create-post" value="Зберегти" class="button-submit default primary-btn" name="_save">Зберегти</button>
                         </div>
                         <script id="django-admin-form-add-constants" src="/static/admin/js/change_form.js" data-model-name="post" async></script>
                         <script id="django-admin-prepopulated-fields-constants" src="/static/admin/js/prepopulate_init.js" data-prepopulated-fields="[]"></script>
                     </form>
                 </div>
             </div>
-        </main>
+        </div>
     </div>
 </section>
 {% endblock %}

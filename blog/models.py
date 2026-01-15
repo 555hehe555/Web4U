@@ -32,17 +32,17 @@ class OwnUserPost(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=True)
 
 
-class Comments(models.Model):
-    name = models.CharField(max_length=25)
-    text_comments = models.TextField('текст коментаря', max_length=240)
-    post = models.ForeignKey(Post, verbose_name='публікації', on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f'{self.name},{self.post}'
-
-    class Meta:
-        verbose_name = 'коментар'
-        verbose_name_plural = 'коментарi'
+# class Comments(models.Model):
+#     name = models.CharField(max_length=25)
+#     text_comments = models.TextField('текст коментаря', max_length=240)
+#     post = models.ForeignKey(Post, verbose_name='публікації', on_delete=models.CASCADE)
+#
+#     def __str__(self):
+#         return f'{self.name},{self.post}'
+#
+#     class Meta:
+#         verbose_name = 'коментар'
+#         verbose_name_plural = 'коментарi'
 
 
 class Likes(models.Model):

@@ -35,6 +35,7 @@ function getPage(){
 
 
 function renderBlogPosts(posts) {
+  if (!posts.results) return "<h3>у вас поки що немає постів</h3>";
   console.log(posts);
   totalPages = Math.ceil(posts.count / 10);
   return posts.results
@@ -50,8 +51,7 @@ function renderBlogPosts(posts) {
           </div>
         </div>
       `;
-    })
-    .join("");
+    }).join("");
 }
 
 function renderCommentsPost(comments) {
@@ -349,22 +349,46 @@ async function profileUser(){
   const currentUser = await getCurrentUser();
   console.log(currentUser)
 
+  const usernameHeader = document.querySelector(".username")
+  usernameHeader.innerText = `${currentUser.username}`
+
   let infoUser = [
-    `Ваш id - ${currentUser.id}`,
-    `Ваш нік - ${currentUser.username}`,
-    `Ваш пароль - ${currentUser.password}`,
-    `Ваша пошта ${currentUser.email}`,
-    `Ваша дата рерістрації - ${currentUser.date_joined}`,
-    `Ваше імя - ${currentUser.first_name}`,
-    `Ваше прізвіще - ${currentUser.last_name}`,
-    `Ваш останній логін ${currentUser.last_login}`,
-    `Ваш стан акаунта - ${currentUser.is_active}`,
-    `Чи ви адмін - ${currentUser.is_superuser}`,
-    `Чи ви персонал - ${currentUser.is_staff}`,
+    ["Ваш id", currentUser.id],
+    ["Ваш нік", currentUser.username],
+    ["Ваш пароль", currentUser.password],
+    ["Ваша пошта", currentUser.email],
+    ["Ваша дата реєстрації", currentUser.date_joined],
+    ["Ваше імʼя", currentUser.first_name],
+    ["Ваше прізвище", currentUser.last_name],
+    ["Ваш останній логін", currentUser.last_login],
+    ["Ваш стан акаунта", currentUser.is_active],
+    ["Чи ви адмін", currentUser.is_superuser],
+    ["Чи ви персонал", currentUser.is_staff]
   ]
 
-  infoUserContainer.innerHTML = infoUser.map(i => `<li class="profile-info-item"><p>${i}</p></li>`).join("")
+  infoUserContainer.innerHTML = infoUser.map(i => 
+`<div class="row">
+  <div class="col-sm-3">
+    <h6 class="mb-0">${i[0]}</h6>
+  </div>
+  <div class="col-sm-9 text-secondary">
+    ${i[1]}
+  </div>
+</div>
+<hr>`).join("")
+  infoUserContainer.innerHTML += `
+  <div class="row">
+    <div class="col-sm-12">
+      <a class="btn btn-info " target="__blank" href="https://www.bootdey.com/snippets/view/profile-edit-data-and-skills">Edit</a>
+    </div>
+  </div>`
 
+
+
+  const userPostsContainer = document.querySelector(".uesr-posts-container")
+  const data = await getAllPosts()
+  const userPosts = data.results.filter(post => post.author === currentUser.username)
+  userPostsContainer.innerHTML = renderBlogPosts(userPosts)
 }
 
 document.addEventListener("DOMContentLoaded", async function () {
@@ -379,7 +403,7 @@ document.addEventListener("DOMContentLoaded", async function () {
           if (i.id === 'first') {
             currentPage = 1;
           } else if (i.id === 'prev') {
-            currentPage--
+            currentPage = currentPage > 1 ? currentPage - 1 : 1;
           } else if (i.id === 'next') {
             currentPage = currentPage != totalPages ? currentPage + 1 : totalPages;
           } else if (i.id === 'last') {

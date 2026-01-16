@@ -331,3 +331,30 @@ hr{
   display:  flex;
   flex-wrap: wrap;
 }
+
+/*.card-columns {*/
+/*  @include media-breakpoint-only(lg) {*/
+/*    column-count: 4;*/
+/*  }*/
+/*  @include media-breakpoint-only(xl) {*/
+/*    column-count: 5;*/
+/*  }*/
+/*}*/
+
+.card{
+  background-color: var(--blog-backround);
+  margin: 10px;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.list-group-item{
+  background-color: transparent;
+}
+
+.user-data-input{
+  display: none;
+  border: none;
+  padding: 5px;
+  border-radius: 50px;
+}

@@ -33,6 +33,18 @@ function getPage(){
   return { pageType, id }
 }
 
+function formatDate(dateString) {
+  const d = new Date(dateString);
+
+  return d.toLocaleString("uk-UA", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit"
+  });
+}
 
 function renderBlogPosts(posts) {
   if (posts.results) {
@@ -357,57 +369,112 @@ async function logoutUser(){
 }
 
 
-async function profileUser(){
-  const profileContainer = document.querySelector(".main-profile")
+let isEditing = false;
+
+async function profileUser() {
+  const profileContainer = document.querySelector(".main-profile");
   if (!profileContainer) return;
-  const infoUserContainer = document.querySelector(".profile-info")
+
+  const infoUserContainer = document.querySelector(".profile-info");
+  if (!infoUserContainer) return;
 
   const currentUser = await getCurrentUser();
-  console.log(currentUser)
 
-  const usernameHeader = document.querySelector(".username")
-  usernameHeader.innerText = `${currentUser.username}`
+  document.querySelector(".username").innerText = currentUser.username;
 
-  let infoUser = [
-    ["Ваш id", currentUser.id],
-    ["Ваш нік", currentUser.username],
-    ["Ваш пароль", currentUser.password],
-    ["Ваша пошта", currentUser.email],
-    ["Ваша дата реєстрації", currentUser.date_joined],
-    ["Ваше імʼя", currentUser.first_name],
-    ["Ваше прізвище", currentUser.last_name],
-    ["Ваш останній логін", currentUser.last_login],
-    ["Ваш стан акаунта", currentUser.is_active],
-    ["Чи ви адмін", currentUser.is_superuser],
-    ["Чи ви персонал", currentUser.is_staff]
-  ]
+  const infoUser = [
+    ["Ваш id", currentUser.id, false],
+    ["Ваш нік", currentUser.username, true],
+    ["Ваш пароль", currentUser.password, true],
+    ["Ваша пошта", currentUser.email, false],
+    ["Ваша дата реєстрації", formatDate(currentUser.date_joined), false],
+    ["Ваше імʼя", currentUser.first_name, true],
+    ["Ваше прізвище", currentUser.last_name, true],
+    ["Чи ви адмін", currentUser.is_superuser, false],
+    ["Чи ви персонал", currentUser.is_staff, false]
+  ];
 
-  infoUserContainer.innerHTML = infoUser.map(i => 
-`<div class="row">
-  <div class="col-sm-3">
-    <h6 class="mb-0">${i[0]}</h6>
-  </div>
-  <div class="col-sm-9 text-secondary">
-    ${i[1]}
-  </div>
-</div>
-<hr>`).join("")
-  infoUserContainer.innerHTML += `
-  <div class="row">
-    <div class="col-sm-12">
-      <a class="btn btn-info " target="__blank" href="https://www.bootdey.com/snippets/view/profile-edit-data-and-skills">Edit</a>
-    </div>
-  </div>`
+  renderUserData(infoUser, infoUserContainer);
 
+  document
+    .querySelector("#edit-profile-btn")
+    .addEventListener("click", editProfileUser);
 
-
-  const userPostsContainer = document.querySelector(".uesr-posts-container")
-  const me = await getCurrentUser();
-  console.log(me.id)
-  const data = await getUserPostsById(me.id)
-  userPostsContainer.innerHTML = renderBlogPosts(data)
-  console.log(renderBlogPosts(data))
+  const userPostsContainer = document.querySelector(".user-posts-container");
+  const data = await getUserPostsById(currentUser.id);
+  userPostsContainer.innerHTML = renderBlogPosts(data);
 }
+
+function renderUserData(infoUser, container) {
+  container.innerHTML = infoUser.map(item => {
+    const [label, value, editable] = item;
+
+    return `
+      <div class="row user-data-row" data-editable="${editable}">
+        <div class="col-sm-3">
+          <h6 class="mb-0">${label}</h6>
+        </div>
+        <div class="col-sm-9 text-secondary">
+          <p class="user-data-p">${value}</p>
+          <input 
+            type="text"
+            class="user-data-input"
+            placeholder="${item[0] === "Ваш пароль" ? "Введідь новий пароль" : value}"
+            ${editable ? "" : "disabled"}
+            style="display: none;"
+          />
+        </div>
+      </div>
+      <hr>
+    `;
+  }).join("");
+
+  container.innerHTML += `
+    <div class="row">
+      <div class="col-sm-12">
+        <button id="edit-profile-btn" class="btn btn-info secondary-btn">
+          Редагувати
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function editProfileUser(e) {
+  e.preventDefault();
+
+  const rows = document.querySelectorAll(".user-data-row");
+  const editBtn = document.querySelector("#edit-profile-btn");
+
+  rows.forEach(row => {
+    const isEditable = row.dataset.editable === "true";
+    const p = row.querySelector(".user-data-p");
+    const input = row.querySelector(".user-data-input");
+
+    if (!isEditable) {
+      // НЕредаговані поля: взагалі нічого не чіпаємо
+      p.style.display = "block";
+      input.style.display = "none";
+      return;
+    }
+
+    if (isEditing) {
+      // EXIT
+      p.innerText = input.value;
+      p.style.display = "block";
+      input.style.display = "none";
+    } else {
+      // EDIT
+      p.style.display = "none";
+      input.style.display = "block";
+    }
+  });
+
+  editBtn.innerText = isEditing ? "Редагувати" : "Зберегти";
+  isEditing = !isEditing;
+}
+
+
 
 document.addEventListener("DOMContentLoaded", async function () {
     const { pageType, id } = getPage();

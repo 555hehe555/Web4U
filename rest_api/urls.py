@@ -35,6 +35,7 @@ urlpatterns = [
         'put': 'update',
         'patch': 'partial_update'
     })),
+    path('users/<int:user_pk>/posts/', views.CustomUserViewSet.as_view({'get': 'post_list'}), name='post_list'),
     path('accounts/login/', views.AuthViewSet.as_view({'post': 'login'}), name='login'),
     path('accounts/logout/', views.AuthViewSet.as_view({'post': 'logout'}), name='logout'),
 

@@ -319,3 +319,15 @@ export async function postLogoutUser(csrfToken) {
   }
 }
 
+
+export async function getUserPostsById(id) {
+  try {
+    const response = await fetch(`/api/users/${id}/posts/`);
+    const data = await response.json();
+    console.log("user posts by id", data);
+    return data;
+  } catch (error) {
+    console.error("Error:", error);
+    return [];
+  }
+}

@@ -40,6 +40,14 @@ class PatchPostsListSerializer(serializers.ModelSerializer):
         read_only_fields = ['id']
 
 
+class GetPostOneUserSerializer(serializers.ModelSerializer):
+    author = serializers.CharField(source='author.username', read_only=True)
+
+    class Meta:
+        model = Post
+        fields = ['id', 'title', 'description', 'author', 'date']
+
+
 ### === COMMENTS === ###
 class GetCommentListSerializer(serializers.ModelSerializer):
     user = serializers.CharField(source='user.username', read_only=True)

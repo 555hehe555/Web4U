@@ -33,7 +33,7 @@ from .serializers import (
     PutCustomUserSerializer,
     PatchCustomUserSerializer,
     GetMeSerializer,
-    LoginCustomUserSerializer
+    LoginCustomUserSerializer, GetPostOneUserSerializer
 )
 import colorama
 
@@ -174,7 +174,7 @@ class CustomUserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
 
     def get_permissions(self):
-        if self.action in ['list', 'retrieve', 'create']:
+        if self.action in ['list', 'retrieve', 'create', 'post_list']:
             return [permissions.AllowAny()]
         return [IsOwner()]
 
@@ -189,7 +189,17 @@ class CustomUserViewSet(viewsets.ModelViewSet):
             return PutCustomUserSerializer
         elif self.action == 'partial_update':
             return PatchCustomUserSerializer
+
+        elif self.action == 'post_list':
+            return GetPostOneUserSerializer
         return super().get_serializer_class()
+
+    @action(detail=True, methods=['get'], url_path='posts')
+    def post_list(self, request, user_pk=None):
+
+        posts = Post.objects.filter(author_id=user_pk)
+        serializer = self.get_serializer(posts, many=True)
+        return Response(serializer.data)
 
 
 @extend_schema_view(me=login_user_list_doc)

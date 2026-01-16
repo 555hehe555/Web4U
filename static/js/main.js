@@ -1,6 +1,6 @@
 import {
   getAllPosts, getPostByID, getCommentsByPostID, postCreateComment, postCreatePost, getCurrentUser,
-  getLikesByPostID, postCreateLike, deleteLike, postCreateUser, postLoginUser, postLogoutUser
+  getLikesByPostID, postCreateLike, deleteLike, postCreateUser, postLoginUser, postLogoutUser, getUserPostsById
 } from "./api.js"
 import getCookie from "./get_csrf_token.js";
 
@@ -35,23 +35,39 @@ function getPage(){
 
 
 function renderBlogPosts(posts) {
-  if (!posts.results) return "<h3>у вас поки що немає постів</h3>";
-  console.log(posts);
-  totalPages = Math.ceil(posts.count / 10);
-  return posts.results
-    .map(({ id, title, img, description, author, date }) => {
-      const imageSrc = img ? img : "/media/image/standart/img_placeholder.png";
-      return `
-        <div class="container-item">
-          <div class="post">
-              <a class="post-title post-item" href="post-info/${id}"><h3>${title}</h3></a>
-              <img class="post-image post-item" src="${imageSrc}" width="200px" height="200px" style="border-radius: 20px;">
-              <p class="post-description post-item">${description}</p>
-              <p class="post-author post-item">${author}</p>
+  if (posts.results) {
+    console.log(posts);
+    totalPages = Math.ceil(posts.count / 10);
+    return posts.results
+      .map(({ id, title, img, description, author, date }) => {
+        const imageSrc = img ? img : "/media/image/standart/img_placeholder.png";
+        return `
+          <div class="container-item">
+            <div class="post">
+                <a class="post-title post-item" href="post-info/${id}"><h3>${title}</h3></a>
+                <img class="post-image post-item" src="${imageSrc}" width="200px" height="200px" style="border-radius: 20px;">
+                <p class="post-description post-item">${description}</p>
+                <p class="post-author post-item">${author}</p>
+            </div>
           </div>
-        </div>
-      `;
-    }).join("");
+        `;
+      }).join("");
+  } else if (posts[0].title) {
+    return posts
+      .map(({ id, title, img, description, author, date }) => {
+        const imageSrc = img ? img : "/media/image/standart/img_placeholder.png";
+        return `
+          <div class="container-item">
+            <div class="post">
+                <a class="post-title post-item" href="post-info/${id}"><h3>${title}</h3></a>
+                <img class="post-image post-item" src="${imageSrc}" width="200px" height="200px" style="border-radius: 20px;">
+                <p class="post-description post-item">${description}</p>
+                <p class="post-author post-item">${author}</p>
+            </div>
+          </div>
+        `;
+      }).join("");
+  } else {"<p>У ас поки що немає постів</p>"}
 }
 
 function renderCommentsPost(comments) {
@@ -386,9 +402,11 @@ async function profileUser(){
 
 
   const userPostsContainer = document.querySelector(".uesr-posts-container")
-  const data = await getAllPosts()
-  const userPosts = data.results.filter(post => post.author === currentUser.username)
-  userPostsContainer.innerHTML = renderBlogPosts(userPosts)
+  const me = await getCurrentUser();
+  console.log(me.id)
+  const data = await getUserPostsById(me.id)
+  userPostsContainer.innerHTML = renderBlogPosts(data)
+  console.log(renderBlogPosts(data))
 }
 
 document.addEventListener("DOMContentLoaded", async function () {

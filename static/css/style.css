@@ -145,8 +145,8 @@ main{
   background-color: var(--blog-backround);
   padding: 15px;
   border-radius: 20px;
-  padding: 15px;
   margin: 20px;
+  max-width: 250px;
 }
 
 .title-posts{
@@ -171,7 +171,7 @@ main{
 }
 
 .post-img{
-  margin-top: 10px;
+  margin: 20px 10px;
 }
 
 .post-description{
@@ -324,4 +324,10 @@ hr{
 
 .description{
   margin: 10px 0;
+}
+
+.uesr-posts-container{
+  margin-top: 30px;
+  display:  flex;
+  flex-wrap: wrap;
 }

@@ -40,13 +40,6 @@ class PatchPostsListSerializer(serializers.ModelSerializer):
         read_only_fields = ['id']
 
 
-class GetPostOneUserSerializer(serializers.ModelSerializer):
-    author = serializers.CharField(source='author.username', read_only=True)
-
-    class Meta:
-        model = Post
-        fields = ['id', 'title', 'description', 'author', 'date']
-
 
 ### === COMMENTS === ###
 class GetCommentListSerializer(serializers.ModelSerializer):
@@ -138,7 +131,7 @@ class DeleteCustomUserSerializer(serializers.ModelSerializer):
 class PutCustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'password', 'email']
+        fields = ['id', 'username', 'password', 'email', 'first_name', 'last_name']
         extra_kwargs = {'password': {'write_only': True}}
 
     def update(self, instance, validated_data):
@@ -154,7 +147,7 @@ class PutCustomUserSerializer(serializers.ModelSerializer):
 class PatchCustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'password', 'email']
+        fields = ['username', 'password', 'email', 'first_name', 'last_name']
         extra_kwargs = {'password': {'write_only': True}}
 
     def update(self, instance, validated_data):
@@ -166,6 +159,13 @@ class PatchCustomUserSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+
+class GetPostOneUserSerializer(serializers.ModelSerializer):
+    author = serializers.CharField(source='author.username', read_only=True)
+
+    class Meta:
+        model = Post
+        fields = ['id', 'title', 'description', 'author', 'date']
 
 class GetMeSerializer(serializers.ModelSerializer):
     class Meta:

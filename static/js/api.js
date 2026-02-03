@@ -331,3 +331,32 @@ export async function getUserPostsById(id) {
     return [];
   }
 }
+
+
+export async function PatchUser(csrfToken, userID, dataToUpdate) {
+  console.warn("PatchUser function called");
+  console.log(`csrfToken ${csrfToken}`);
+  console.log(`userID ${userID}`);
+  console.log(`dataToUpdate ${JSON.stringify(dataToUpdate)}`);
+
+  try {
+    const response = await fetch(`/api/users/${userID}/`, {
+      method: 'PATCH',
+      headers: {
+        'X-CSRFToken': csrfToken,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(dataToUpdate)
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      console.log("if !res " + response.ok)
+    }
+
+    console.log("Успішна відповідь від API:", data);
+  } catch (error) {
+    console.error("Помилка при оновленні користувача:", error);
+    alert("Сталася помилка при оновленні. Спробуйте ще раз.");
+  }
+}

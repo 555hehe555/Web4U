@@ -1,6 +1,18 @@
 import {
-  getAllPosts, getPostByID, getCommentsByPostID, postCreateComment, postCreatePost, getCurrentUser,
-  getLikesByPostID, postCreateLike, deleteLike, postCreateUser, postLoginUser, postLogoutUser, getUserPostsById
+  getAllPosts,
+  getPostByID,
+  getCommentsByPostID,
+  postCreateComment,
+  postCreatePost,
+  getCurrentUser,
+  getLikesByPostID,
+  postCreateLike,
+  deleteLike,
+  postCreateUser,
+  postLoginUser,
+  postLogoutUser,
+  getUserPostsById,
+  PatchUser
 } from "./api.js"
 import getCookie from "./get_csrf_token.js";
 
@@ -383,22 +395,22 @@ async function profileUser() {
   document.querySelector(".username").innerText = currentUser.username;
 
   const infoUser = [
-    ["Ваш id", currentUser.id, false],
-    ["Ваш нік", currentUser.username, true],
-    ["Ваш пароль", currentUser.password, true],
-    ["Ваша пошта", currentUser.email, false],
-    ["Ваша дата реєстрації", formatDate(currentUser.date_joined), false],
-    ["Ваше імʼя", currentUser.first_name, true],
-    ["Ваше прізвище", currentUser.last_name, true],
-    ["Чи ви адмін", currentUser.is_superuser, false],
-    ["Чи ви персонал", currentUser.is_staff, false]
+    ["Ваш id", currentUser.id, false, "user-id"],
+    ["Ваш нік", currentUser.username, true, "user-username"],
+    ["Ваш пароль", currentUser.password, true, "user-password"],
+    ["Ваша пошта", currentUser.email, false, "user-email"],
+    ["Ваша дата реєстрації", formatDate(currentUser.date_joined), false, "user-date-joined"],
+    ["Ваше імʼя", currentUser.first_name, true, "user-first-name"],
+    ["Ваше прізвище", currentUser.last_name, true, "user-last-name"],
+    ["Чи ви адмін", currentUser.is_superuser, false, "user-is-superuser"],
+    ["Чи ви персонал", currentUser.is_staff, false, "user-is-staff"],
   ];
 
   renderUserData(infoUser, infoUserContainer);
 
   document
     .querySelector("#edit-profile-btn")
-    .addEventListener("click", editProfileUser);
+    .addEventListener("click", await editProfileUser);
 
   const userPostsContainer = document.querySelector(".user-posts-container");
   const data = await getUserPostsById(currentUser.id);
@@ -407,7 +419,7 @@ async function profileUser() {
 
 function renderUserData(infoUser, container) {
   container.innerHTML = infoUser.map(item => {
-    const [label, value, editable] = item;
+    const [label, value, editable, id] = item;
 
     return `
       <div class="row user-data-row" data-editable="${editable}">
@@ -418,6 +430,7 @@ function renderUserData(infoUser, container) {
           <p class="user-data-p">${value}</p>
           <input 
             type="text"
+            id="${id}"
             class="user-data-input"
             placeholder="${item[0] === "Ваш пароль" ? "Введідь новий пароль" : value}"
             ${editable ? "" : "disabled"}
@@ -440,35 +453,48 @@ function renderUserData(infoUser, container) {
   `;
 }
 
-function editProfileUser(e) {
+async function editProfileUser(e) {
   e.preventDefault();
 
   const rows = document.querySelectorAll(".user-data-row");
   const editBtn = document.querySelector("#edit-profile-btn");
 
+  const dataToUpdate = {};
+
   rows.forEach(row => {
-    const isEditable = row.dataset.editable === "true";
+    const editable = row.dataset.editable === "true";
     const p = row.querySelector(".user-data-p");
     const input = row.querySelector(".user-data-input");
 
-    if (!isEditable) {
-      // НЕредаговані поля: взагалі нічого не чіпаємо
-      p.style.display = "block";
-      input.style.display = "none";
-      return;
-    }
+    if (!editable) return;
 
     if (isEditing) {
-      // EXIT
-      p.innerText = input.value;
+      // вихід з редагування
       p.style.display = "block";
       input.style.display = "none";
+
+      if (input.value.trim() !== "") {
+        dataToUpdate[input.id.replace("user-", "")] = input.value;
+        p.textContent = input.value;
+      }
     } else {
-      // EDIT
+      // вхід в редагування
       p.style.display = "none";
       input.style.display = "block";
     }
   });
+
+  console.log(dataToUpdate);
+
+  if (isEditing && Object.keys(dataToUpdate).length) {
+    const user = await getCurrentUser()
+    const userId = user.id;
+    const csrfToken = getCookie('csrftoken')
+
+    await PatchUser(csrfToken, userId, dataToUpdate).catch(err => {
+      console.error("Не вдалося оновити користувача:", err);
+    });
+  }
 
   editBtn.innerText = isEditing ? "Редагувати" : "Зберегти";
   isEditing = !isEditing;

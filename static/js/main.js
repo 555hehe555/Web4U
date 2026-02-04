@@ -65,17 +65,33 @@ function renderBlogPosts(posts) {
     return posts.results
       .map(({ id, title, img, description, author, date }) => {
         const imageSrc = img ? img : "/media/image/standart/img_placeholder.png";
-        return `
-          <div class="container-item">
-            <div class="post">
-                <a class="post-title post-item" href="post-info/${id}"><h3>${title}</h3></a>
-                <img class="post-image post-item" src="${imageSrc}" width="200px" height="200px" style="border-radius: 20px;">
-                <p class="post-description post-item">${description}</p>
-                <p class="post-author post-item">${author}</p>
+      //   return `
+      //     <div class="container-item">
+      //       <div class="post">
+      //           <a class="post-title post-item" href="post-info/${id}"><h3>${title}</h3></a>
+      //           <img class="post-image post-item" src="${imageSrc}" width="200px" height="200px" style="border-radius: 20px;">
+      //           <p class="post-description post-item">${description}</p>
+      //           <p class="post-author post-item">${author}</p>
+      //       </div>
+      //     </div>
+      //   `;
+      // }).join("");
+          return `
+            <div class="container-item">
+
+              <div class="post">
+                <div class="post-img-contener">
+                    <img class="post-image post-item" src="${imageSrc}">
+                </div>
+                <div class="post-info-contener">
+                  <a class="post-title post-item" href="post-info/${id}"><h3>${title}</h3></a>
+                  <p class="post-description post-item">${description}</p>
+                  <p class="post-author post-item">${author}</p>
+                </div>
+              </div>
             </div>
-          </div>
-        `;
-      }).join("");
+          `;
+        }).join("");
   } else if (posts[0].title) {
     return posts
       .map(({ id, title, img, description, author, date }) => {
@@ -83,11 +99,15 @@ function renderBlogPosts(posts) {
         return `
           <div class="container-item">
             <div class="post">
-                <a class="post-title post-item" href="post-info/${id}"><h3>${title}</h3></a>
-                <img class="post-image post-item" src="${imageSrc}" width="200px" height="200px" style="border-radius: 20px;">
-                <p class="post-description post-item">${description}</p>
-                <p class="post-author post-item">${author}</p>
-            </div>
+                <div class="post-img-contener">
+                    <img class="post-image post-item" src="${imageSrc}">
+                </div>
+                <div class="post-info-contener">
+                  <a class="post-title post-item" href="/post-info/${id}"><h3>${title}</h3></a>
+                  <p class="post-description post-item">${description}</p>
+                  <p class="post-author post-item">${author}</p>
+                </div>
+              </div>
           </div>
         `;
       }).join("");
@@ -126,9 +146,7 @@ function renderPostInfo(post, comments, likes) {
                 <p class="post-author post-detail-author post-item">${author}</p>
                 <p class="post-date post-detail-date post-item">${shortDate}</p>
             </div>
-            <div class="img-container">
-                <img class="post-image post-detail-image post-item" src="${imageSrc}" width="400" style="border-radius: 20px;">
-            </div>
+
             
             <div class="like">
               <a href="#" class="like-btn">
@@ -137,15 +155,18 @@ function renderPostInfo(post, comments, likes) {
               <span class="like-count">${countLikes}</span>
             </div>
             
-            <div class="comment-form">
-                <textarea type="text" class="comment-input" placeholder="Write a comment..."></textarea>
-                <button class="comment-submit-btn">Submit</button>
+            <div class="comment-finished">
+                <div class="comment-form">
+                    <textarea type="text" class="comment-input" placeholder="Write a comment..."></textarea>
+                     <button class="comment-submit-btn">Submit</button>
+                </div>
+              <h2 class="comment-finished-title"><br>Comment<br></h2> 
+              ${commentsMarkup}
             </div>
         </div>
-
-        <div class="comment-finished">
-          <h2 class="comment-finished-title"><br>Comment<br></h2> 
-          ${commentsMarkup}
+        
+        <div class="img-container">
+            <img class="post-image post-detail-image post-item" src="${imageSrc}" width="400" style="border-radius: 20px;">
         </div>
     `;
 }

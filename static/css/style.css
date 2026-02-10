@@ -1,4 +1,7 @@
-/*                  Reset style                    */
+/* ========================================================================== */
+/*                                RESET STYLE                                */
+/* ========================================================================== */
+
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -7,70 +10,81 @@ small, strike, strong, sub, sup, tt, var,
 dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td {
-margin: 0;
-padding: 0;
-border: 0;
-outline: 0;
-font-weight: inherit;
-font-style: inherit;
-font-size: 100%;
-font-family: inherit;
-vertical-align: baseline;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-weight: inherit;
+  font-style: inherit;
+  font-size: 100%;
+  font-family: inherit;
+  vertical-align: baseline;
 }
+
 /* remember to define focus styles! */
 :focus {
-outline: 0;
+  outline: 0;
 }
+
 body {
-line-height: 1;
-color: black;
-background: white;
+  line-height: 1;
+  color: black;
+  background: white;
 }
+
 ol, ul {
-list-style: none;
+  list-style: none;
 }
+
 /* tables still need 'cellspacing="0"' in the markup */
 table {
-border-collapse: separate;
-border-spacing: 0;
+  border-collapse: separate;
+  border-spacing: 0;
 }
+
 caption, th, td {
-text-align: left;
-font-weight: normal;
+  text-align: left;
+  font-weight: normal;
 }
-blockquote:before, blockquote:after,
-q:before, q:after {
-content: "";
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
 }
+
 blockquote, q {
-quotes: "" "";
+  quotes: "" "";
 }
 
 
+/* ========================================================================== */
+/*                                ROOT / THEME                                */
+/* ========================================================================== */
 
-/*                    Main style                     */
-
-
-
-:root{
+:root {
   --background: #263243;
   --background-color-header-and-footer: #212529;
-  --blog-backround: #A1D1D1;
+  --blog-backround: #A1D1D1; /* typo в назві, але не чіпаю */
   --primary: #60A5FA;
-  --primary-hover:#0a58ca;
+  --primary-hover: #0a58ca;
   --secondary: #F472B6;
   --secondary-hover: #9c2575;
   --text: #52555c;
   --text-on-black: #fff;
 }
 
-body{
+
+/* ========================================================================== */
+/*                              GLOBAL BASE STYLE                              */
+/* ========================================================================== */
+
+body {
   background-color: var(--background);
-  
   display: flex;
   flex-direction: column;
-  margin-bottom: 150px;
-
+  margin-bottom: 150px; /* костиль під fixed footer */
   color: var(--text);
   font-family: "Roboto Mono", monospace;
   font-optical-sizing: auto;
@@ -78,90 +92,77 @@ body{
   font-style: normal;
 }
 
+main {
+  margin: 50px 0;
+}
+
 footer {
   background-color: var(--background-color-header-and-footer);
-  margin-top: 150px;
   position: fixed;
   left: 0;
   bottom: 0;
   width: 100%;
+  margin-top: 150px;
   text-align: center;
 }
 
 
-.primary-btn{
+/* ========================================================================== */
+/*                                BUTTONS                                     */
+/* ========================================================================== */
+
+.primary-btn {
   background-color: var(--primary);
   border-color: var(--primary);
   color: var(--text-on-black);
   margin: 5px;
 }
 
-.primary-btn:hover{
+.primary-btn:hover {
   background-color: var(--primary-hover);
   border-color: var(--primary-hover);
-  color: var(--text-on-black);
 }
 
-.secondary-btn{
+.secondary-btn {
   background-color: var(--secondary);
   border-color: var(--secondary);
   color: var(--text-on-black);
   margin: 5px;
 }
 
-.secondary-btn:hover{
+.secondary-btn:hover {
   background-color: var(--secondary-hover);
   border-color: var(--secondary-hover);
-  color: var(--text-on-black) !important;
+  color: var(--text-on-black) !important; /* suspicious, можливо десь конфлікт */
 }
 
 
-.main-blog-style{
+/* ========================================================================== */
+/*                                COMMON BLOG                                 */
+/* ========================================================================== */
+
+.main-blog-style {
   background-color: var(--blog-backround);
-  margin-top: 27% !important;
   max-width: 500px;
   padding: 15px;
   border-radius: 10px;
+  margin-top: 27% !important; /* дуже жорстка привʼязка до viewport */
+}
+
+.title-posts {
+  display: block;
+  font-size: 3rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  margin-right: 100%; /* дивно, виглядає як злам вирівнювання */
+  color: var(--text-on-black);
 }
 
 
-/*                  index style                    */
+/* ========================================================================== */
+/*                                POSTS LIST                                  */
+/* ========================================================================== */
 
-
-/*                  Blog style                     */
-
-main{
-  margin: 50px 0;
-}
-
-.title-posts{
-   display: block;
-   font-size: 3rem;
-   margin-right: 100%;
-   margin-top: 2rem;
-   margin-bottom: 2rem;
-   color: var(--text-on-black);
- }
-
-/*.all-post{*/
-/*  max-width: 1180px;*/
-/*  margin-top: 50px;*/
-/*  margin-left: 25%;*/
-/*  display: flex;*/
-/*  flex-wrap: wrap;*/
-/*}*/
-
-/*.own-container{*/
-/*       display: flex;*/
-/*       flex-wrap: wrap;*/
-/*     }*/
-
-/*.post{*/
-/*  background-color: var(--blog-backround);*/
-/*  padding: 15px;*/
-/*  border-radius: 20px;*/
-/*  margin: 20px;*/
-/*}*/
 .own-container {
   width: 100%;
   max-width: 1180px;
@@ -173,292 +174,275 @@ main{
   display: flex;
   flex-direction: row;
   gap: 18px;
-
   background-color: var(--blog-backround);
   margin: 20px;
-  /*padding: 15px;*/
   border-radius: 20px;
 
-
-  /*display: grid;*/
-  /*grid-template-columns: minmax(260px, 320px) 1fr;*/
-  /*gap: 10px;*/
-  /*align-items: stretch;*/
-  /*background-color: var(--blog-backround);*/
-  /*border: none;*/
-  /*border-radius: calc(var(20) * 1.2);*/
-  /*overflow: hidden;*/
-  /*box-shadow: 0 14px 44px rgba(0, 0, 0, 0.45);*/
-  /*position: relative;*/
+  /* старі варіанти верстки залишив як історію болю */
+  /*
+  display: grid;
+  grid-template-columns: minmax(260px, 320px) 1fr;
+  */
 }
 
-
-
-/*.post-title{*/
-/*  text-decoration: none;*/
-/*  text-align: center;*/
-/*  font-size: 20px;*/
-/*  margin-bottom: 10px;*/
-/*}*/
-
-/*.post-img{*/
-/*  margin: 20px 10px;*/
-/*}*/
-
-/*.post-description{*/
-/*  font-size: 16px;*/
-/*  padding: 10px 0px;*/
-/*}*/
-
-/*.post-author{*/
-/*  font-size: 16px;*/
-/*}*/
-
-.post-img-contener{
+.post-img-contener {
+  /* порожній клас, або для майбутнього, або забутий */
 }
 
-.post-image{
+.post-image {
   display: block;
   position: relative;
-  aspect-ratio: 1/1;
-  background-size: cover;
-  background-position: center;
+  aspect-ratio: 1 / 1;
+  width: 100%;
   min-height: 100%;
   max-height: 100%;
-  width: 100%;
-
+  background-size: cover;
+  background-position: center;
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
 }
 
-
-.post-info-contener{
+.post-info-contener {
+  width: 825px; /* неадаптивно, на мобі буде боляче */
   padding: 10px 0;
-  width: 825px;
 }
 
-.post-title{
+.post-title {
   text-decoration: none;
   font-size: 24px;
   margin-bottom: 10px;
   color: var(--text-on-black);
 }
 
-.post-description{
+.post-description {
   font-size: 16px;
   margin-bottom: 10px;
-
   line-height: 1.7;
+
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+
   word-break: break-word;
 }
 
 .post-author {
   font-size: 16px;
-  margin-top: 160px;
+  margin-top: 160px; /* жорстка привʼязка, краще flex */
 }
 
 
-.pagination{
+/* ========================================================================== */
+/*                                PAGINATION                                  */
+/* ========================================================================== */
+
+.pagination-container{
   display: flex;
   justify-content: center;
-  margin: 50px 33%;
+  margin-top: 20px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
   background-color: var(--blog-backround);
   padding: 10px;
   border-radius: 10px;
 }
 
-.pagination button{
+.pagination button {
   color: var(--text);
   background-color: var(--secondary);
   padding: 5px 10px;
-  text-decoration: none;
   border-radius: 5px;
   margin: 0 10px;
 }
 
-.pagination button:hover{
+.pagination button:hover {
   background-color: var(--secondary-hover);
   color: var(--text-on-black);
 }
 
-.pagination p{
-  color: var(--text);
-  margin: 0 10px;
+.pagination p {
   font-size: 24px;
+  margin: 0 10px;
   align-self: center;
+  color: var(--text);
 }
 
 
-/*                          Blog detail style                              */
+/* ========================================================================== */
+/*                             BLOG DETAIL PAGE                                */
+/* ========================================================================== */
 
-
-.blog-detail-main{
+.blog-detail-main {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-bottom: 200px;
 }
 
-.container-item-deteil{
+.container-item-deteil {
   max-width: 500px;
   margin-top: 50px;
 }
 
-.container-detail{
-
+.post-info-root {
+  display: flex;
+  gap: 20px;
 }
 
-.post-detail-title{
-  text-align: left;
-  font-size: 24px;
-}
-
-.post-detail{
+.post-detail {
   margin-right: 15px;
 }
 
-.img-container{
+.post-detail-title {
+  font-size: 24px;
+}
+
+.post-detail-description {
+  font-size: 16px;
+  margin-top: 10px;
+  line-height: 1.7;
+  word-break: break-word;
+}
+
+.img-container {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  flex-direction: row;
-  margin-top: 20px;
-  margin-bottom: 30px;
+  margin: 20px 0 30px;
 }
 
-.post-detail-author{
-  font-size: 16px;
-  margin-top: 10px;
-  margin-bottom: 200px;
-}
-
-.post-detail-image{
+.post-detail-image {
   width: 500px;
   height: 500px;
+  min-height: auto;
   border-radius: 10px;
   background-size: cover;
 }
 
-.like{
+.post-detail-author {
+  font-size: 16px;
+  margin: 10px 0 200px;
+}
+
+.like {
   display: flex;
-  align-items: center;
   justify-content: flex-end;
-  margin-top: -35px;
+  align-items: center;
+  margin-top: -35px; /* обережно, легко зламати */
   margin-right: 15px;
 }
 
-.comment-finished{
-  margin-bottom: 20px;
-  margin-right: 15px;
-}
 
-.comment-form{
+/* ========================================================================== */
+/*                                COMMENTS                                    */
+/* ========================================================================== */
+
+.comment-form {
   display: flex;
   flex-direction: column;
   margin-top: 20px;
 }
 
-.comment-input{
-  margin-bottom: 3px;
-  max-height: 100px;
+.comment-input {
   min-height: 30px;
+  max-height: 100px;
+  margin-bottom: 3px;
   border: none;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
+  border-radius: 10px 10px 0 0;
 }
 
-.comment-submit-btn{
+.comment-submit-btn {
   padding: 5px;
   border: none;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
+  border-radius: 0 0 10px 10px;
   background-color: var(--primary);
   color: var(--text-on-black);
 }
 
-.comment-finished-user-name{
+.comment-finished {
+  margin-bottom: 20px;
+  margin-right: 15px;
+}
+
+.comment-finished-user-name {
   text-align: center;
   font-size: 20px;
   margin-top: 20px;
 }
 
-.comment-finished-user-text-comments{
+.comment-finished-user-text-comments {
   margin-top: 5px;
 }
 
-/*                        Login-Registration-Profile style                        */
 
-.input{
+/* ========================================================================== */
+/*                    LOGIN / REGISTRATION / PROFILE                            */
+/* ========================================================================== */
+
+.input {
   margin-top: 10px;
 }
 
-.label-input{
-  color: #000000;
+.label-input {
+  color: #000;
 }
 
-/*                              Profile style                                     */
-
-.line-element{
+.line-element {
   display: flex;
   justify-content: space-between;
 }
 
-.profile-info-item{
+.profile-info-item {
   margin: 7px 0;
   overflow-wrap: break-word;
 }
 
-/*                                 Create post style                               */
 
-.flex-container{
+/* ========================================================================== */
+/*                           CREATE POST / USER POSTS                           */
+/* ========================================================================== */
+
+.flex-container {
   margin-top: 15px;
 }
 
-
-/*                                temp                                             */
-
-
-hr{
-  margin: .5rem 0;
-}
-
-.description{
-  margin: 10px 0;
-}
-
-.uesr-posts-container{
-  margin-top: 30px;
-  display:  flex;
+.uesr-posts-container { /* typo user */
+  display: flex;
   flex-wrap: wrap;
+  margin-top: 30px;
 }
 
-/*.card-columns {*/
-/*  @include media-breakpoint-only(lg) {*/
-/*    column-count: 4;*/
-/*  }*/
-/*  @include media-breakpoint-only(xl) {*/
-/*    column-count: 5;*/
-/*  }*/
-/*}*/
-
-.card{
+.card {
   background-color: var(--blog-backround);
   margin: 10px;
-  border-radius: 10px;
   padding: 10px;
+  border-radius: 10px;
 }
 
-.list-group-item{
+.list-group-item {
   background-color: transparent;
 }
 
-.user-data-input{
+.user-data-input {
   display: none;
   border: none;
   padding: 5px;
   border-radius: 50px;
+}
+
+
+/* ========================================================================== */
+/*                                    TEMP                                     */
+/* ========================================================================== */
+
+hr {
+  margin: 0.5rem 0;
+}
+
+.description {
+  margin: 10px 0;
 }

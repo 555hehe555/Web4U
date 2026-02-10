@@ -84,7 +84,7 @@ class CommentModelViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         post_pk = self.kwargs.get("post_pk")  # беремо id поста з url
-        return Comments.objects.filter(post_id=post_pk)
+        return Comments.objects.filter(post_id=post_pk).order_by('-date')
 
     def get_serializer_class(self):
         if self.action == 'list':

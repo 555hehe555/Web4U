@@ -27,11 +27,11 @@ function deleteMarkup(el) {
 let currentPage = 1;
 let totalPages = null;
 
-const current = document.getElementById('current')
-const first = document.getElementById('first')
-const prev = document.getElementById('prev')
-const next = document.getElementById('next')
-const last = document.getElementById('last')
+let first = document.getElementById('first');
+let prev = document.getElementById('prev');
+let next = document.getElementById('next');
+let last = document.getElementById('last');
+let current = document.getElementById('current');
 
 
 function getPage(){
@@ -116,7 +116,7 @@ function renderBlogPosts(posts) {
 
 function renderCommentsPost(comments) {
   console.log(comments.results);
-  return comments.results
+  const commentsItem = comments.results
     .map(({ id, user, text_comments, post }) => {
       return `
       <div>
@@ -124,7 +124,15 @@ function renderCommentsPost(comments) {
       </div>
       `;
     })
-    .join("");
+
+  commentsItem.unshift(`
+              <div class="comment-form">
+              <textarea type="text" class="comment-input" placeholder="Write a comment..."></textarea>
+              <button class="comment-submit-btn">Submit</button>
+          </div>
+          `)
+
+    return commentsItem.join("");
 }
 
 
@@ -156,10 +164,6 @@ function renderPostInfo(post, comments, likes) {
             </div>
             
             <div class="comment-finished">
-                <div class="comment-form">
-                    <textarea type="text" class="comment-input" placeholder="Write a comment..."></textarea>
-                     <button class="comment-submit-btn">Submit</button>
-                </div>
               <h2 class="comment-finished-title"><br>Comment<br></h2> 
               ${commentsMarkup}
             </div>
@@ -185,7 +189,7 @@ async function showBlogPage() {
 
 async function showPostInfo(id) {
   try {
-    const postInfoContainer = document.querySelector(".container-item-detail");
+    const postInfoContainer = document.querySelector(".container-detail");
     const post = await getPostByID(id);
     const comments = await getCommentsByPostID(id);
     const likes = await getLikesByPostID(id);
@@ -523,42 +527,40 @@ async function editProfileUser(e) {
 
 
 
-document.addEventListener("DOMContentLoaded", async function () {
-    const { pageType, id } = getPage();
+document.addEventListener("DOMContentLoaded", async () => {
+  const { pageType, id } = getPage();
 
-    if (pageType === undefined) {
-      await showBlogPage();
+  if (pageType === undefined) {
+    await showBlogPage();
 
-      for (let i of [first, prev, next, last]) {
-        i.addEventListener('click', async function (e) {
-          e.preventDefault();
-          if (i.id === 'first') {
-            currentPage = 1;
-          } else if (i.id === 'prev') {
-            currentPage = currentPage > 1 ? currentPage - 1 : 1;
-          } else if (i.id === 'next') {
-            currentPage = currentPage != totalPages ? currentPage + 1 : totalPages;
-          } else if (i.id === 'last') {
-            currentPage = totalPages;
-          }
-          current.textContent = currentPage;
-          await showBlogPage();
-        });
-      }
-    } else if (pageType === "post-info" && id) {
-      await showPostInfo(id)
-    } else if (pageType === "create-post") {
-      await createPost()
-    } else if (pageType === "register") {
-      await createUser()
-    } else if (pageType === "login") {
-      await loginUser()
-    } else if (pageType === "profile") {
-      await profileUser()
-      await logoutUser()
+    for (let i of [first, prev, next, last]) {
+      i.addEventListener('click', async function (e) {
+        e.preventDefault();
+        if (i.id === 'first') {
+          currentPage = 1;
+        } else if (i.id === 'prev') {
+          currentPage = currentPage > 1 ? currentPage - 1 : 1;
+        } else if (i.id === 'next') {
+          currentPage = currentPage != totalPages ? currentPage + 1 : totalPages;
+        } else if (i.id === 'last') {
+          currentPage = totalPages;
+        }
+        current.textContent = currentPage;
+        await showBlogPage();
+      });
     }
-
-    else {
-      console.error("Unknown page type or missing ID");
-    }
+  } else if (pageType === "post-info" && id) {
+    await showPostInfo(id);
+  } else if (pageType === "create-post") {
+    await createPost();
+  } else if (pageType === "register") {
+    await createUser();
+  } else if (pageType === "login") {
+    await loginUser();
+  } else if (pageType === "profile") {
+    await profileUser();
+    await logoutUser();
+  } else {
+    console.error("Unknown page type or missing ID");
+  }
 });

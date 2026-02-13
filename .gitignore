@@ -25,7 +25,7 @@ migrations/*
 
 # Static / Media (якщо генерується або динамічно додається)
 /media/image/temporary/
-!/media/image/standart/**
+!/media/image/standard/**
 # /static/  <- залиш коментованим, якщо стилі статичні й потрібні
 
 # Docker / DB

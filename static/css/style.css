@@ -121,6 +121,7 @@ footer {
 .primary-btn:hover {
   background-color: var(--primary-hover);
   border-color: var(--primary-hover);
+  color: #ffffff;
 }
 
 .secondary-btn {
@@ -150,11 +151,9 @@ footer {
 }
 
 .title-posts {
-  display: block;
+  text-align: center;
+  margin-bottom: 50px;
   font-size: 3rem;
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-  margin-right: 100%; /* дивно, виглядає як злам вирівнювання */
   color: var(--text-on-black);
 }
 
@@ -445,4 +444,20 @@ hr {
 
 .description {
   margin: 10px 0;
+}
+
+/* =================================NAV======================================== */
+
+@media (min-width: 992px) {
+  .nav {
+    margin-left: 20px;
+  }
+}
+
+.nav li a{
+    color:#ffffff;
+}
+
+.nav li a:hover{
+    color:#6c757d;
 }

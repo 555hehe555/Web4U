@@ -64,7 +64,7 @@ function renderBlogPosts(posts) {
     totalPages = Math.ceil(posts.count / 10);
     return posts.results
       .map(({ id, title, img, description, author, date }) => {
-        const imageSrc = img ? img : "/media/image/standart/img_placeholder.png";
+        const imageSrc = img ? img : "/media/image/standard/img_placeholder.png";
       //   return `
       //     <div class="container-item">
       //       <div class="post">
@@ -95,7 +95,7 @@ function renderBlogPosts(posts) {
   } else if (posts[0].title) {
     return posts
       .map(({ id, title, img, description, author, date }) => {
-        const imageSrc = img ? img : "/media/image/standart/img_placeholder.png";
+        const imageSrc = img ? img : "/media/image/standard/img_placeholder.png";
         return `
           <div class="container-item">
             <div class="post">
@@ -140,10 +140,10 @@ function renderPostInfo(post, comments, likes) {
   const { id, title, img, description, author, date } = post;
   const countLikes = likes.count || 0;
   const commentsMarkup = renderCommentsPost(comments);
-  const imageSrc = img ? img : "/media/image/standart/img_placeholder.png";
+  const imageSrc = img ? img : "/media/image/standard/img_placeholder.png";
   const likeImgSrc = likes.user_liked
-    ? "/media/image/standart/like.png"
-    : "/media/image/standart/no_like.png";
+    ? "/media/image/standard/like.png"
+    : "/media/image/standard/no_like.png";
   const shortDate = date.split("T")[0];
 
   return `
@@ -257,7 +257,7 @@ document.addEventListener("DOMContentLoaded", function() {
       const updatedLikes = await getLikesByPostID(postId);
       const img = likeBtn.querySelector("img");
       const userLiked = updatedLikes.results.some(like => like.author === currentUser.username);
-      img.src = userLiked ? "/media/image/standart/like.png" : "/media/image/standart/no_like.png";
+      img.src = userLiked ? "/media/image/standart/like.png" : "/media/image/standard/no_like.png";
 
       const countElem = postElem.querySelector(".like-count");
       if (countElem) countElem.textContent = updatedLikes.count || 0;

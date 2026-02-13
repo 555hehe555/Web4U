@@ -65,6 +65,7 @@ function renderBlogPosts(posts) {
     return posts.results
       .map(({ id, title, img, description, author, date }) => {
         const imageSrc = img ? img : "/media/image/standard/img_placeholder.png";
+        const shortDate = date.split("T")[0];
       //   return `
       //     <div class="container-item">
       //       <div class="post">
@@ -86,6 +87,7 @@ function renderBlogPosts(posts) {
                 <div class="post-info-contener">
                   <a class="post-title post-item" href="post-info/${id}"><h3>${title}</h3></a>
                   <p class="post-description post-item">${description}</p>
+                  <p class="post-date post-item">${shortDate}</p>
                   <p class="post-author post-item">${author}</p>
                 </div>
               </div>
@@ -105,6 +107,7 @@ function renderBlogPosts(posts) {
                 <div class="post-info-contener">
                   <a class="post-title post-item" href="/post-info/${id}"><h3>${title}</h3></a>
                   <p class="post-description post-item">${description}</p>
+                  <p class="post-date post-item">${shortDate}</p>
                   <p class="post-author post-item">${author}</p>
                 </div>
               </div>

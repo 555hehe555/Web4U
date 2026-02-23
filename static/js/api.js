@@ -72,24 +72,28 @@ export async function postCreateComment(csrfToken, postID, text) {
   }
 }
 
-export async function postCreatePost(csrfToken, title, description) {
+export async function postCreatePost(csrfToken, title, description, img) {
   console.warn("createPost function called");
   console.log(`csrfToken ${csrfToken}`);
   console.log(`title ${title}`);
   console.log(`description ${description}`);
+  console.log(`img ${img}`);
 
 
   try {
-    const response = await fetch(`/api/posts/`, {
-      method: 'POST',
+    const formData = new FormData();
+
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("img", img); // img = input.files[0]
+
+    const response = await fetch("/api/posts/", {
+      method: "POST",
       headers: {
-        'X-CSRFToken': csrfToken,
-        'Content-Type': 'application/json',
+        "X-CSRFToken": csrfToken,
+        // НЕ ставимо Content-Type вручну
       },
-      body: JSON.stringify({
-        title: title,
-        description: description
-      })
+      body: formData
     });
 
     const data = await response.json();

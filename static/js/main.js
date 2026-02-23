@@ -59,12 +59,17 @@ function formatDate(dateString) {
 }
 
 function renderBlogPosts(posts) {
+  const withoutPlaceholders = true
+
   if (posts.results) {
     console.log(posts);
     totalPages = Math.ceil(posts.count / 10);
     return posts.results
       .map(({ id, title, img, description, author, date }) => {
-        const imageSrc = img ? img : "/media/image/standard/img_placeholder.png";
+        const hasImage = !!img;
+        const imageSrc = hasImage ? img : "/media/image/standard/img_placeholder.png";
+        const showImage = withoutPlaceholders ? hasImage : true;
+
         const shortDate = date.split("T")[0];
       //   return `
       //     <div class="container-item">
@@ -77,12 +82,14 @@ function renderBlogPosts(posts) {
       //     </div>
       //   `;
       // }).join("");
+
+      //   Це пости на головній сторінці
           return `
             <div class="container-item">
 
               <div class="post">
                 <div class="post-img-contener">
-                    <img class="post-image post-item" src="${imageSrc}">
+                    ${showImage ? `<img class="post-image post-item" src="${imageSrc}">` : ""}
                 </div>
                 <div class="post-info-contener">
                   <a class="post-title post-item" href="post-info/${id}"><h3>${title}</h3></a>
@@ -95,14 +102,19 @@ function renderBlogPosts(posts) {
           `;
         }).join("");
   } else if (posts[0].title) {
+    // Це пости на сторінці профілю
     return posts
       .map(({ id, title, img, description, author, date }) => {
-        const imageSrc = img ? img : "/media/image/standard/img_placeholder.png";
+        const hasImage = !!img;
+        const imageSrc = hasImage ? img : "/media/image/standard/img_placeholder.png";
+        const showImage = withoutPlaceholders ? hasImage : true;
+
+        const shortDate = date.split("T")[0];
         return `
           <div class="container-item">
             <div class="post">
                 <div class="post-img-contener">
-                    <img class="post-image post-item" src="${imageSrc}">
+                    ${showImage ? `<img class="post-image post-item" src="${imageSrc}">` : ""}
                 </div>
                 <div class="post-info-contener">
                   <a class="post-title post-item" href="/post-info/${id}"><h3>${title}</h3></a>
@@ -213,9 +225,10 @@ async function createPost(){
         const formData = new FormData(this)
         const title = formData.get('title')
         const description = formData.get('description')
+        const image = formData.get('img')
 
         const csrfToken = getCookie('csrftoken')
-        await postCreatePost(csrfToken, title, description)
+        await postCreatePost(csrfToken, title, description, image)
         alert("Пост успішно створено")
       } catch (error) {
         console.error("Не вдалося створити пост:", error);

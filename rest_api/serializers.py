@@ -8,13 +8,13 @@ class GetPostsListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['id', 'title', 'description', 'author', 'date']
+        fields = ['id', 'title', 'description', 'img', 'author', 'date']
 
 
 class CreatePostsListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        fields = ['title', 'description']
+        fields = ['title', 'description', 'img']
         read_only_fields = ['id']  # author не передається, додається в perform_create()
 
 
@@ -23,7 +23,7 @@ class DeletePostsListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['id', 'title', 'description', 'author', 'date']
+        fields = ['id', 'title', 'description', 'img', 'author', 'date']
 
 
 class PutPostsListSerializer(serializers.ModelSerializer):
@@ -165,7 +165,8 @@ class GetPostOneUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['id', 'title', 'description', 'author', 'date']
+        fields = ['id', 'title', 'description', 'img', 'author', 'date']
+
 
 class GetMeSerializer(serializers.ModelSerializer):
     class Meta:

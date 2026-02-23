@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from rest_framework import viewsets, permissions
 from drf_spectacular.utils import extend_schema_view
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -50,6 +51,7 @@ class PostModelViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     http_method_names = ['get', 'post', 'delete', 'put', 'patch']
     serializer_class = GetPostsListSerializer
+    parser_classes = (MultiPartParser, FormParser)
     queryset = Post.objects.all().order_by('-date')
 
     def get_serializer_class(self):
@@ -197,8 +199,9 @@ class CustomUserViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['get'], url_path='posts')
     def post_list(self, request, user_pk=None):
 
-        posts = Post.objects.filter(author_id=user_pk)
+        posts = Post.objects.filter(author_id=user_pk).order_by('-date')
         serializer = self.get_serializer(posts, many=True)
+
         return Response(serializer.data)
 
 

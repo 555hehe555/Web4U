@@ -364,3 +364,44 @@ export async function PatchUser(csrfToken, userID, dataToUpdate) {
     alert("Сталася помилка при оновленні. Спробуйте ще раз.");
   }
 }
+
+
+export async function PutPost(csrfToken, postID, title, description, img) {
+  console.warn("PutPost function called");
+  console.log(`csrfToken ${csrfToken}`);
+  console.log(`postID ${postID}`);
+  console.log(`title ${title}`);
+  console.log(`description ${description}`);
+  console.log(`img ${img}`);
+
+  try {
+    const formData = new FormData();
+
+    formData.append("title", title);
+    formData.append("description", description);
+    if (img) {
+      formData.append("img", img); // img = input.files[0]
+    }
+
+    const response = await fetch(`/api/posts/${postID}/`, {
+      method: "PUT",
+      headers: {
+        "X-CSRFToken": csrfToken,
+        // НЕ ставимо Content-Type вручну
+      },
+      body: formData
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.log("if !res" + response.ok)
+    }
+
+    console.log("Успішна відповідь від API:", data);
+
+  } catch (error) {
+    console.error("Помилка при оновленні поста:", error);
+    alert("Сталася помилка при оновленні. Спробуйте ще раз.");
+  }
+  }

@@ -29,14 +29,14 @@ class DeletePostsListSerializer(serializers.ModelSerializer):
 class PutPostsListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        fields = ['id', 'title', 'description']
+        fields = ['id', 'title', 'description', 'img']
         read_only_fields = ['id']
 
 
 class PatchPostsListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        fields = ['id', 'title', 'description']
+        fields = ['id', 'title', 'description', 'img']
         read_only_fields = ['id']
 
 

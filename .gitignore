@@ -24,8 +24,9 @@ migrations/*
 !*/migrations/init.py
 
 # Static / Media (якщо генерується або динамічно додається)
-/media/image/temporary/
+/media/image/
 !/media/image/standard/**
+!/media/image/favicon/**
 # /static/  <- залиш коментованим, якщо стилі статичні й потрібні
 
 # Docker / DB

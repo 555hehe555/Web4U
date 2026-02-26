@@ -153,44 +153,126 @@ function renderCommentsPost(comments) {
 
 function renderPostInfo(post, comments, likes) {
   const { id, title, img, description, author, date } = post;
+
   const countLikes = likes.count || 0;
   const commentsMarkup = renderCommentsPost(comments);
-  const imageSrc = img ? img : "/media/image/standard/img_placeholder.png";
+
+  const imageSrc = img
+    ? img
+    : "/media/image/standard/img_placeholder.png";
+
   const likeImgSrc = likes.user_liked
     ? "/media/image/standard/like.png"
     : "/media/image/standard/no_like.png";
+
   const shortDate = date.split("T")[0];
 
   return `
         <div class="container-item-detail" data-post-id="${id}">
-            <div class="post-detail">
-                <h3 class="post-title post-detail-title post-item">${title}</h3>
-                <p class="post-description post-detail-description post-item">${description}</p>
-                <p class="post-author post-detail-author post-item">${author}</p>
-                <p class="post-date post-detail-date post-item">${shortDate}</p>
+            <div class="container-item">
+                <div class="post" style="display: flex;
+                                         justify-content: space-between;
+                                         flex-direction: row-reverse;">
+                                
+                    
+                    <div class="post-img-contener">
+                        <input 
+                            class="button-img mt-2"
+                            type="file"
+                            name="img"
+                            accept="image/*"
+                            id="id_img"
+                            style="display: none;"
+                            disabled>
+
+                        <label for="id_img" style="display: flex;
+                                                   flex-direction: column;
+                                                   align-items: flex-start;">
+                            <img id="prev_img"
+                                 src="${imageSrc}"
+                                 style="width: 450px; height: 450px; border-radius: 20px; margin-top: 10px; cursor: pointer;">
+                                 
+                                        
+                            <button id="editCurrentPost">
+                                editCurrentPost
+                            </button>
+                        </label>
+                    </div>
+
+                    <div class="post-info-contener" style="width: auto;">
+                        
+                        <h3 class="post-title post-detail-title post-item">
+                            ${title}
+                        </h3>
+
+                        <input
+                            type="text"
+                            name="title"
+                            class="form-control input-style vTextField mt-2"
+                            maxlength="70"
+                            required
+                            id="id_title"
+                            placeholder="Введіть назву поста"
+                            style="display: none">
+
+                        <p class="post-description post-detail-description post-item">
+                            ${description}
+                        </p>
+
+                        <textarea
+                            name="description"
+                            cols="40"
+                            rows="10"
+                            placeholder="Введіть опис поста"
+                            class="form-control textarea-style vLargeTextField mt-2"
+                            required
+                            id="id_description"
+                            spellcheck="false"
+                            style="display: none">
+                        </textarea>
+
+                        <p class="post-author post-detail-author post-item">
+                            ${author}
+                        </p>
+
+                        <p class="post-date post-detail-date post-item">
+                            ${shortDate}
+                        </p>
+                    </div>
+
+                </div>
             </div>
 
-            
             <div class="like">
-              <a href="#" class="like-btn">
-                <img src="${likeImgSrc}" width="20" height="20">
-              </a>
-              <span class="like-count">${countLikes}</span>
+                <a href="#" class="like-btn">
+                    <img src="${likeImgSrc}" width="20" height="20">
+                </a>
+                <span class="like-count">
+                    ${countLikes}
+                </span>
             </div>
-            
+
             <div class="comment-finished">
-              <h2 class="comment-finished-title"><br>Comment<br></h2> 
-              ${commentsMarkup}
+                <h2 class="comment-finished-title">
+                    <br>Comment<br>
+                </h2>
+                ${commentsMarkup}
             </div>
-        </div>
-        
-        <div class="img-container">
-            <img class="post-image post-detail-image post-item" src="${imageSrc}" width="400" style="border-radius: 20px;">
+
         </div>
     `;
 }
 
 
+
+document.addEventListener("DOMContentLoaded", function() {
+  const container = document.querySelector(".post");
+  if (!container) return; // якщо контейнера нема, нічого не робимо
+
+  container.addEventListener("click", async function(e) {
+    
+  }
+);
 
 async function showBlogPage() {
   const postContainer = document.querySelector(".own-container");
@@ -540,6 +622,11 @@ async function editProfileUser(e) {
   editBtn.innerText = isEditing ? "Редагувати" : "Зберегти";
   isEditing = !isEditing;
 }
+
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+});
 
 
 

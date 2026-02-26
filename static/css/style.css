@@ -291,8 +291,10 @@ footer {
 }
 
 .container-item-deteil {
-  max-width: 500px;
   margin-top: 50px;
+}
+.container-item-detail {
+  width: 100%;
 }
 
 .post-info-root {
@@ -343,6 +345,19 @@ footer {
   margin-right: 15px;
 }
 
+#editCurrentPost{
+  margin-top: 10px;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  background-color: var(--secondary);
+  color: var(--text-on-black);
+}
+
+#editCurrentPost:hover {
+  background-color: var(--secondary-hover);
+  color: var(--text-on-black);
+}
 
 /* ========================================================================== */
 /*                                COMMENTS                                    */
@@ -516,3 +531,16 @@ hr {
     color:#6c757d;
 }
 
+.post-create-title{
+  border: none;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  width: 400px;
+}
+
+.post-create-description{
+  border: none;
+  border-radius: 10px;
+  width: 400px;
+  height: 100px;
+}

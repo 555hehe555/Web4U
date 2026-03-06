@@ -264,15 +264,15 @@ function renderPostInfo(post, comments, likes) {
 }
 
 
-
-document.addEventListener("DOMContentLoaded", function() {
-  const container = document.querySelector(".post");
-  if (!container) return; // якщо контейнера нема, нічого не робимо
-
-  container.addEventListener("click", async function(e) {
-    
-  }
-);
+//
+//document.addEventListener("DOMContentLoaded", function() {
+//  const container = document.querySelector(".post");
+//  if (!container) return; // якщо контейнера нема, нічого не робимо
+//
+//  container.addEventListener("click", async function(e) {
+//
+//  }
+//);
 
 async function showBlogPage() {
   const postContainer = document.querySelector(".own-container");

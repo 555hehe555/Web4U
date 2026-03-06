@@ -12,7 +12,9 @@ import {
   postLoginUser,
   postLogoutUser,
   getUserPostsById,
-  PatchUser
+  PatchUser,
+  PatchPost,
+  DeletePost
 } from "./api.js"
 import getCookie from "./get_csrf_token.js";
 
@@ -26,6 +28,8 @@ function deleteMarkup(el) {
 
 let currentPage = 1;
 let totalPages = null;
+
+let isEditing = false;
 
 let first = document.getElementById('first');
 let prev = document.getElementById('prev');
@@ -189,19 +193,25 @@ function renderPostInfo(post, comments, likes) {
                                                    flex-direction: column;
                                                    align-items: flex-start;">
                             <img id="prev_img"
-                                 src="${imageSrc}"
+                                 src="${img}"
                                  style="width: 450px; height: 450px; border-radius: 20px; margin-top: 10px; cursor: pointer;">
                                  
-                                        
-                            <button id="editCurrentPost">
-                                editCurrentPost
-                            </button>
+                            <input id="send-img"  type="checkbox" style="display: none">
+                            <label for="send-img" id="send-img-p" style="display: none">чи надсилати картику?</label>
                         </label>
+                        
+                       
+                        <button id="editCurrentPost">
+                            Редагувати
+                        </button>
+                        <button id="deleteCurrentPost">
+                            Видалити цей пост
+                        </button>
                     </div>
 
                     <div class="post-info-contener" style="width: auto;">
                         
-                        <h3 class="post-title post-detail-title post-item">
+                        <h3 id="post-title" class="post-title post-detail-title post-item">
                             ${title}
                         </h3>
 
@@ -211,11 +221,11 @@ function renderPostInfo(post, comments, likes) {
                             class="form-control input-style vTextField mt-2"
                             maxlength="70"
                             required
-                            id="id_title"
-                            placeholder="Введіть назву поста"
+                            id="post-title-edit"
+                            placeholder=${title}
                             style="display: none">
 
-                        <p class="post-description post-detail-description post-item">
+                        <p id="post-description" class="post-description post-detail-description post-item">
                             ${description}
                         </p>
 
@@ -223,10 +233,10 @@ function renderPostInfo(post, comments, likes) {
                             name="description"
                             cols="40"
                             rows="10"
-                            placeholder="Введіть опис поста"
+                            placeholder=${description}
                             class="form-control textarea-style vLargeTextField mt-2"
                             required
-                            id="id_description"
+                            id="post-description-edit"
                             spellcheck="false"
                             style="display: none">
                         </textarea>
@@ -264,15 +274,115 @@ function renderPostInfo(post, comments, likes) {
 }
 
 
-//
-//document.addEventListener("DOMContentLoaded", function() {
-//  const container = document.querySelector(".post");
-//  if (!container) return; // якщо контейнера нема, нічого не робимо
-//
-//  container.addEventListener("click", async function(e) {
-//
-//  }
-//);
+
+document.addEventListener("DOMContentLoaded", function() {
+ const container = document.querySelector(".post");
+ if (!container) return; // якщо контейнера нема, нічого не робимо
+
+ container.addEventListener("click", async function(e) {
+   const postElem = e.target.closest(".container-item-detail");
+   if (!postElem) return;
+
+   const postId = postElem.dataset.postId;
+
+   const editButton = e.target.closest("#editCurrentPost");
+   const deleteButton = e.target.closest("#deleteCurrentPost");
+
+
+   const titleElem = postElem.querySelector("#post-title");
+   const descriptionElem = postElem.querySelector("#post-description");
+
+   const titleInput = postElem.querySelector("#post-title-edit");
+   const descriptionInput = postElem.querySelector("#post-description-edit");
+
+   const prevImg = postElem.querySelector("#prev_img");
+   const imgInput = postElem.querySelector("#id_img");
+   const sendImgCheckbox = postElem.querySelector("#send-img");
+   const sendImgLabel = postElem.querySelector("#send-img-p");
+
+
+  if (editButton && !isEditing) {
+    console.log("Edit button clicked");
+    isEditing = true
+
+    editButton.textContent = "Зберегти";
+
+      titleElem.style.display = "none";
+      descriptionElem.style.display = "none";
+
+      titleInput.style.display = "block";
+      descriptionInput.style.display = "block";
+
+      sendImgCheckbox.style.display = "block";
+      sendImgLabel.style.display = "block";
+
+      imgInput.disabled = false;
+
+      imgInput.addEventListener("change", function() {
+        const file = this.files[0];
+        if (file) {
+          prevImg.src = URL.createObjectURL(file);
+        } else {
+          prevImg.src = "none";
+        }
+      });
+  } else if (editButton && isEditing) {
+    console.log("Save button clicked");
+    isEditing = false
+
+      titleElem.style.display = "block";
+      descriptionElem.style.display = "block";
+
+      titleInput.style.display = "none";
+      descriptionInput.style.display = "none";
+
+      sendImgCheckbox.style.display = "none";
+      sendImgLabel.style.display = "none";
+
+      imgInput.disabled = true;
+
+      const updatedTitle = titleInput.value.trim();
+      const updatedDescription = descriptionInput.value.trim();
+      const updatedImageFile = imgInput.files[0];
+
+      prevImg.src = updatedImageFile ? URL.createObjectURL(updatedImageFile) : prevImg.src;
+
+      if (updatedTitle && updatedDescription) {
+        const formData = new FormData();
+
+        formData.append("title", updatedTitle);
+        formData.append("description", updatedDescription);
+
+        if (updatedImageFile && sendImgCheckbox.checked) {
+          formData.append("img", updatedImageFile);
+        }
+
+        const csrfToken = getCookie('csrftoken');
+
+        await PatchPost(csrfToken, postId, formData)
+
+        titleElem.textContent = updatedTitle;
+        descriptionElem.textContent = updatedDescription;
+      } else {
+        alert("Заголовок і опис не можуть бути порожніми.");
+      }
+    }
+  else if (deleteButton) {
+    console.log("Delete button clicked");
+      if (confirm("Ви впевнені, що хочете видалити цей пост?")) {
+        try {
+          const csrfToken = getCookie('csrftoken');
+          await DeletePost(csrfToken, postId);
+          alert("Пост успішно видалено");
+          window.location.href = "/"; // повертаємося на головну після видалення
+        } catch (error) {
+          console.error("Не вдалося видалити пост:", error);
+          alert("Сталася помилка при видаленні поста. Спробуйте ще раз.");
+        }
+      }
+   }
+ })
+});
 
 async function showBlogPage() {
   const postContainer = document.querySelector(".own-container");
@@ -504,7 +614,7 @@ async function logoutUser(){
 }
 
 
-let isEditing = false;
+
 
 async function profileUser() {
   const profileContainer = document.querySelector(".main-profile");

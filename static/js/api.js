@@ -365,43 +365,48 @@ export async function PatchUser(csrfToken, userID, dataToUpdate) {
   }
 }
 
-
-export async function PutPost(csrfToken, postID, title, description, img) {
-  console.warn("PutPost function called");
+export async function PatchPost(csrfToken, postID, dataToUpdate) {
+  console.warn("PatchPost function called");
   console.log(`csrfToken ${csrfToken}`);
   console.log(`postID ${postID}`);
-  console.log(`title ${title}`);
-  console.log(`description ${description}`);
-  console.log(`img ${img}`);
+  console.log(`dataToUpdate ${dataToUpdate}`);
 
   try {
-    const formData = new FormData();
-
-    formData.append("title", title);
-    formData.append("description", description);
-    if (img) {
-      formData.append("img", img); // img = input.files[0]
-    }
-
     const response = await fetch(`/api/posts/${postID}/`, {
-      method: "PUT",
+      method: "PATCH",
       headers: {
-        "X-CSRFToken": csrfToken,
-        // НЕ ставимо Content-Type вручну
+        "X-CSRFToken": csrfToken
       },
-      body: formData
+      body: dataToUpdate
     });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      console.log("if !res" + response.ok)
-    }
-
-    console.log("Успішна відповідь від API:", data);
-
   } catch (error) {
     console.error("Помилка при оновленні поста:", error);
     alert("Сталася помилка при оновленні. Спробуйте ще раз.");
   }
+}
+
+export async function DeletePost(csrfToken, postID) {
+  console.warn("DeletePost function called");
+  console.log(`csrfToken ${csrfToken}`);
+  console.log(`postID ${postID}`);
+
+  try {
+    const response = await fetch(`/api/posts/${postID}/`, {
+      method: "DELETE",
+      headers: {
+        "X-CSRFToken": csrfToken,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const data = await response.json();
+      console.log("if !res" + response.ok)
+    }
+
+    console.log("Успішна відповідь від API:", response);
+  } catch (error) {
+    console.error("Помилка при видаленні поста:", error);
+    alert("Сталася помилка при видаленні. Спробуйте ще раз.");
   }
+}

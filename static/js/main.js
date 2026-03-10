@@ -185,7 +185,7 @@ function renderPostInfo(post, comments, likes) {
                                          justify-content: space-between;
                                          flex-direction: row-reverse;">
                                 
-                    
+
                     <div class="post-img-contener">
                         <input 
                             class="button-img mt-2"
@@ -199,9 +199,7 @@ function renderPostInfo(post, comments, likes) {
                         <label for="id_img" style="display: flex;
                                                    flex-direction: column;
                                                    align-items: flex-start;">
-                            <img id="prev_img"
-                                 src="${img}"
-                                 style="width: 450px; height: 450px; border-radius: 20px; margin-top: 10px; cursor: pointer;">
+                            <img id="prev_img" src="${img}">
                                  
                             <input id="send-img"  type="checkbox" style="display: none">
                             <label for="send-img" id="send-img-p" style="display: none">чи надсилати картику?</label>

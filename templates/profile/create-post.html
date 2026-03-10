@@ -8,62 +8,53 @@
     <div class="container">
         <div class="create-post-style form-signin w-100 m-auto main-blog-style" style="max-width: none">
             <div id="content" class="colM">
-                <div id="content-main">
-                    <form id="post_form" class="post_form">
-                        {% csrf_token %}
-                        {{ form.errors }}
-                        <div class="container-item">
-
-                            <div class="post">
-                                <div class="post-img-contener">
-                                    <div class="post-img-contener">
-                                        <input class="button-img mt-2" type="file" name="img"
+                <form id="post_form" class="post_form">
+                    {% csrf_token %}
+                    {{ form.errors }}
+                        <div class="post">
+                            <div>
+                                <input class="button-img mt-2" type="file" name="img"
                                                accept="image/*" id="id_img" style="display: none;">
-                                        <label for="id_img">
-                                            <p>Тисни!⭣⭣⭣⭣</p>
-                                            <img id="prev_img" src="https://i0.wp.com/corvallisddc.org/wp-content/uploads/2021/10/placeholder-664.png?fit=1200%2C800&ssl=1&w=640"
-                                                 style="width: 450px;height: 450px; border-radius: 20px; margin-top: 10px; cursor: pointer;">
-                                        </label>
-                                    </div>
+                                <label for="id_img">
+                                    <p>Тисни!⭣⭣⭣⭣</p>
+                                    <img id="prev_img" src="https://i0.wp.com/corvallisddc.org/wp-content/uploads/2021/10/placeholder-664.png?fit=1200%2C800&ssl=1&w=640">
+                                </label>
+                            </div>
+                            <script>
+                                const imgInput = document.getElementById('id_img');
+                                const prevImg = document.getElementById('prev_img');
 
-                                    <script>
-                                      const imgInput = document.getElementById('id_img');
-                                      const prevImg = document.getElementById('prev_img');
-
-                                      imgInput.addEventListener('change', function() {
-                                        const file = this.files[0];
-                                        if (file) {
-                                          const reader = new FileReader();
-                                          reader.onload = function(e) {
+                                imgInput.addEventListener('change', function() {
+                                    const file = this.files[0];
+                                    if (file) {
+                                        const reader = new FileReader();
+                                        reader.onload = function(e) {
                                             prevImg.src = e.target.result;
                                             prevImg.style.display = 'block';
-                                          }
-                                          reader.readAsDataURL(file);
-                                        } else {
-                                          prevImg.src = '';
-                                          prevImg.style.display = 'none';
                                         }
-                                      });
-                                    </script>
-                                </div>
-                                <div class="post-info-contener" style="width: auto;">
-                                    <input type="text" name="title" class="form-control input-style vTextField mt-2"
+                                        reader.readAsDataURL(file);
+                                    } else {
+                                        prevImg.src = '';
+                                        prevImg.style.display = 'none';
+                                        }
+                                    });
+                            </script>
+
+                            <div>
+                                <input type="text" name="title" class="form-control input-style vTextField mt-2"
                                            maxlength="70" required id="id_title" placeholder="Введіть назву поста">
 
-                                    <textarea name="description" cols="40" rows="10" placeholder="Введіть опис поста"
+                                <textarea name="description" cols="40" rows="10" placeholder="Введіть опис поста"
                                               class="form-control textarea-style vLargeTextField mt-2" required id="id_description" spellcheck="false"></textarea>
 
-
-                                    <div class="submit-row mt-4">
-                                        <button id="submit-create-post" value="Зберегти" class="button-submit default primary-btn" name="_save">Зберегти</button>
-                                    </div>
-                                    <script id="django-admin-form-add-constants" src="/static/admin/js/change_form.js" data-model-name="post" async></script>
-                                    <script id="django-admin-prepopulated-fields-constants" src="/static/admin/js/prepopulate_init.js" data-prepopulated-fields="[]"></script>
+                                <div class="submit-row mt-4">
+                                    <button id="submit-create-post" value="Зберегти" class="button-submit default primary-btn" name="_save">Зберегти</button>
                                 </div>
+                                <script id="django-admin-form-add-constants" src="/static/admin/js/change_form.js" data-model-name="post" async></script>
+                                <script id="django-admin-prepopulated-fields-constants" src="/static/admin/js/prepopulate_init.js" data-prepopulated-fields="[]"></script>
                             </div>
                         </div>
                     </form>
-                </div>
             </div>
         </div>
     </div>

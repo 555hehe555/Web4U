@@ -4,7 +4,7 @@ export async function getAllPosts(page = 1) {
     console.warn("getAllPosts function called", page);
     const response = await fetch(`/api/posts/?page=${page}`);
     const data = await response.json();
-    console.log("All post" + data);
+    console.log("All post", data);
     return data;
   } catch (error) {
     console.error("Error:", error);

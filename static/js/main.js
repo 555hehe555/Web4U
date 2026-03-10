@@ -31,6 +31,8 @@ let totalPages = null;
 
 let isEditing = false;
 
+let paginationContainer = document.querySelector(".pagination-container");
+
 let first = document.getElementById('first');
 let prev = document.getElementById('prev');
 let next = document.getElementById('next');
@@ -65,9 +67,14 @@ function formatDate(dateString) {
 function renderBlogPosts(posts) {
   const withoutPlaceholders = true
 
-  if (posts.results) {
+  if ("results" in posts) {
     console.log(posts);
     totalPages = Math.ceil(posts.count / 10);
+    if (totalPages === 1) {
+      paginationContainer.style.display = "none";
+    } else {
+      paginationContainer.style.display = "flex";
+    }
     return posts.results
       .map(({ id, title, img, description, author, date }) => {
         const hasImage = !!img;
@@ -96,7 +103,7 @@ function renderBlogPosts(posts) {
                     ${showImage ? `<img class="post-image post-item" src="${imageSrc}">` : ""}
                 </div>
                 <div class="post-info-contener">
-                  <a class="post-title post-item" href="post-info/${id}"><h3>${title}</h3></a>
+                <a class="post-title post-item" href="/post-info/${id}"><h3>${title}</h3></a>
                   <p class="post-description post-item">${description}</p>
                   <p class="post-date post-item">${shortDate}</p>
                   <p class="post-author post-item">${author}</p>
@@ -105,7 +112,7 @@ function renderBlogPosts(posts) {
             </div>
           `;
         }).join("");
-  } else if (posts[0].title) {
+  } else if (!("results aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" in posts) && posts.length) {
     // Це пости на сторінці профілю
     return posts
       .map(({ id, title, img, description, author, date }) => {
@@ -130,7 +137,7 @@ function renderBlogPosts(posts) {
           </div>
         `;
       }).join("");
-  } else {"<p>У ас поки що немає постів</p>"}
+  } else {return "<img src='/media/image/standard/no_posts_plasholder.png' width='500px' style='display: block; margin: 0 auto; border-radius: 20px'>";}
 }
 
 function renderCommentsPost(comments) {

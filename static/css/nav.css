@@ -1,0 +1,12 @@
+  .nav li a{
+    color:#ffffff;
+}
+
+.nav li a:hover{
+    color:#6c757d;
+}
+
+@media (min-width: 991px) {
+  .nav {
+    margin-left: 20px;
+  }

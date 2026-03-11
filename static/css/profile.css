@@ -1,0 +1,25 @@
+hr {
+  margin: 0.5rem 0;
+}
+
+.input {
+  margin-top: 10px;
+}
+
+.label-input {
+  color: #000;
+}
+
+.line-element {
+  display: flex;
+  justify-content: space-between;
+}
+
+.profile-info-item {
+  margin: 7px 0;
+  overflow-wrap: break-word;
+}
+
+.description {
+  margin: 10px 0;
+}

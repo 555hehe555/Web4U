@@ -16,7 +16,7 @@ export async function getPostByID(id) {
   try {
     const response = await fetch(`/api/posts/${id}`);
     const data = await response.json();
-    console.log("post by id" + data);
+    console.log("post by id", data);
     return data;
   } catch (error) {
     console.error("Error:", error);
@@ -188,11 +188,7 @@ export async function deleteLike(csrfToken, postID, likeID) {
     });
 
     if (!response.ok) {
-      const data = await response.json();
-      console.log("if !res" + response.ok)
-      // const errorText = JSON.stringify(data.errors || data);
-      // document.querySelector('.form-errors').innerText = errorText;
-      // throw new Error('Помилка збереження поста');
+      throw new Error(`HTTP error ${response.status}`);
     }
 
     console.log("Успішна відповідь від API:", response);
@@ -369,7 +365,7 @@ export async function PatchPost(csrfToken, postID, dataToUpdate) {
   console.warn("PatchPost function called");
   console.log(`csrfToken ${csrfToken}`);
   console.log(`postID ${postID}`);
-  console.log(`dataToUpdate ${dataToUpdate}`);
+  console.log("dataToUpdate", JSON.stringify(dataToUpdate))
 
   try {
     const response = await fetch(`/api/posts/${postID}/`, {

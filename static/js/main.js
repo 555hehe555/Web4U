@@ -112,7 +112,7 @@ function renderBlogPosts(posts) {
             </div>
           `;
         }).join("");
-  } else if (!("results aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" in posts) && posts.length) {
+  } else if (!("results" in posts) && posts.length) {
     // Це пости на сторінці профілю
     return posts
       .map(({ id, title, img, description, author, date }) => {
@@ -162,7 +162,7 @@ function renderCommentsPost(comments) {
 }
 
 
-function renderPostInfo(post, comments, likes) {
+async function renderPostInfo(post, comments, likes) {
   const { id, title, img, description, author, date } = post;
 
   const countLikes = likes.count || 0;
@@ -178,13 +178,29 @@ function renderPostInfo(post, comments, likes) {
 
   const shortDate = date.split("T")[0];
 
+
+  const currentUser = await getCurrentUser();
+
+  let showEditButtons = false;
+  if (currentUser.username === post.author) {
+    showEditButtons = true;
+    console.log("User is the author of the post. Edit buttons will be shown.");
+  }
+  console.log("Current Current user:", currentUser);
+  console.log("currentUser json:", JSON.stringify(currentUser));
+  console.log("Current user:", currentUser.username);
+  console.log("Post author:", post.author);
+  console.log("Show edit buttons:", showEditButtons);
+  console.log("Like image source:", likeImgSrc);
+  console.log(currentUser.username === post.author);
+  console.log(`${currentUser.username} === ${post.author}`);
+
   return `
         <div class="container-item-detail" data-post-id="${id}">
             <div class="container-item">
-                <div class="post" style="display: flex;
+                <div class="post post-detail" style="display: flex;
                                          justify-content: space-between;
                                          flex-direction: row-reverse;">
-                                
 
                     <div class="post-img-contener">
                         <input 
@@ -199,22 +215,19 @@ function renderPostInfo(post, comments, likes) {
                         <label for="id_img" style="display: flex;
                                                    flex-direction: column;
                                                    align-items: flex-start;">
-                            <img id="prev_img" src="${img}">
-                                 
-                            <input id="send-img"  type="checkbox" style="display: none">
-                            <label for="send-img" id="send-img-p" style="display: none">чи надсилати картику?</label>
+                            <img id="prev_img" src="${img}" style="display: ${img ? "block" : "none"}">
                         </label>
                         
-                       
-                        <button id="editCurrentPost">
+                        <button id="editCurrentPost"   style="display: ${showEditButtons ? "block" : "none"};">
                             Редагувати
                         </button>
-                        <button id="deleteCurrentPost">
+                        <button id="deleteCurrentPost" style="display: ${showEditButtons ? "block" : "none"};">
                             Видалити цей пост
                         </button>
                     </div>
 
                     <div class="post-info-contener" style="width: auto;">
+                        <a href="javascript:history.back()" class="back-button"><img src="/media/image/standard/arrow_left.svg"></svg></a>
                         
                         <h3 id="post-title" class="post-title post-detail-title post-item">
                             ${title}
@@ -227,7 +240,7 @@ function renderPostInfo(post, comments, likes) {
                             maxlength="70"
                             required
                             id="post-title-edit"
-                            placeholder=${title}
+                            value=${title}
                             style="display: none">
 
                         <p id="post-description" class="post-description post-detail-description post-item">
@@ -238,13 +251,11 @@ function renderPostInfo(post, comments, likes) {
                             name="description"
                             cols="40"
                             rows="10"
-                            placeholder=${description}
                             class="form-control textarea-style vLargeTextField mt-2"
                             required
                             id="post-description-edit"
                             spellcheck="false"
-                            style="display: none">
-                        </textarea>
+                            style="display: none">${description}</textarea>
 
                         <p class="post-author post-detail-author post-item">
                             ${author}
@@ -259,7 +270,7 @@ function renderPostInfo(post, comments, likes) {
             </div>
 
             <div class="like">
-                <a href="#" class="like-btn">
+                <a class="like-btn">
                     <img src="${likeImgSrc}" width="20" height="20">
                 </a>
                 <span class="like-count">
@@ -302,8 +313,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
    const prevImg = postElem.querySelector("#prev_img");
    const imgInput = postElem.querySelector("#id_img");
-   const sendImgCheckbox = postElem.querySelector("#send-img");
-   const sendImgLabel = postElem.querySelector("#send-img-p");
 
 
   if (editButton && !isEditing) {
@@ -317,9 +326,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
       titleInput.style.display = "block";
       descriptionInput.style.display = "block";
-
-      sendImgCheckbox.style.display = "block";
-      sendImgLabel.style.display = "block";
 
       imgInput.disabled = false;
 
@@ -341,9 +347,6 @@ document.addEventListener("DOMContentLoaded", function() {
       titleInput.style.display = "none";
       descriptionInput.style.display = "none";
 
-      sendImgCheckbox.style.display = "none";
-      sendImgLabel.style.display = "none";
-
       imgInput.disabled = true;
 
       const updatedTitle = titleInput.value.trim();
@@ -352,25 +355,20 @@ document.addEventListener("DOMContentLoaded", function() {
 
       prevImg.src = updatedImageFile ? URL.createObjectURL(updatedImageFile) : prevImg.src;
 
-      if (updatedTitle && updatedDescription) {
-        const formData = new FormData();
+      const formData = new FormData();
 
-        formData.append("title", updatedTitle);
-        formData.append("description", updatedDescription);
+      if (updatedTitle)       {formData.append("title", updatedTitle);}
+      if (updatedDescription) {formData.append("description", updatedDescription);}
+      if (updatedImageFile)   {formData.append("img", updatedImageFile);}
 
-        if (updatedImageFile && sendImgCheckbox.checked) {
-          formData.append("img", updatedImageFile);
-        }
+      const csrfToken = getCookie('csrftoken');
 
-        const csrfToken = getCookie('csrftoken');
+      await PatchPost(csrfToken, postId, formData)
 
-        await PatchPost(csrfToken, postId, formData)
-
-        titleElem.textContent = updatedTitle;
-        descriptionElem.textContent = updatedDescription;
-      } else {
-        alert("Заголовок і опис не можуть бути порожніми.");
-      }
+      titleElem.textContent = updatedTitle;
+      descriptionElem.textContent = updatedDescription;
+      editButton.textContent = "Редагувати";
+      window.location.href = `/post-info/${postId}`;
     }
   else if (deleteButton) {
     console.log("Delete button clicked");
@@ -406,8 +404,7 @@ async function showPostInfo(id) {
     const comments = await getCommentsByPostID(id);
     const likes = await getLikesByPostID(id);
     console.log(comments)
-    console.error(likes)
-    postInfoContainer.innerHTML = renderPostInfo(post, comments, likes);
+    postInfoContainer.innerHTML = await renderPostInfo(post, comments, likes);
   } catch (error) {
     console.error("Не вдалося завантажити пост:", error);
   }
@@ -470,7 +467,7 @@ document.addEventListener("DOMContentLoaded", function() {
       const updatedLikes = await getLikesByPostID(postId);
       const img = likeBtn.querySelector("img");
       const userLiked = updatedLikes.results.some(like => like.author === currentUser.username);
-      img.src = userLiked ? "/media/image/standart/like.png" : "/media/image/standard/no_like.png";
+      img.src = userLiked ? "/media/image/standard/like.png" : "/media/image/standard/no_like.png";
 
       const countElem = postElem.querySelector(".like-count");
       if (countElem) countElem.textContent = updatedLikes.count || 0;

@@ -1,0 +1,33 @@
+.pagination-container{
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  background-color: var(--blog-backround);
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.pagination button {
+  color: var(--text);
+  background-color: var(--secondary);
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin: 0 10px;
+}
+
+.pagination button:hover {
+  background-color: var(--secondary-hover);
+  color: var(--text-on-black);
+}
+
+.pagination p {
+  font-size: 24px;
+  margin: 0 10px;
+  align-self: center;
+  color: var(--text);
+}

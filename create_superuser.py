@@ -21,4 +21,3 @@ def create_superuser():
             print("Superuser already exists.")
     except Exception as e:
         print(f"Error creating superuser: {e}")
-

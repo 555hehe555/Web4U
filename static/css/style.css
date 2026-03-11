@@ -21,6 +21,14 @@ table, caption, tbody, tfoot, thead, tr, th, td {
   vertical-align: baseline;
 }
 
+a{
+    text-decoration: none;
+}
+
+a:hover{
+    text-decoration: none;
+}
+
 /* remember to define focus styles! */
 :focus {
   outline: 0;
@@ -179,16 +187,6 @@ footer {
   background-color: var(--blog-backround);
   margin: 20px;
   border-radius: 20px;
-
-  /* старі варіанти верстки залишив як історію болю */
-  /*
-  display: grid;
-  grid-template-columns: minmax(260px, 320px) 1fr;
-  */
-}
-
-.post-img-contener {
-  /* порожній клас, або для майбутнього, або забутий */
 }
 
 .post-image {

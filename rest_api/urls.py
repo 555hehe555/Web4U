@@ -1,7 +1,9 @@
 from django.urls import path, include
 from django.shortcuts import redirect
-from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+
 from rest_framework.routers import DefaultRouter
+
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 from . import views
 
@@ -25,7 +27,6 @@ urlpatterns = [
     })),
     path('posts/<int:post_pk>/likes/', views.LikePostViewSet.as_view({'get': 'list', 'post': 'create'})),
     path('posts/<int:post_pk>/likes/<int:pk>/', views.LikePostViewSet.as_view({
-        # 'get': 'retrieve',
         'delete': 'destroy'
     })),
     path('users/', views.CustomUserViewSet.as_view({'get': 'list', 'post': 'create'})),
@@ -44,5 +45,3 @@ urlpatterns = [
     path('', lambda request: redirect("swagger-ui")),
     path(route='v1/docs/', view=SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
 ]
-
-

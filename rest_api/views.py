@@ -1,16 +1,19 @@
 from django.contrib.auth import authenticate, login, logout
+
 from rest_framework import viewsets, permissions
-from drf_spectacular.utils import extend_schema_view
-from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
 from rest_framework.decorators import action
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
+from drf_spectacular.utils import extend_schema_view
+
 from documentation.comments import comments_list_doc
-from documentation.likes import like_list_doc
-from documentation.login_user import login_user_list_doc, logout_user_list_doc
-from documentation.posts import post_list_doc
 from documentation.custom_user import user_list_doc
+from documentation.login_user import login_user_list_doc, logout_user_list_doc
+from documentation.likes import like_list_doc
+from documentation.posts import post_list_doc
+
 from .models import Post, Comments, Like, CustomUser
 from .permissions import IsOwner, IsOwnerOrReadOnly
 from .serializers import (
@@ -24,7 +27,6 @@ from .serializers import (
     DeleteCommentListSerializer,
     PutCommentListSerializer,
     PatchCommentListSerializer,
-    # GetUserLikeSerializer,
     GetAllUserLikeSerializer,
     CreateUserLikeSerializer,
     DeleteUserLikeSerializer,
@@ -34,9 +36,10 @@ from .serializers import (
     PutCustomUserSerializer,
     PatchCustomUserSerializer,
     GetMeSerializer,
-    LoginCustomUserSerializer, GetPostOneUserSerializer
+    LoginCustomUserSerializer, 
+    GetPostOneUserSerializer
 )
-import colorama
+
 
 @extend_schema_view(
     list=post_list_doc,
@@ -160,7 +163,6 @@ class LikePostViewSet(viewsets.ModelViewSet):
         return Response(data)
 
 
-
 @extend_schema_view(
     list=user_list_doc,
     retrieve=user_list_doc,
@@ -240,3 +242,4 @@ class AuthViewSet(viewsets.ViewSet):
     def logout(self, request):
         logout(request)
         return Response({"detail": "Logout successful"})
+    

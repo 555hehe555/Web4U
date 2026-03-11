@@ -1,11 +1,7 @@
-from django.db import models
-from django.utils import timezone
-from django.contrib.auth.models import AbstractUser
 import uuid
 
-
-# class CustomUser(AbstractUser):
-#     email = models.EmailField("email", blank=True, max_length=30)
+from django.db import models
+from django.utils import timezone
 
 
 class Post(models.Model):
@@ -30,19 +26,6 @@ class OwnUserPost(models.Model):
     img = models.ImageField("зображеня", upload_to="image/", blank=True)
     date = models.DateField("дата публікації", default=timezone.now)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=True)
-
-
-# class Comments(models.Model):
-#     name = models.CharField(max_length=25)
-#     text_comments = models.TextField('текст коментаря', max_length=240)
-#     post = models.ForeignKey(Post, verbose_name='публікації', on_delete=models.CASCADE)
-#
-#     def __str__(self):
-#         return f'{self.name},{self.post}'
-#
-#     class Meta:
-#         verbose_name = 'коментар'
-#         verbose_name_plural = 'коментарi'
 
 
 class Likes(models.Model):

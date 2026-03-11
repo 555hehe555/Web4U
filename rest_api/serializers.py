@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from .models import Post, Comments, Like, CustomUser
 
 
@@ -177,4 +178,3 @@ class GetMeSerializer(serializers.ModelSerializer):
 class LoginCustomUserSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField(write_only=True)
-

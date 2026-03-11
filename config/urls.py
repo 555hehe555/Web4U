@@ -16,18 +16,16 @@ Including another URLconf
 """
 from django.conf import settings
 from django.conf.urls.static import static
-from django.contrib.auth import urls
 from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('blog.urls')),
-    # path('accounts/', include(urls)),
     path('api-auth/', include('rest_framework.urls')),
     path('api/', include('rest_api.urls')),
-    # path('quizzes/', include('quiz.urls', namespace='quiz'))
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    

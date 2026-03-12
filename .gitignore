@@ -27,6 +27,7 @@ migrations/*
 /media/image/
 !/media/image/standard/**
 !/media/image/favicon/**
+staticfiles/
 # /static/  <- залиш коментованим, якщо стилі статичні й потрібні
 
 # Docker / DB

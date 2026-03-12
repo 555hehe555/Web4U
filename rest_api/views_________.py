@@ -16,7 +16,7 @@ from documentation.posts import post_list_doc
 
 from .models import Post, Comments, Like, CustomUser
 from .permissions import IsOwner, IsOwnerOrReadOnly
-from .serializers import (
+from .serializers________ import (
     GetPostsListSerializer,
     CreatePostsListSerializer,
     DeletePostsListSerializer,

@@ -1,0 +1,22 @@
+body {
+  background-color: var(--background);
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 150px; /* костиль під fixed footer */
+  color: var(--text);
+  font-family: "Roboto Mono", monospace;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+}
+
+main {
+  margin: 50px 0;
+}
+
+.main-blog-style {
+  background-color: var(--blog-backround);
+  max-width: 500px;
+  padding: 15px;
+  border-radius: 10px;
+}

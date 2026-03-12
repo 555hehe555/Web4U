@@ -1,0 +1,25 @@
+.primary-btn {
+  background-color: var(--primary);
+  border-color: var(--primary);
+  color: var(--text-on-black);
+  margin: 5px;
+}
+
+.primary-btn:hover {
+  background-color: var(--primary-hover);
+  border-color: var(--primary-hover);
+  color: #ffffff;
+}
+
+.secondary-btn {
+  background-color: var(--secondary);
+  border-color: var(--secondary);
+  color: var(--text-on-black);
+  margin: 5px;
+}
+
+.secondary-btn:hover {
+  background-color: var(--secondary-hover);
+  border-color: var(--secondary-hover);
+  color: var(--text-on-black) !important; /* suspicious, можливо десь конфлікт */
+}

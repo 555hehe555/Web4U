@@ -2,7 +2,7 @@ from drf_spectacular.utils import extend_schema
 
 from rest_framework import status
 
-from rest_api.serializers import GetCommentListSerializer
+from rest_api.serializers________ import GetCommentListSerializer
 
 
 comments_list_doc = extend_schema(

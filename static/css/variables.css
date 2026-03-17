@@ -1,4 +1,5 @@
 :root {
+  --default-white: #ffffff;
   --background: #263243;
   --background-color-header-and-footer: #212529;
   --blog-backround: #A1D1D1;
@@ -6,6 +7,7 @@
   --primary-hover: #0a58ca;
   --secondary: #F472B6;
   --secondary-hover: #9c2575;
+  --white-bg-hover: #6c757d;
   --text: #52555c;
   --text-on-black: #FFF;
 }

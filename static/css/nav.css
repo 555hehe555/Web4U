@@ -1,9 +1,9 @@
   .nav li a{
-    color:#ffffff;
+    color: var(--default-white);
 }
 
 .nav li a:hover{
-    color:#6c757d;
+    color:var(--white-bg-hover);
 }
 
 @media (min-width: 991px) {

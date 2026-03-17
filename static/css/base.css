@@ -2,7 +2,6 @@ body {
   background-color: var(--background);
   display: flex;
   flex-direction: column;
-  margin-bottom: 150px; /* костиль під fixed footer */
   color: var(--text);
   font-family: "Roboto Mono", monospace;
   font-optical-sizing: auto;

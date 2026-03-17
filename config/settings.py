@@ -154,7 +154,8 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 COMPRESS_ROOT = STATIC_ROOT
 COMPRESS_URL = STATIC_URL
-
+COMPRESS_OFFLINE = False
+COMPRESS_ENABLED=False
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 

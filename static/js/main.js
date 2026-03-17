@@ -21,7 +21,6 @@ import getCookie from "./get_csrf_token.js";
 
 //TODO: need refactoring and dividing to extra modules
 
-
 function deleteMarkup(el) {
   el.innerHTML = "";
 }
@@ -38,7 +37,6 @@ let prev = document.getElementById('prev');
 let next = document.getElementById('next');
 let last = document.getElementById('last');
 let current = document.getElementById('current');
-
 
 function getPage(){
   const path = window.location.pathname;
@@ -82,18 +80,6 @@ function renderBlogPosts(posts) {
         const showImage = withoutPlaceholders ? hasImage : true;
 
         const shortDate = date.split("T")[0];
-      //   return `
-      //     <div class="container-item">
-      //       <div class="post">
-      //           <a class="post-title post-item" href="post-info/${id}"><h3>${title}</h3></a>
-      //           <img class="post-image post-item" src="${imageSrc}" width="200px" height="200px" style="border-radius: 20px;">
-      //           <p class="post-description post-item">${description}</p>
-      //           <p class="post-author post-item">${author}</p>
-      //       </div>
-      //     </div>
-      //   `;
-      // }).join("");
-
       //   Це пости на головній сторінці
           return `
             <div class="container-item">
@@ -160,7 +146,6 @@ function renderCommentsPost(comments) {
 
     return commentsItem.join("");
 }
-
 
 async function renderPostInfo(post, comments, likes) {
   const { id, title, img, description, author, date } = post;
@@ -289,8 +274,6 @@ async function renderPostInfo(post, comments, likes) {
     `;
 }
 
-
-
 document.addEventListener("DOMContentLoaded", function() {
  const container = document.querySelector(".post");
  if (!container) return; // якщо контейнера нема, нічого не робимо
@@ -396,7 +379,6 @@ async function showBlogPage() {
   console.log(document.querySelectorAll(".post-title"));
 }
 
-
 async function showPostInfo(id) {
   try {
     const postInfoContainer = document.querySelector(".container-detail");
@@ -424,6 +406,7 @@ async function createPost(){
         const csrfToken = getCookie('csrftoken')
         await postCreatePost(csrfToken, title, description, image)
         alert("Пост успішно створено")
+        window.location.href = "/profile/";
       } catch (error) {
         console.error("Не вдалося створити пост:", error);
       }
@@ -615,9 +598,6 @@ async function logoutUser(){
     });
 }
 
-
-
-
 async function profileUser() {
   const profileContainer = document.querySelector(".main-profile");
   if (!profileContainer) return;
@@ -734,13 +714,6 @@ async function editProfileUser(e) {
   editBtn.innerText = isEditing ? "Редагувати" : "Зберегти";
   isEditing = !isEditing;
 }
-
-
-document.addEventListener("DOMContentLoaded", async () => {
-
-});
-
-
 
 document.addEventListener("DOMContentLoaded", async () => {
   const { pageType, id } = getPage();

@@ -2,7 +2,7 @@ from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
 
-from rest_api.serializers.users import LoginCustomUserSerializer
+from rest_api.serializers import LoginCustomUserSerializer
 
 
 login_user_list_doc = extend_schema(

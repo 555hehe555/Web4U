@@ -6,14 +6,20 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema_view
 
-from documentation.comments import comments_list_doc
-from documentation.custom_user import user_list_doc
-from documentation.login_user import login_user_list_doc, logout_user_list_doc
-from documentation.likes import like_list_doc
-from documentation.posts import post_list_doc
+from documentation import login_user_list_doc, logout_user_list_doc, user_list_doc
 
+from ..models import CustomUser, Post
 from ..permissions import IsOwner
-from ..serializers.users import *
+from ..serializers import (
+    GetCustomUserSerializer,
+    CreateCustomUserSerializer,
+    DeleteCustomUserSerializer,
+    PutCustomUserSerializer,
+    PatchCustomUserSerializer,
+    GetPostOneUserSerializer,
+    LoginCustomUserSerializer,
+    GetMeSerializer
+)
 
 
 @extend_schema_view(

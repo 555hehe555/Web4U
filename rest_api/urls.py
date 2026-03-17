@@ -5,10 +5,14 @@ from rest_framework.routers import DefaultRouter
 
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
-from .views.post import *
-from .views.comment import *
-from .views.like import *
-from .views.user import *
+from .views import (
+    PostModelViewSet,
+    CommentModelViewSet,
+    LikePostViewSet,
+    CustomUserViewSet,
+    AuthViewSet,
+    ManagerViewSet,
+)
 
 router = DefaultRouter()
 router.register(r'', ManagerViewSet, basename='manager')

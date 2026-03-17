@@ -2,10 +2,11 @@ from rest_framework import viewsets, permissions
 from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema_view
 
-from documentation.likes import like_list_doc
+from documentation import like_list_doc
 
+from ..models import Like
 from ..permissions import IsOwnerOrReadOnly
-from ..serializers.likes import *
+from ..serializers import GetAllUserLikeSerializer, CreateUserLikeSerializer, DeleteUserLikeSerializer
 
 @extend_schema_view(
     list=like_list_doc,

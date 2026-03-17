@@ -2,19 +2,25 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from drf_spectacular.utils import extend_schema_view
 
-from documentation.comments import comments_list_doc
+from documentation import comments_list_doc
 
+from ..models import Comments
 from ..permissions import IsOwnerOrReadOnly
-from ..serializers.comments import *
-
+from ..serializers import (
+    GetCommentListSerializer,
+    CreateCommentListSerializer,
+    DeleteCommentListSerializer,
+    PutCommentListSerializer,
+    PatchCommentListSerializer
+)
 
 @extend_schema_view(
-    list = comments_list_doc,
-    retrieve = comments_list_doc,
-    create = comments_list_doc,
-    destroy = comments_list_doc,
-    update = comments_list_doc,
-    partial_update = comments_list_doc
+    list=comments_list_doc,
+    retrieve=comments_list_doc,
+    create=comments_list_doc,
+    destroy=comments_list_doc,
+    update=comments_list_doc,
+    partial_update=comments_list_doc
 )
 class CommentModelViewSet(viewsets.ModelViewSet):
     http_method_names = ['get', 'post', 'delete', 'put', 'patch']

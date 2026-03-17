@@ -2,10 +2,17 @@ from rest_framework import viewsets, permissions
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from drf_spectacular.utils import extend_schema_view
 
-from documentation.posts import post_list_doc
+from documentation import post_list_doc
 
+from ..models import Post
 from ..permissions import IsOwnerOrReadOnly
-from ..serializers.posts import *
+from ..serializers import (
+    GetPostsListSerializer,
+    CreatePostsListSerializer,
+    DeletePostsListSerializer,
+    PutPostsListSerializer,
+    PatchPostsListSerializer
+)
 
 
 @extend_schema_view(

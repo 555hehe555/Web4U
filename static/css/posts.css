@@ -50,6 +50,10 @@
   color: var(--text-on-black);
 }
 
+.post-title:hover{
+    color: var(--secondary);
+}
+
 .post-description {
   font-size: 16px;
   margin-bottom: 30px;

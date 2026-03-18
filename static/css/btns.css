@@ -2,7 +2,6 @@
   background-color: var(--primary);
   border-color: var(--primary);
   color: var(--text-on-black);
-  margin: 5px;
 }
 
 .primary-btn:hover {

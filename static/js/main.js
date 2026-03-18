@@ -612,13 +612,12 @@ async function profileUser() {
   const infoUser = [
     ["Ваш id", currentUser.id, false, "user-id"],
     ["Ваш нік", currentUser.username, true, "user-username"],
-    ["Ваш пароль", currentUser.password, true, "user-password"],
+    ["Ваш пароль", '********', true, "user-password"],
     ["Ваша пошта", currentUser.email, false, "user-email"],
     ["Ваша дата реєстрації", formatDate(currentUser.date_joined), false, "user-date-joined"],
     ["Ваше імʼя", currentUser.first_name, true, "user-first-name"],
     ["Ваше прізвище", currentUser.last_name, true, "user-last-name"],
-    ["Чи ви адмін", currentUser.is_superuser, false, "user-is-superuser"],
-    ["Чи ви персонал", currentUser.is_staff, false, "user-is-staff"],
+    ["Роль", currentUser.is_staff ? "адміністратор" : "користувач", false, "user-is-staff" ],
   ];
 
   renderUserData(infoUser, infoUserContainer);

@@ -173,13 +173,13 @@ export async function postCreateLike(csrfToken, postID) {
 }
 
 
-export async function deleteLike(csrfToken, postID, likeID) {
+export async function deleteLike(csrfToken, postID) {
   console.warn("deleteLike function called");
   console.log(`csrfToken ${csrfToken}`);
   console.log(`postID ${postID}`);
-  console.log(`likeID ${likeID}`);
+
   try {
-    const response = await fetch(`/api/posts/${postID}/likes/${likeID}/`, {
+    const response = await fetch(`/api/posts/${postID}/likes/`, {
       method: 'DELETE',
       headers: {
         'X-CSRFToken': csrfToken,

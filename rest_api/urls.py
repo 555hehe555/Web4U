@@ -32,10 +32,8 @@ urlpatterns = [
         'put': 'update',
         'patch': 'partial_update'
     })),
-    path('posts/<int:post_pk>/likes/', LikePostViewSet.as_view({'get': 'list', 'post': 'create'})),
-    path('posts/<int:post_pk>/likes/<int:pk>/', LikePostViewSet.as_view({
-        'delete': 'destroy'
-    })),
+    path('posts/<int:post_pk>/likes/', LikePostViewSet.as_view({'get': 'list', 'post': 'create', 'delete': 'destroy'})),
+
     path('users/', CustomUserViewSet.as_view({'get': 'list', 'post': 'create'})),
     path('users/<int:pk>/', CustomUserViewSet.as_view({
         'get': 'retrieve',

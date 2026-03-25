@@ -58,3 +58,14 @@ class LikePostViewSet(viewsets.ModelViewSet):
             )
         }
         return Response(data)
+    
+    def destroy(self, request, *args, **kwargs):
+        post_pk = self.kwargs.get("post_pk")
+        like = Like.objects.filter(
+            user_id=request.user.id,
+            post_id=post_pk
+        ).first()
+        if like:
+            like.delete()
+            return Response({"detail": "Like deleted successfully"}, status=204)
+        return Response({"detail": "Like not found"}, status=404)

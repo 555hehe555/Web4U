@@ -446,7 +446,7 @@ document.addEventListener("DOMContentLoaded", function() {
       }
 
       if (userLike) {
-        await deleteLike(csrfToken, postId, userLike.id);
+        await deleteLike(csrfToken, postId);
       } else {
         await postCreateLike(csrfToken, postId);
       }

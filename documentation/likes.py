@@ -6,6 +6,7 @@ from rest_framework import status
 from rest_api.serializers import (
     GetAllUserLikeSerializer,
     CreateUserLikeSerializer,
+    DeleteUserLikeSerializer
 )
 
 
@@ -58,3 +59,43 @@ like_list_doc = extend_schema(
         ),
     },
 )
+
+like_post_doc = extend_schema(
+    tags=['Like'],
+    description="Create like API",
+    request=None,
+    responses={
+        status.HTTP_200_OK: OpenApiResponse(
+            response=GetAllUserLikeSerializer,
+            description="Like details",
+            examples=[
+                OpenApiExample(
+                    name="Create response",
+                    value={"id": 2},
+                )
+            ],
+        )
+    },
+)
+
+like_delete_doc = extend_schema(
+    tags=['Like'],
+    description="Delete like API",
+    request=DeleteUserLikeSerializer,
+    responses={
+        status.HTTP_204_NO_CONTENT: OpenApiResponse(
+            response=None,
+            description="Like deleted successfully",
+        ),
+        status.HTTP_404_NOT_FOUND: OpenApiResponse(
+            response=OpenApiTypes.OBJECT,
+            description="Like not found",
+            examples=[
+                OpenApiExample(
+                    name="Not found",
+                    value={"detail": "Like not found"},
+                )
+            ],
+        ),
+    },
+)   

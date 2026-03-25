@@ -68,11 +68,16 @@ function renderBlogPosts(posts) {
   if ("results" in posts) {
     console.log(posts);
     totalPages = Math.ceil(posts.count / 10);
-    if (totalPages === 1) {
+    if (posts.count === 0) {
+      paginationContainer.style.display = "none";
+      return "<img src='/media/image/standard/no_posts_plasholder.png' width='500px' style='display: block; margin: 0 auto; border-radius: 20px'>";
+    }
+    else if (totalPages === 1) {
       paginationContainer.style.display = "none";
     } else {
       paginationContainer.style.display = "flex";
     }
+
     return posts.results
       .map(({ id, title, img, description, author, date }) => {
         const hasImage = !!img;

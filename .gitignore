@@ -49,3 +49,6 @@ docker/nginx/*.pid
 
 # Others
 .cadence/
+
+# Plagin on mac
+.start

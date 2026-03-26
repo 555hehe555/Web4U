@@ -51,32 +51,3 @@ logout_user_list_doc = extend_schema(
     },
 )
 
-get_me_doc = extend_schema(
-    tags=['Auth'],
-    description="Get current info API",
-    request=None,
-    responses={
-        status.HTTP_200_OK: OpenApiResponse(
-            response=True,
-            description="Get successful",
-            examples=[
-                OpenApiExample(
-                    name="Success response",
-                    value={
-                      "id": 1,
-                      "username": "aboba",
-                      "email": "aboba@example.com",
-                      "is_staff": False,
-                      "is_superuser": True,
-                      "date_joined": "3026-31-13T15:41:15.847892Z",
-                      "last_login": "2026-03-18T16:04:51.184195Z",
-                      "is_active": True,
-                      "first_name": "abobaaboba",
-                      "last_name": "abobaabobaaboba",
-                      "password": "pbkdf2_sha256$720000$aboba@aboba#aboba%aboba^aboba&aboba*aboba(aboba)aboba!aboba"
-                    },
-                )
-            ],
-        )
-    },
-)

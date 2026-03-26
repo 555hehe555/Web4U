@@ -2,7 +2,13 @@ from rest_framework import viewsets, permissions
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from drf_spectacular.utils import extend_schema_view
 
-from documentation import post_list_doc
+from documentation import (
+    post_list_doc,
+    post_create_doc,
+    post_update_doc,
+    post_patch_doc,
+    post_delete_doc,
+)
 
 from ..models import Post
 from ..permissions import IsOwnerOrReadOnly
@@ -18,10 +24,10 @@ from ..serializers import (
 @extend_schema_view(
     list=post_list_doc,
     retrieve=post_list_doc,
-    create=post_list_doc,
-    destroy=post_list_doc,
-    update=post_list_doc,
-    partial_update=post_list_doc
+    create=post_create_doc,
+    destroy=post_delete_doc,
+    update=post_update_doc,
+    partial_update=post_patch_doc
 )
 class PostModelViewSet(viewsets.ModelViewSet):
     template_settings_list = 'blog.html'

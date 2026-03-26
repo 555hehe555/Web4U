@@ -6,7 +6,17 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema_view
 
-from documentation import login_user_list_doc, logout_user_list_doc, user_list_doc, post_list_doc, get_me_doc
+from documentation import (
+    login_user_list_doc,
+    logout_user_list_doc,
+    user_list_doc,
+    user_create_doc,
+    user_update_doc,
+    user_patch_doc,
+    user_delete_doc,
+    post_list_doc,
+    get_me_doc,
+)
 
 from ..models import CustomUser, Post
 from ..permissions import IsOwner
@@ -25,10 +35,10 @@ from ..serializers import (
 @extend_schema_view(
     list=user_list_doc,
     retrieve=user_list_doc,
-    create=user_list_doc,
-    destroy=user_list_doc,
-    update=user_list_doc,
-    partial_update=user_list_doc,
+    create=user_create_doc,
+    destroy=user_delete_doc,
+    update=user_update_doc,
+    partial_update=user_patch_doc,
     post_list=post_list_doc,
 )
 class CustomUserViewSet(viewsets.ModelViewSet):

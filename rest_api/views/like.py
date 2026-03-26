@@ -2,7 +2,7 @@ from rest_framework import viewsets, permissions
 from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema_view
 
-from documentation import like_list_doc
+from documentation import like_list_doc, like_post_doc, like_delete_doc
 
 from ..models import Like
 from ..permissions import IsOwnerOrReadOnly
@@ -11,8 +11,8 @@ from ..serializers import GetAllUserLikeSerializer, CreateUserLikeSerializer, De
 @extend_schema_view(
     list=like_list_doc,
     retrieve=like_list_doc,
-    create=like_list_doc,
-    destroy=like_list_doc
+    create=like_post_doc,
+    destroy=like_delete_doc
 )
 class LikePostViewSet(viewsets.ModelViewSet):
     http_method_names = ['get', 'post', 'delete']

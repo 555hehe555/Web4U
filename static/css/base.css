@@ -1,6 +1,7 @@
 body {
   background-color: var(--background);
   display: flex;
+  height:100%;
   flex-direction: column;
   color: var(--text);
   font-family: "Roboto Mono", monospace;
@@ -9,8 +10,18 @@ body {
   font-style: normal;
 }
 
+.wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 main {
   margin: 50px 0;
+}
+
+.content{
+    flex: 1;
 }
 
 .main-blog-style {

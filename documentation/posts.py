@@ -33,8 +33,18 @@ post_list_doc = extend_schema(
                             "date": "2026-03-18T16:00:00Z",
                         }
                     ],
-                )
+                ),
             ],
+        ),
+        status.HTTP_404_NOT_FOUND: OpenApiResponse(
+            response=OpenApiTypes.OBJECT,
+            description="Post not found",
+            examples=[
+                OpenApiExample(
+                    name="Post not found",
+                    value={"detail": "No Post matches the given query."}
+                )
+            ]
         ),
     },
 )
@@ -51,12 +61,9 @@ post_create_doc = extend_schema(
                 OpenApiExample(
                     name="Created response",
                     value={
-                        "id": 2,
                         "title": "New post",
                         "description": "Content of the new post",
-                        "author": "john_doe",
                         "img": "image_url",
-                        "date": "2026-03-18T16:05:00Z",
                     },
                 )
             ],

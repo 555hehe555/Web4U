@@ -57,10 +57,7 @@ user_create_doc = extend_schema(
                     value={
                         "id": 2,
                         "username": "newuser",
-                        "email": "newuser@example.com",
-                        "first_name": "New",
-                        "last_name": "User",
-                        "is_active": True,
+                        "email": "newuser@example.com"
                     },
                 )
             ],
@@ -99,9 +96,25 @@ user_update_doc = extend_schema(
                 )
             ],
         ),
+        status.HTTP_403_FORBIDDEN: OpenApiResponse(
+            response=OpenApiTypes.OBJECT,
+            description="Forbidden - insufficient permissions",
+            examples=[
+                OpenApiExample(
+                    name="Forbidden",
+                    value={"detail": "У вас нема дозволу робити цю дію."}
+                )
+            ],
+        ),
         status.HTTP_404_NOT_FOUND: OpenApiResponse(
             response=OpenApiTypes.OBJECT,
             description="User not found",
+            examples=[
+                OpenApiExample(
+                    name="User not found",
+                    value={"detail": "No CustomUser matches the given query."}
+                )
+            ]
         ),
     },
 )
@@ -113,23 +126,39 @@ user_patch_doc = extend_schema(
     responses={
         status.HTTP_200_OK: OpenApiResponse(
             response=GetCustomUserSerializer,
-            description="User partially updated successfully",
+            description="User updated successfully",
             examples=[
                 OpenApiExample(
-                    name="Patched user",
+                    name="Updated user",
                     value={
                         "id": 1,
-                        "username": "aboba",
-                        "email": "newemail@example.com",
-                        "first_name": "aboba",
-                        "last_name": "updated_last_name",
+                        "username": "updated_user",
+                        "email": "updated@example.com",
+                        "first_name": "Updated",
+                        "last_name": "User",
                     },
+                )
+            ],
+        ),
+        status.HTTP_403_FORBIDDEN: OpenApiResponse(
+            response=OpenApiTypes.OBJECT,
+            description="Forbidden - insufficient permissions",
+            examples=[
+                OpenApiExample(
+                    name="Forbidden",
+                    value={"detail": "У вас нема дозволу робити цю дію."}
                 )
             ],
         ),
         status.HTTP_404_NOT_FOUND: OpenApiResponse(
             response=OpenApiTypes.OBJECT,
             description="User not found",
+            examples=[
+                OpenApiExample(
+                    name="User not found",
+                    value={"detail": "No CustomUser matches the given query."}
+                )
+            ]
         ),
     },
 )
@@ -143,9 +172,25 @@ user_delete_doc = extend_schema(
             response=None,
             description="User deleted successfully",
         ),
+        status.HTTP_403_FORBIDDEN: OpenApiResponse(
+            response=OpenApiTypes.OBJECT,
+            description="Forbidden - insufficient permissions",
+            examples=[
+                OpenApiExample(
+                    name="Forbidden",
+                    value={"detail": "У вас нема дозволу робити цю дію."}
+                )
+            ],
+        ),
         status.HTTP_404_NOT_FOUND: OpenApiResponse(
             response=OpenApiTypes.OBJECT,
             description="User not found",
+            examples=[
+                OpenApiExample(
+                    name="User not found",
+                    value={"detail": "No CustomUser matches the given query."}
+                )
+            ]
         ),
     },
 )

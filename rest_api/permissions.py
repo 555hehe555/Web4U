@@ -23,13 +23,16 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
 class IsOwner(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
+        if not request.user.is_authenticated:
+            return False
+
         if hasattr(obj, "author"):
             return obj.author == request.user
 
         if hasattr(obj, "user"):
             return obj.user == request.user
 
-        return False
+        return obj == request.user
 
 
 class IsAuthenticated(permissions.BasePermission):

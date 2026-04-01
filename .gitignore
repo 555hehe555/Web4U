@@ -24,11 +24,10 @@ migrations/*
 !*/migrations/init.py
 
 # Static / Media (якщо генерується або динамічно додається)
-/media/image/
-!/media/image/standard/**
-!/media/image/favicon/**
+/media/image/temp/*
+!/media/image/temp/.gitkeep
+
 staticfiles/
-# /static/  <- залиш коментованим, якщо стилі статичні й потрібні
 
 # Docker / DB
 postgres_data/

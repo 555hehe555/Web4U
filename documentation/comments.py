@@ -3,7 +3,7 @@ from drf_spectacular.utils import extend_schema, OpenApiResponse, OpenApiExample
 
 from rest_framework import status
 
-from rest_api.serializers import (
+from blog_api.serializers import (
     GetCommentListSerializer,
     CreateCommentListSerializer,
     DeleteCommentListSerializer,

@@ -2,9 +2,9 @@ from django.apps import AppConfig
 from django.db.models.signals import post_migrate
 from django.db.utils import OperationalError
 
-class TestRestConfig(AppConfig):
+class BlogApiConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'rest_api'
+    name = 'blog_api'
     
     def ready(self):
         from django.contrib.auth import get_user_model

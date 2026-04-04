@@ -20,7 +20,7 @@ ENV/
 *.env
 
 # Migrations
-rest_api/migrations/*
+blog_api/migrations/*
 !*/migrations/init.py
 
 # Static / Media (якщо генерується або динамічно додається)

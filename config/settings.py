@@ -23,7 +23,7 @@ DEBUG = env("DEBUG")
 
 ALLOWED_HOSTS = env('ALLOWED_HOSTS').split(',')
 
-AUTH_USER_MODEL = "rest_api.CustomUser"
+AUTH_USER_MODEL = "blog_api.CustomUser"
 
 # Application definition
 
@@ -39,8 +39,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'compressor',
 
-    'blog.apps.BlogConfig',
-    'rest_api.apps.TestRestConfig'
+    'blog_pages.apps.BlogPagesConfig',
+    'blog_api.apps.BlogApiConfig'
 ]
 
 MIDDLEWARE = [

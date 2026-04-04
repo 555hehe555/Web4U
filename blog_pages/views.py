@@ -12,11 +12,9 @@ class PostDetail(View):
     def get(self, request, pk):
         return render(request, "blog/blog_detail.html")
 
-
 @login_required(login_url="/login/")
 def profile_view(request):
     return render(request, 'profile/profile.html')
-
 
 class RegisterView(View):
     def get(self, request):

@@ -595,7 +595,7 @@ async function logoutUser(){
         console.warn(csrfToken)
         await postLogoutUser(csrfToken)
         alert("Вихід успішний")
-        window.location.href = "/";
+        window.location.href = "/login/";
 
       } catch (error) {
         console.error("Не вдалося вийти:", error);

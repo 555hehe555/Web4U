@@ -70,7 +70,7 @@ function renderBlogPosts(posts) {
     totalPages = Math.ceil(posts.count / 10);
     if (posts.count === 0) {
       paginationContainer.style.display = "none";
-      return "<img src='/media/image/standard/no_posts_placeholder.png' width='500px' style='display: block; margin: 0 auto; border-radius: 20px'>";
+      return "<img class='no-post-placeholder-img' src='/media/image/standard/no_posts_placeholder.png' width='500px' style='display: block; margin: 0 auto; border-radius: 20px'>";
     }
     else if (totalPages === 1) {
       paginationContainer.style.display = "none";
@@ -128,7 +128,7 @@ function renderBlogPosts(posts) {
           </div>
         `;
       }).join("");
-  } else {return "<img src='/media/image/standard/no_posts_placeholder.png' width='500px' style='display: block; margin: 0 auto; border-radius: 20px'>";}
+  } else {return "<img class='no-post-placeholder-img' src='/media/image/standard/no_posts_placeholder.png' width='500px' style='display: block; margin: 0 auto; border-radius: 20px'>";}
 }
 
 function renderCommentsPost(comments) {

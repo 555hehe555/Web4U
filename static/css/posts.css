@@ -36,6 +36,16 @@
   border-bottom-left-radius: 20px;
 }
 
+.no-post-placeholder-img{
+    width: 80%;
+  }
+
+@media (min-width: 991px) {
+  .no-post-placeholder-img{
+    width: 60%;
+  }
+}
+
 .post-info-contener {
   width: 825px;
   padding: 10px 0;

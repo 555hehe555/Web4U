@@ -41,17 +41,15 @@
                             </script>
 
                             <div>
-                                <input type="text" name="title" class="form-control input-style vTextField mt-2"
+                                <input type="text" name="title" class="form-control input-style mt-2"
                                            maxlength="70" required id="id_title" placeholder="Введіть назву поста">
 
                                 <textarea name="description" cols="40" rows="10" placeholder="Введіть опис поста"
-                                              class="form-control textarea-style vLargeTextField mt-2" required id="id_description" spellcheck="false"></textarea>
+                                              class="form-control textarea-style mt-2" required id="id_description" spellcheck="false"></textarea>
 
                                 <div class="submit-row mt-4">
                                     <button id="submit-create-post" value="Зберегти" class="button-submit default primary-btn" name="_save">Зберегти</button>
                                 </div>
-                                <script id="django-admin-form-add-constants" src="/static/admin/js/change_form.js" data-model-name="post" async></script>
-                                <script id="django-admin-prepopulated-fields-constants" src="/static/admin/js/prepopulate_init.js" data-prepopulated-fields="[]"></script>
                             </div>
                         </div>
                     </form>

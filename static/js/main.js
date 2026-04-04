@@ -15,7 +15,7 @@ import {
   PatchUser,
   PatchPost,
   DeletePost
-} from "./api.js"
+} from "./api/index.js"
 import getCookie from "./get_csrf_token.js";
 
 

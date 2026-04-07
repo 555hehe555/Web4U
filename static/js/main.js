@@ -15,15 +15,17 @@ import {
   PatchUser,
   PatchPost,
   DeletePost
-} from "./api/index.js"
+} from "./api/index.js";
+import {
+  formatDate,
+  getShortDate,
+  getPage,
+  deleteMarkup,
+} from "./utils/index.js";
 import getCookie from "./get_csrf_token.js";
 
 
 //TODO: need refactoring and dividing to extra modules
-
-function deleteMarkup(el) {
-  el.innerHTML = "";
-}
 
 let currentPage = 1;
 let totalPages = null;
@@ -37,30 +39,6 @@ let prev = document.getElementById('prev');
 let next = document.getElementById('next');
 let last = document.getElementById('last');
 let current = document.getElementById('current');
-
-function getPage(){
-  const path = window.location.pathname;
-  const parts = path.split("/").filter(Boolean); // розіб'є /post/42 => ['post', '42']
-  console.log(parts)
-
-  const pageType = parts[0]; // 'post' або 'category' або 'user'
-  const id = parts[1];
-
-  return { pageType, id }
-}
-
-function formatDate(dateString) {
-  const d = new Date(dateString);
-
-  return d.toLocaleString("uk-UA", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit"
-  });
-}
 
 function renderBlogPosts(posts) {
   const withoutPlaceholders = true
@@ -84,7 +62,7 @@ function renderBlogPosts(posts) {
         const imageSrc = hasImage ? img : "/media/image/standard/img_placeholder.png";
         const showImage = withoutPlaceholders ? hasImage : true;
 
-        const shortDate = date.split("T")[0];
+        const shortDate = getShortDate(date);
       //   Це пости на головній сторінці
           return `
             <div class="container-item">
@@ -111,7 +89,7 @@ function renderBlogPosts(posts) {
         const imageSrc = hasImage ? img : "/media/image/standard/img_placeholder.png";
         const showImage = withoutPlaceholders ? hasImage : true;
 
-        const shortDate = date.split("T")[0];
+        const shortDate = getShortDate(date);
         return `
           <div class="container-item">
             <div class="post">
@@ -166,7 +144,7 @@ async function renderPostInfo(post, comments, likes) {
     ? "/media/image/standard/like.png"
     : "/media/image/standard/no_like.png";
 
-  const shortDate = date.split("T")[0];
+  const shortDate = getShortDate(date);
 
 
   const currentUser = await getCurrentUser();

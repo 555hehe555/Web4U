@@ -175,11 +175,28 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'WEB4U documentation',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
-    "SECURITY": [{"ApiKeyAuth": [], }],
-    "SWAGGER_UI_SETTINGS": {
-        "deepLinking": True,
-        "displayRequestDuration": True,
-        "persistAuthorization": True,
-    },
+    "SECURITY": [{"ApiKeyAuth": []}],
+    "SWAGGER_UI_SETTINGS": """
+    {
+      deepLinking: true,
+      displayRequestDuration: true,
+      persistAuthorization: true,
+      withCredentials: true,
+      requestInterceptor: (req) => {
+        const method = (req.method || '').toUpperCase();
+
+        if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(method)) {
+          const match = document.cookie.match(/(?:^|;\\s*)csrftoken=([^;]+)/);
+          const token = match ? decodeURIComponent(match[1]) : null;
+
+          if (token) {
+            req.headers['X-CSRFToken'] = token;
+          }
+        }
+
+        return req;
+      }
+    }
+    """,
     "AUTHENTICATION_WHITELIST": [],
 }

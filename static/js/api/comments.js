@@ -1,20 +1,22 @@
+import { log, warn, error, info, TheAlert } from "../utils";
+
 export async function getCommentsByPostID(id) {
   try {
     const response = await fetch(`/api/posts/${id}/comments/`);
     const data = await response.json();
-    console.log("comment" + data);
+    log("api/comments.js", 7, "getCommentsByPostID response:", data);
     return data;
-  } catch (error) {
-    console.error("Error:", error);
+  } catch (err) {
+    error("api/comments.js", 10, "Error getting comments by post id:", err);
     return [];
   }
 }
 
 export async function postCreateComment(csrfToken, postID, text) {
-  console.warn("createComment function called");
-  console.log(`csrfToken ${csrfToken}`);
-  console.log(`postID ${postID}`);
-  console.log(`text ${text}`);
+  warn("api/comments.js", 16, "postCreateComment called");
+  info("api/comments.js", 17, `csrfToken ${csrfToken}`);
+  info("api/comments.js", 18, `postID ${postID}`);
+  info("api/comments.js", 19, `text ${text}`);
 
   try {
     const response = await fetch(`/api/posts/${postID}/comments/`, {
@@ -32,16 +34,16 @@ export async function postCreateComment(csrfToken, postID, text) {
     const data = await response.json();
 
     if (!response.ok) {
-      console.log("if !res " + response.ok)
+      warn("api/comments.js", 37, "API returned non-ok response:", data);
       // const errorText = JSON.stringify(data.errors || data);
       // document.querySelector('.form-errors').innerText = errorText;
       // throw new Error('Помилка збереження поста');
     }
 
-    console.log("Успішна відповідь від API:", data);
+    log("api/comments.js", 43, "Успішна відповідь від API:", data);
     // Можна тут показати повідомлення або оновити DOM
-  } catch (error) {
-    console.error("Помилка при створенні коментаря:", error);
-    alert("Сталася помилка при збереженні. Спробуйте ще раз.");
+  } catch (err) {
+    error("api/comments.js", 46, "Помилка при створенні коментаря:", err);
+    TheAlert("api/comments.js", 47, "Сталася помилка при збереженні. Спробуйте ще раз.", err);
   }
 }

@@ -1,12 +1,14 @@
+import { log, warn, error, info, TheAlert } from "../utils";
+
 export async function getAllPosts(page = 1) {
   try {
-    console.warn("getAllPosts function called", page);
+    warn("api/posts.js", 5, "getAllPosts called", page);
     const response = await fetch(`/api/posts/?page=${page}`);
     const data = await response.json();
-    console.log("All post", data);
+    log("api/posts.js", 8, "getAllPosts response:", data);
     return data;
-  } catch (error) {
-    console.error("Error:", error);
+  } catch (err) {
+    error("api/posts.js", 11, "Error getting all posts:", err);
     return [];
   }
 }
@@ -15,20 +17,20 @@ export async function getPostByID(id) {
   try {
     const response = await fetch(`/api/posts/${id}`);
     const data = await response.json();
-    console.log("post by id", data);
+    log("api/posts.js", 20, "getPostByID response:", data);
     return data;
-  } catch (error) {
-    console.error("Error:", error);
+  } catch (err) {
+    error("api/posts.js", 23, "Error getting post by id:", err);
     return [];
   }
 }
 
 export async function postCreatePost(csrfToken, title, description, img) {
-  console.warn("createPost function called");
-  console.log(`csrfToken ${csrfToken}`);
-  console.log(`title ${title}`);
-  console.log(`description ${description}`);
-  console.log(`img ${img}`);
+  warn("api/posts.js", 29, "postCreatePost called");
+  info("api/posts.js", 31, `csrfToken ${csrfToken}`);
+  info("api/posts.js", 32, `title ${title}`);
+  info("api/posts.js", 33, `description ${description}`);
+  info("api/posts.js", 34, `img ${img}`);
 
   try {
     const formData = new FormData();
@@ -49,17 +51,17 @@ export async function postCreatePost(csrfToken, title, description, img) {
     const data = await response.json();
 
     if (!response.ok) {
-      console.log("if !res" + response.ok)
+      warn("api/posts.js", 54, "API returned non-ok response:", data);
       // const errorText = JSON.stringify(data.errors || data);
       // document.querySelector('.form-errors').innerText = errorText;
       // throw new Error('Помилка збереження поста');
     }
 
-    console.log("Успішна відповідь від API:", data);
+    log("api/posts.js", 60, "Успішна відповідь від API:", data);
     // Можна тут показати повідомлення або оновити DOM
-  } catch (error) {
-    console.error("Помилка при створенні поста:", error);
-    alert("Сталася помилка при збереженні. Спробуйте ще раз.");
+  } catch (err) {
+    error("api/posts.js", 63, "Помилка при створенні поста:", err);
+    TheAlert("api/posts.js", 64, "Сталася помилка при збереженні. Спробуйте ще раз.", err);
   }
 }
 
@@ -67,38 +69,47 @@ export async function getUserPostsById(id) {
   try {
     const response = await fetch(`/api/users/${id}/posts/`);
     const data = await response.json();
-    console.log("user posts by id", data);
+    log("api/posts.js", 72, "getUserPostsById response:", data);
     return data;
-  } catch (error) {
-    console.error("Error:", error);
+  } catch (err) {
+    error("api/posts.js", 75, "Error getting user posts by id:", err);
     return [];
   }
 }
 
 export async function PatchPost(csrfToken, postID, dataToUpdate) {
-  console.warn("PatchPost function called");
-  console.log(`csrfToken ${csrfToken}`);
-  console.log(`postID ${postID}`);
-  console.log("dataToUpdate", JSON.stringify(dataToUpdate))
+  warn("api/posts.js", 81, "PatchPost called");
+  info("api/posts.js", 82, `csrfToken ${csrfToken}`);
+  info("api/posts.js", 83, `postID ${postID}`);
+  info("api/posts.js", 84, "dataToUpdate" , JSON.stringify(dataToUpdate));
 
   try {
-    const response = await fetch(`/api/posts/${postID}/`, {
+    const res = await fetch(`/api/posts/${postID}/`, {
       method: "PATCH",
       headers: {
         "X-CSRFToken": csrfToken
       },
       body: dataToUpdate
     });
-  } catch (error) {
-    console.error("Помилка при оновленні поста:", error);
-    alert("Сталася помилка при оновленні. Спробуйте ще раз.");
+
+    const data = await res.json();
+    if (!res.ok) {
+      warn("api/posts.js", 97, "API returned non-ok response:", data);
+    }
+
+    log("api/posts.js", 100, "PatchPost response:", data);
+    return data;
+  } catch (err) {
+    error("api/posts.js", 103, "Помилка при оновленні поста:", err);
+    TheAlert("api/posts.js", 104, "Сталася помилка при оновленні. Спробуйте ще раз.", err);
+    return null;
   }
 }
 
 export async function DeletePost(csrfToken, postID) {
-  console.warn("DeletePost function called");
-  console.log(`csrfToken ${csrfToken}`);
-  console.log(`postID ${postID}`);
+  warn("api/posts.js", 110, "DeletePost called");
+  info("api/posts.js", 111, `csrfToken ${csrfToken}`);
+  info("api/posts.js", 112, `postID ${postID}`);
 
   try {
     const response = await fetch(`/api/posts/${postID}/`, {
@@ -111,12 +122,12 @@ export async function DeletePost(csrfToken, postID) {
 
     if (!response.ok) {
       const data = await response.json();
-      console.log("if !res" + response.ok)
+      warn("api/posts.js", 125, "API returned non-ok response:", data);
     }
 
-    console.log("Успішна відповідь від API:", response);
-  } catch (error) {
-    console.error("Помилка при видаленні поста:", error);
-    alert("Сталася помилка при видаленні. Спробуйте ще раз.");
+    log("api/posts.js", 128, "Успішна відповідь від API:", response);
+  } catch (err) {
+    error("api/posts.js", 130, "Помилка при видаленні поста:", err);
+    TheAlert("api/posts.js", 131, "Сталася помилка при видаленні. Спробуйте ще раз.", err);
   }
 }

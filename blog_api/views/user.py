@@ -45,7 +45,7 @@ class CustomUserViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     http_method_names = ['get', 'post', 'delete', 'put', 'patch']
     serializer_class = GetCustomUserSerializer
-    queryset = CustomUser.objects.all()
+    queryset = CustomUser.objects.all().order_by("-date_joined", "-id")
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve', 'create', 'post_list']:

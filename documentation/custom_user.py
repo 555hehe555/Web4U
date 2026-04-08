@@ -6,7 +6,6 @@ from rest_framework import status
 from blog_api.serializers import (
     GetCustomUserSerializer,
     CreateCustomUserSerializer,
-    DeleteCustomUserSerializer,
     PutCustomUserSerializer,
     PatchCustomUserSerializer,
     GetMeSerializer,
@@ -25,20 +24,31 @@ user_list_doc = extend_schema(
             examples=[
                 OpenApiExample(
                     name="List response",
-                    value=[
-                        {
-                            "id": 1,
-                            "username": "aboba",
-                            "email": "aboba@example.com",
-                            "first_name": "aboba",
-                            "last_name": "aboba",
-                            "is_active": True,
-                            "is_staff": False,
-                            "is_superuser": False,
-                        }
-                    ],
+                    value=
+                    {
+                        "id": 1,
+                        "username": "username",
+                        "email": "username@example.com",
+                        "date_joined": "2026-04-04T13:39:10.037294Z",
+                        "first_name": "",
+                        "last_name": "",
+                        "last_login": "2026-04-08T14:54:50.031231Z",
+                        "is_active": True,
+                        "is_staff": True,
+                        "is_superuser": True
+                    },
                 )
             ],
+        ),
+        status.HTTP_404_NOT_FOUND: OpenApiResponse(
+            response=OpenApiTypes.OBJECT,
+            description="User not found",
+            examples=[
+                OpenApiExample(
+                    name="User not found",
+                    value={"detail": "No CustomUser matches the given query."}
+                )
+            ]
         ),
     },
 )
@@ -102,7 +112,7 @@ user_update_doc = extend_schema(
             examples=[
                 OpenApiExample(
                     name="Forbidden",
-                    value={"detail": "У вас нема дозволу робити цю дію."}
+                    value={"detail": "You do not have permission to perform this action."}
                 )
             ],
         ),
@@ -146,7 +156,7 @@ user_patch_doc = extend_schema(
             examples=[
                 OpenApiExample(
                     name="Forbidden",
-                    value={"detail": "У вас нема дозволу робити цю дію."}
+                    value={"detail": "You do not have permission to perform this action."}
                 )
             ],
         ),
@@ -178,7 +188,7 @@ user_delete_doc = extend_schema(
             examples=[
                 OpenApiExample(
                     name="Forbidden",
-                    value={"detail": "У вас нема дозволу робити цю дію."}
+                    value={"detail": "You do not have permission to perform this action."}
                 )
             ],
         ),

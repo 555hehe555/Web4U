@@ -25,6 +25,9 @@ class IsOwner(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         if not request.user.is_authenticated:
             return False
+        
+        if request.method == 'DELETE' and (request.user.is_staff and request.user.is_superuser):
+            return True
 
         if hasattr(obj, "author"):
             return obj.author == request.user

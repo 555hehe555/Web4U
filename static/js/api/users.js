@@ -1,4 +1,4 @@
-import { log, warn, error, info, TheAlert } from "../utils";
+import { log, warn, error, info, TheAlert } from "../utils/index.js";
 
 export async function getCurrentUser() {
   try {

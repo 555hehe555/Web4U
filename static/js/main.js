@@ -15,17 +15,17 @@ import {
   PatchUser,
   PatchPost,
   DeletePost
-} from "./api/";
+} from "./api/index.js";
 import {
   formatDate,
   getShortDate,
   getPage,
   deleteMarkup,
-} from "./utils/";
-import { log, warn, error, info, debug, TheAlert } from "./utils";
+} from "./utils/index.js";
+import { log, warn, error, info, debug, TheAlert,  debugMode } from "./utils/index.js";
 
 // Redirect any remaining console.* calls to the project's logging helpers
-if (typeof console !== 'undefined') {
+if (typeof console !== 'undefined' && debugMode()) {
   try {
     console.log = (...args) => log("main.js", 1, ...args);
     console.warn = (...args) => warn("main.js", 1, ...args);

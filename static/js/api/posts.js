@@ -1,4 +1,4 @@
-import { log, warn, error, info, TheAlert } from "../utils";
+import { log, warn, error, info, TheAlert } from "../utils/index.js";
 
 export async function getAllPosts(page = 1) {
   try {

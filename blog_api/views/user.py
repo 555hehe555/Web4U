@@ -10,6 +10,7 @@ from documentation import (
     login_user_list_doc,
     logout_user_list_doc,
     user_list_doc,
+    user_post_list_doc,
     user_create_doc,
     user_update_doc,
     user_patch_doc,
@@ -39,7 +40,7 @@ from ..serializers import (
     destroy=user_delete_doc,
     update=user_update_doc,
     partial_update=user_patch_doc,
-    post_list=post_list_doc,
+    post_list=user_post_list_doc,
 )
 class CustomUserViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]

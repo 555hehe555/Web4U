@@ -20,6 +20,7 @@ from .posts import (
     post_update_doc,
     post_patch_doc,
     post_delete_doc,
+    user_post_list_doc,
 )
 from .custom_user import (
     user_list_doc,

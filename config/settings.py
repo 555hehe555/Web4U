@@ -176,6 +176,7 @@ SPECTACULAR_SETTINGS = {
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
     "SECURITY": [{"ApiKeyAuth": []}],
+    'COMPONENT_SPLIT_REQUEST': True,
     "SWAGGER_UI_SETTINGS": """
     {
       deepLinking: true,

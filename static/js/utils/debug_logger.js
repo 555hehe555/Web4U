@@ -46,5 +46,8 @@ export function debug(file, line, message, ...args) {
 export function TheAlert(file, line, message, ...args) {
     const timestamp = new Date().toISOString();
     const formattedMessage = `${getShortTime(timestamp, 4)} ${file}:${line} - ALERT: \n${message}`;
-    if (debugMode()) { alert(formattedMessage); }
+    if (debugMode()) {
+        alert(formattedMessage);
+        console.warn(formattedMessage);
+    }
 }

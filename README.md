@@ -1,174 +1,87 @@
 # Web4U
 
-**Web4U** — це проста соціальна мережа, створена на Django як pet-проєкт. Користувачі можуть створювати акаунти, додавати пости, залишати коментарі, ставити лайки. Проєкт містить REST API з автоматичною документацією через Swagger, базу даних PostgreSQL, контейнеризацію через Docker, а також підтримку статичних і медійних файлів.
+**Web4U** — це проста соціальна мережа, створена на Django як pet-проєкт.  
+Користувачі можуть реєструватися, створювати пости, коментувати їх та ставити лайки.
+
+Проєкт включає REST API, Swagger-документацію, PostgreSQL, Docker та підтримку статичних і медіафайлів.
+
+---
 
 ## Основні можливості
 
 - Реєстрація та аутентифікація користувачів
-- CRUD для постів
+- CRUD операції для постів
 - Коментарі до постів
 - Система лайків
 - REST API
-- Swagger-документація
+- Swagger документація
 - Docker + Docker Compose
-- база даний PostgreSQL (у Docker) або SQLite (локально)
+- PostgreSQL (Docker) або SQLite (локально)
 - Автоматичне застосування міграцій
-- Підтримка media/static файлів через volume
+- Підтримка static/media через volumes
 
 ---
 
-## Швидкий запуск проєкту
+## Технології
 
-### 1. Клонувати репозиторій
+- Python / Django
+- Django REST Framework
+- PostgreSQL
+- Docker
+- Swagger (drf-yasg)
+
+
+### В майбутньому буде ще:
+
+- React.js
+- Nginx
+- хостинг
+- і багато іншого...
+
+---
+
+## Запуск проєкту
+
+### Клонувати репозиторій
 
 ```bash
 git clone https://github.com/555hehe555/Web4U.git
 cd web4u
 ```
 
-### 2. Створити `.env` файл у корені проєкту
-
-Використай шаблон нижче або створюй власний:
-
-```
-DEBUG=True
-SECRET_KEY='your_secret_key'
-
-# Database
-POSTGRES_DB=mydb
-POSTGRES_USER=root
-POSTGRES_PASSWORD=root
-POSTGRES_HOST=db
-POSTGRES_PORT=5432
-
-# Admin user
-ADMIN_NAME=admin
-ADMIN_EMAIL=admin@example.com
-ADMIN_PASSWORD=admin
-
-DJANGO_SETTINGS_MODULE='config.settings'
-NGINX_PORT='80'
-
-WEBSITE_DOMAIN=localhost:8000
-DJANGO_SECRET_KEY='your-secret-key'
-DJANGO_DEBUG='True'
-DJANGO_ALLOWED_HOSTS='localhost 127.0.0.1 [::1]'
-POSTGRES_DB='your-db-name'
-POSTGRES_USER='your-db-user'
-POSTGRES_PASSWORD='your-db-password'
-```
-
-Або можете вести команду:
-
+### Створення .env
 ```bash
-# Windows
+cp .env.example .env
+```
+або 
+```bash
 copy .env.example .env
 ```
 
-```bash
-# Linux / macOS
-cp .env.example .env
-```
+### І далі в заледності як ви захочите запускати проєкт:
 
-> **Примітка:** `DB_*` змінні потрібні для зв’язку Django з базою, `POSTGRES_*` — для ініціалізації самої бази.
+- [Чи ви хочете запустити локально](guide/start_local.md)
+- [Чи ви хочете запустити через Docker](guide/start_docker.md)
 
 ---
 
-### 3. Запустити проєкт через Docker Compose
+## Фотографії
 
-```bashAdd commentMore actions
-docker-compose up --build
-```
+![Screenshot](examples/chrome_Prall1Vbmn.png)
+![Screenshot](examples/chrome_btZHoX2eaO.png)
+![Screenshot](examples/chrome_NLcqvH09zz.png)
+![Screenshot](examples/chrome_PIoNjs7Jbc.png)
+![Screenshot](examples/chrome_WnLBh1LlUU.png)
+![Screenshot](examples/chrome_Hviyy9rL7N.png)
 
-> Після цього автоматично:
->
-> * створиться база даних PostgreSQL
-> * застосуються всі міграції
-> * створиться суперкористувач (якщо реалізовано в `create_superuser.py`)
-> * сервер Django буде доступний на `http://localhost:8000/`
+### [І інші фото](examples/)
 
 ---
 
-## Swagger / API документація
+## Наші активні завдання
+- [тут](guide/todo.md)
 
-**Swagger** — інтерактивна документація до API, яка дозволяє переглядати та тестувати запити безпосередньо з браузера.
+## Автори
 
-Після запуску перейдіть за адресою:
-
-```
-http://localhost:8000/api/v1/docs/
-```
-
-або
-
-```
-http://127.0.0.1:8000/api/v1/docs/
-```
-
----
-
-## Примітки
-
-* Якщо порт 8000 уже зайнятий, змініть його в `docker-compose.yml` у секції `ports`
-* За замовчуванням всі дані зберігаються в тому `./postgres_data` на вашій машині
-* Усі сервіси запускаються разом (Postgres, Django app, yt-django). Якщо не потрібен `yt-django`, можна закоментувати його у `docker-compose.yml`
-* Ви можете швидко перемикатися між Docker та локальним режимом, змінюючи лише змінну USE_DOCKER у .env
-
----
-
-## TODO і баги
-
-X | добавити плавні переходи на ховери
-
-X | добавити тіні чи скейли коли ховер
-
-X | у хедера інші точки перелому ніж в мейні (не критично, але)
-
-
-X | в debug_logger.js зробити нормальне отримання параметра з .env файлу
-
-X | покращити readme, зробити 4 файли, вітання та проєкт, як запустити через докер і запустити просто, та окремо таски
-
-X | свагер не змінює CRF токен без перезавантаження сторінки
-
-90/10 | виправити і переробити візуал деталів поста
-
-90/10 | рефакторинг файлів і структури проєкту
-
-X | додати в аватар профілю
-
-X | в креейт пост скрипт прямо запихнутий у верстку
-
-X | розбити джс на модулі, зробити рефакторинг, змінити принцип виклику функцій під час відкриття певної сторінки
-
-X | добавити пагінацію постів на профіль юзера
-
-X | {
-    добавити команди в білд докера для збірки статики:
-    python manage.py collectstatic --noinput
-    python manage.py compress
-    перевірити чи ця ліба не ламає стилі на телефоні
-}
-
-X | зробити фікстури для тестування постів з їх більш природім виглядом
-
-X | зробити нормальне прокидування, відлов і обробку помилок в фронт енд апі
-
-Х | переписати і перевизначити пермішини
-
-
-### Нові фічі
-
-X | додати більше кастомізації для постів через django ck-editor або скоріше TipTap
-
-X | тг бот, але мабуть як окремий проєкт
-
-X | додати плейсхолдери заміни для профілю (фото, біо, свої соцмережі)
-
-X | поповнити футер контактами і соц мережами
-
-X | забрати костиль з супер юзером (create_superuser.py)
-
-X | дефолтну джанго адмін манель варто все ж краще розписувати на всякий випадок + для дебагу
-
-X | заміни консоль логи і консоль алерти на оповіщення з джс ліби
+- [555hehe555](https://github.com/555hehe555)
+- [VaILeo](https://github.com/Valerii-Postrybailo)

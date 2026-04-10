@@ -11,7 +11,7 @@ from documentation import (
 )
 
 from ..models import Post
-from ..permissions import IsOwnerOrReadOnly
+from ..permissions import IsOwnerOrReadOnly, IsOwner
 from ..serializers import (
     GetPostsListSerializer,
     CreatePostsListSerializer,

@@ -14,7 +14,43 @@ from blog_api.serializers import (
 
 post_list_doc = extend_schema(
     tags=['Posts'],
-    description="Posts API - List and Retrieve",
+    description="Posts API - List",
+    request=None,
+    responses={
+        status.HTTP_200_OK: OpenApiResponse(
+            response=GetPostsListSerializer,
+            description="List of posts",
+            examples=[
+                OpenApiExample(
+                    name="List response",
+                    value=
+                    {
+                        "id": 1,
+                        "title": "First post",
+                        "description": "This is the first post",
+                        "img": "image_url",
+                        "author": "john_doe",
+                        "date": "2026-03-18T16:00:00Z",
+                    },
+                ),
+            ],
+        ),
+        status.HTTP_404_NOT_FOUND: OpenApiResponse(
+            response=OpenApiTypes.OBJECT,
+            description="Post not found",
+            examples=[
+                OpenApiExample(
+                    name="Post not found",
+                    value={"detail": "No Post matches the given query."}
+                )
+            ]
+        ),
+    },
+)
+
+user_post_list_doc = extend_schema(
+    tags=['Posts'],
+    description="Posts API - Retrieve list by user",
     request=None,
     responses={
         status.HTTP_200_OK: OpenApiResponse(
@@ -28,11 +64,11 @@ post_list_doc = extend_schema(
                             "id": 1,
                             "title": "First post",
                             "description": "This is the first post",
-                            "author": "john_doe",
                             "img": "image_url",
+                            "author": "john_doe",
                             "date": "2026-03-18T16:00:00Z",
-                        }
-                    ],
+                        },
+                    ],  
                 ),
             ],
         ),
@@ -103,13 +139,15 @@ post_update_doc = extend_schema(
                 )
             ],
         ),
-        status.HTTP_400_BAD_REQUEST: OpenApiResponse(
-            response=OpenApiTypes.OBJECT,
-            description="Invalid data",
-        ),
         status.HTTP_404_NOT_FOUND: OpenApiResponse(
             response=OpenApiTypes.OBJECT,
             description="Post not found",
+            examples=[
+                OpenApiExample(
+                    name="Post not found",
+                    value={"detail": "No Post matches the given query."}
+                )
+            ]
         ),
     },
 )
@@ -130,8 +168,6 @@ post_patch_doc = extend_schema(
                         "title": "Updated title",
                         "description": "Original description",
                         "img": "image_url",
-                        "author": "john_doe",
-                        "date": "2026-03-18T16:10:00Z",
                     },
                 )
             ],
@@ -139,6 +175,12 @@ post_patch_doc = extend_schema(
         status.HTTP_404_NOT_FOUND: OpenApiResponse(
             response=OpenApiTypes.OBJECT,
             description="Post not found",
+            examples=[
+                OpenApiExample(
+                    name="Post not found",
+                    value={"detail": "No Post matches the given query."}
+                )
+            ]
         ),
     },
 )
@@ -155,6 +197,12 @@ post_delete_doc = extend_schema(
         status.HTTP_404_NOT_FOUND: OpenApiResponse(
             response=OpenApiTypes.OBJECT,
             description="Post not found",
+            examples=[
+                OpenApiExample(
+                    name="Post not found",
+                    value={"detail": "No Post matches the given query."}
+                )
+            ]
         ),
     },
 )

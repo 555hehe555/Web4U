@@ -23,6 +23,7 @@ import {
   deleteMarkup,
 } from "./utils/index.js";
 import { log, warn, error, info, debug, TheAlert,  debugMode } from "./utils/index.js";
+import { getCookie } from "./utils/index.js";
 
 // Redirect any remaining console.* calls to the project's logging helpers
 if (typeof console !== 'undefined' && debugMode()) {

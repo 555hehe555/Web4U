@@ -1,28 +1,50 @@
+.primary-btn,
+.secondary-btn {
+  color: var(--text-on-black) !important;
+
+  box-shadow: 0 4px 10px var(--shadow);
+
+  transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease,
+          background-color 0.3s ease;
+}
+
+.primary-btn:hover,
+.secondary-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 10px 25px var(--shadow);
+}
+
+
 .primary-btn {
   background-color: var(--primary);
   border-color: var(--primary);
-  color: var(--text-on-black);
 }
 
 .primary-btn:hover {
   background-color: var(--primary-hover);
   border-color: var(--primary-hover);
-  color: var(--default-white);
 }
 
 .secondary-btn {
   background-color: var(--secondary);
   border-color: var(--secondary);
-  color: var(--text-on-black);
 }
 
 .secondary-btn:hover {
   background-color: var(--secondary-hover);
   border-color: var(--secondary-hover);
-  color: var(--text-on-black) !important; /* suspicious, можливо десь конфлікт */
 }
 
 .auth-btns{
     display:flex;
     align-items: center;
+}
+
+
+#editCurrentPost,
+#deleteCurrentPost{
+  margin: 5px 0;
+  padding: 5px 10px;
 }

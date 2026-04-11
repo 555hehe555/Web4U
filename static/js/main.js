@@ -137,7 +137,7 @@ function renderCommentsPost(comments) {
   commentsItem.unshift(`
               <div class="comment-form">
               <textarea type="text" class="comment-input" placeholder="Write a comment..."></textarea>
-              <button class="comment-submit-btn">Submit</button>
+              <button class="btn primary-btn comment-submit-btn">Submit</button>
           </div>
           `)
 
@@ -192,10 +192,10 @@ async function renderPostInfo(post, comments, likes) {
                             <img id="prev_img" src="${img}" style="display: ${img ? "block" : "none"}">
                         </label>
                         
-                        <button id="editCurrentPost"   style="display: ${showEditButtons ? "block" : "none"};">
+                        <button id="editCurrentPost" class="btn secondary-btn"  style="display: ${showEditButtons ? "block" : "none"};">
                             Редагувати
                         </button>
-                        <button id="deleteCurrentPost" style="display: ${showEditButtons ? "block" : "none"};">
+                        <button id="deleteCurrentPost" class="btn secondary-btn" style="display: ${showEditButtons ? "block" : "none"};">
                             Видалити цей пост
                         </button>
                     </div>

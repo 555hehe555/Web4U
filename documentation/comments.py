@@ -14,7 +14,7 @@ from blog_api.serializers import (
 
 comments_list_doc = extend_schema(
     tags=['Comments'],
-    description="Comments API - List and Retrieve",
+    description="Comments API - List Post Comments",
     request=None,
     responses={
         status.HTTP_200_OK: OpenApiResponse(
@@ -27,11 +27,21 @@ comments_list_doc = extend_schema(
                         {
                             "id": 1,
                             "text_comments": "Nice post!",
+                            "date": "2026-03-18T16:00:00Z",
                             "user": "john_doe",
                             "post": 1,
-                            "date": "2026-03-18T16:00:00Z",
                         }
                     ],
+                )
+            ],
+        ),
+        status.HTTP_404_NOT_FOUND: OpenApiResponse(
+            response=OpenApiTypes.OBJECT,
+            description="Post not found",
+            examples=[
+                OpenApiExample(
+                    name="Not found",
+                    value={"detail": "No Post or Comment matches the given query."},
                 )
             ],
         ),
@@ -69,6 +79,16 @@ comments_create_doc = extend_schema(
                 )
             ],
         ),
+        status.HTTP_404_NOT_FOUND: OpenApiResponse(
+            response=OpenApiTypes.OBJECT,
+            description="Post not found",
+            examples=[
+                OpenApiExample(
+                    name="Not found",
+                    value={"detail": "No Post matches the given query."},
+                )
+            ],
+        ),
     },
 )
 
@@ -95,7 +115,13 @@ comments_update_doc = extend_schema(
         ),
         status.HTTP_404_NOT_FOUND: OpenApiResponse(
             response=OpenApiTypes.OBJECT,
-            description="Comment not found",
+            description="Post not found",
+            examples=[
+                OpenApiExample(
+                    name="Not found",
+                    value={"detail": "No Post or Comment matches the given query."},
+                )
+            ],
         ),
     },
 )
@@ -123,7 +149,13 @@ comments_patch_doc = extend_schema(
         ),
         status.HTTP_404_NOT_FOUND: OpenApiResponse(
             response=OpenApiTypes.OBJECT,
-            description="Comment not found",
+            description="Post not found",
+            examples=[
+                OpenApiExample(
+                    name="Not found",
+                    value={"detail": "No Post or Comment matches the given query."},
+                )
+            ],
         ),
     },
 )
@@ -139,7 +171,13 @@ comments_delete_doc = extend_schema(
         ),
         status.HTTP_404_NOT_FOUND: OpenApiResponse(
             response=OpenApiTypes.OBJECT,
-            description="Comment not found",
+            description="Post not found",
+            examples=[
+                OpenApiExample(
+                    name="Not found",
+                    value={"detail": "No Post or Comment matches the given query."},
+                )
+            ],
         ),
     },
 )

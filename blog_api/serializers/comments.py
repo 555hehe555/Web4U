@@ -11,11 +11,12 @@ class GetCommentListSerializer(serializers.ModelSerializer):
 
 
 class CreateCommentListSerializer(serializers.ModelSerializer):
+    user = serializers.CharField(source='user.username', read_only=True)
+    
     class Meta:
         model = Comments
-        fields = ['id', 'text_comments', 'post']
-        read_only_fields = ['id']  # user додається через perform_create()
-
+        fields = ['id', 'text_comments', 'user', 'post', 'date']
+        read_only_fields = ['id', 'user', 'post', 'date']
 
 class DeleteCommentListSerializer(serializers.ModelSerializer):
     user = serializers.CharField(source='user.username', read_only=True)
@@ -26,15 +27,19 @@ class DeleteCommentListSerializer(serializers.ModelSerializer):
 
 
 class PutCommentListSerializer(serializers.ModelSerializer):
+    user = serializers.CharField(source='user.username', read_only=True)
+
     class Meta:
         model = Comments
-        fields = ['id', 'text_comments', 'post']
-        read_only_fields = ['id']
+        fields = ['id', 'text_comments', 'user', 'post', 'date']
+        read_only_fields = ['id', 'post', 'user', 'date']
 
 
 class PatchCommentListSerializer(serializers.ModelSerializer):
+    user = serializers.CharField(source='user.username', read_only=True)
+
     class Meta:
         model = Comments
-        fields = ['id', 'text_comments']
-        read_only_fields = ['id']
+        fields = ['id', 'text_comments', 'user', 'post', 'date']
+        read_only_fields = ['id', 'post', 'user', 'date']
 

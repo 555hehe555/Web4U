@@ -1,3 +1,5 @@
+import { log, warn, error, info, TheAlert} from "../utils/index.js";
+
 export async function postLoginUser(csrfToken, username, password) {
 
   try {
@@ -16,20 +18,19 @@ export async function postLoginUser(csrfToken, username, password) {
     const data = await response.json();
 
     if (!response.ok) {
-      console.log("if !res " + response.ok)
+      warn("api/auth.js", 21, "Помилка при логіні користувача:", data);
       // const errorText = JSON.stringify(data.errors || data);
       // document.querySelector('.form-errors').innerText = errorText;
       // throw new Error('Помилка збереження поста');
     }
 
   } catch (error) {
-    alert("Сталася помилка при збереженні. Спробуйте ще раз.");
+    TheAlert("api/auth.js", 28, "Помилка при логіні користувача:", error);
   }
 }
 
 export async function postLogoutUser(csrfToken) {
-  console.warn("logoutUser function called");
-  console.log(`csrfToken ${csrfToken}`);
+  info("api/auth.js", 33, "Виклик функції postLogoutUser");
 
   try {
     const response = await fetch(`/api/accounts/logout/`, {
@@ -43,17 +44,17 @@ export async function postLogoutUser(csrfToken) {
     const data = await response.json();
 
     if (!response.ok) {
-      console.log("if !res " + response.ok)
+      error("api/auth.js", 47, "Помилка при логауті користувача:", data);
       // const errorText = JSON.stringify(data.errors || data);
       // document.querySelector('.form-errors').innerText = errorText;
       // throw new Error('Помилка збереження поста');
     }
 
-    console.log("Успішна відповідь від API:", data);
-    alert("Успішна відповідь від API:", data)
+    log("api/auth.js", 53, "Успішна відповідь від API:", data);
+    TheAlert("api/auth.js", 54, "Успішна відповідь від API:", data)
     // Можна тут показати повідомлення або оновити DOM
   } catch (error) {
-    console.error("Помилка при логіні користувача:", error);
-    alert("Сталася помилка при збереженні. Спробуйте ще раз.");
+    error("api/auth.js", 57, "Помилка при логауті користувача:", error);
+    TheAlert("api/auth.js", 58, "Помилка при логауті користувача:", error);
   }
 }

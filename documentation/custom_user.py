@@ -28,6 +28,7 @@ user_list_doc = extend_schema(
                     {
                         "id": 1,
                         "username": "username",
+                        "avatar": "http://example.com/.../{uuid}.jpg",
                         "email": "username@example.com",
                         "date_joined": "2026-04-04T13:39:10.037294Z",
                         "first_name": "",
@@ -99,6 +100,7 @@ user_update_doc = extend_schema(
                     value={
                         "id": 1,
                         "username": "updated_user",
+                        "avatar": "http://example.com/.../{uuid}.jpg",
                         "email": "updated@example.com",
                         "first_name": "Updated",
                         "last_name": "User",
@@ -143,6 +145,7 @@ user_patch_doc = extend_schema(
                     value={
                         "id": 1,
                         "username": "updated_user",
+                        "avatar": "http://example.com/.../{uuid}.jpg",
                         "email": "updated@example.com",
                         "first_name": "Updated",
                         "last_name": "User",
@@ -246,6 +249,7 @@ get_me_doc = extend_schema(
                     value={
                         "id": 1,
                         "username": "aboba",
+                        "avatar": "http://example.com/.../{uuid}.jpg",
                         "email": "aboba@example.com",
                         "is_staff": False,
                         "is_superuser": False,
@@ -254,7 +258,6 @@ get_me_doc = extend_schema(
                         "is_active": True,
                         "first_name": "aboba",
                         "last_name": "aboba",
-                        "password": "pbkdf2_sha256$720000$aboba..."
                     },
                 )
             ],

@@ -1,9 +1,16 @@
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 from django.db import models
+from uuid import uuid4
+
+
+def user_avatar_path(instance, filename):
+    ext = filename.split('.')[-1]
+    return f"image/avatars/user_{instance.id}/{uuid4()}.{ext}"
 
 
 class CustomUser(AbstractUser):
+    avatar = models.ImageField(upload_to=user_avatar_path, null=True, blank=True)
     email = models.EmailField("email", blank=True, max_length=254)
 
 

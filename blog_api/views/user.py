@@ -54,6 +54,7 @@ class CustomUserViewSet(viewsets.ModelViewSet):
         return [IsOwner()]
 
     def get_serializer_class(self):
+        print(self.action)
         if self.action == 'create':
             return CreateCustomUserSerializer
         elif self.action == 'destroy':

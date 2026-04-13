@@ -1,15 +1,17 @@
-from django.contrib.auth.models import AbstractUser
-from django.conf import settings
-from django.db import models
 from uuid import uuid4
+
+from django.conf import settings
+from django.contrib.auth.models import AbstractUser
+from django.db import models
 
 
 def user_avatar_path(instance, filename):
     ext = filename.split('.')[-1]
-    return f"image/avatars/user_{instance.id}/{uuid4()}.{ext}"
+    return f"image/users_media/avatars/user_{instance.id}/{uuid4()}.{ext}"
 
 
 class CustomUser(AbstractUser):
+    description = models.TextField("опис користувача", null=True, max_length=500)
     avatar = models.ImageField(upload_to=user_avatar_path, null=True, blank=True)
     email = models.EmailField("email", blank=True, max_length=254)
 
@@ -23,7 +25,7 @@ class Post(models.Model):
         on_delete=models.CASCADE,
         related_name="posts"
     )
-    img = models.ImageField("зображеня", upload_to="image/temp/%Y", blank=True)
+    img = models.ImageField("зображеня", upload_to="image/users_media/temp/%Y", blank=True)
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

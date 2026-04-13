@@ -6,7 +6,8 @@ from ..models import CustomUser, Post
 class GetCustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'avatar', 'email', 'date_joined', 'first_name', 'last_name', 'last_login', 'is_active', 'is_staff', 'is_superuser']
+        fields = ['id', 'username', 'description', 'avatar', 'email', 'date_joined', 'first_name', 'last_name',
+                  'last_login', 'is_active', 'is_staff', 'is_superuser']
 
 
 class CreateCustomUserSerializer(serializers.ModelSerializer):
@@ -31,7 +32,7 @@ class DeleteCustomUserSerializer(serializers.ModelSerializer):
 class PutCustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['username', 'avatar', 'email', 'first_name', 'last_name', 'password']
+        fields = ['username', 'description', 'avatar', 'email', 'first_name', 'last_name', 'password']
         extra_kwargs = {
             'password': {'write_only': True, 'required': False},
         }
@@ -40,6 +41,7 @@ class PutCustomUserSerializer(serializers.ModelSerializer):
         password = validated_data.pop('password', None)
 
         instance.username = validated_data.get('username')
+        instance.description = validated_data.get('description')
         instance.avatar = validated_data.get('avatar')
         instance.email = validated_data.get('email')
         instance.first_name = validated_data.get('first_name')
@@ -54,13 +56,14 @@ class PutCustomUserSerializer(serializers.ModelSerializer):
 
 class PatchCustomUserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(required=False)
+    description = serializers.CharField(required=False)
     email = serializers.EmailField(required=False)
     first_name = serializers.CharField(required=False)
     last_name = serializers.CharField(required=False)
 
     class Meta:
         model = CustomUser
-        fields = ['username', 'avatar', 'email', 'first_name', 'last_name', 'password']
+        fields = ['username', 'description', 'avatar', 'email', 'first_name', 'last_name', 'password']
         extra_kwargs = {
             'password': {'write_only': True, 'required': False},
         }
@@ -89,7 +92,8 @@ class GetPostOneUserSerializer(serializers.ModelSerializer):
 class GetMeSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'avatar', 'email', 'is_staff', 'is_superuser', 'date_joined', 'last_login', 'is_active', 'first_name', 'last_name', 'password']
+        fields = ['id', 'username', 'avatar', 'email', 'is_staff', 'is_superuser', 'date_joined', 'last_login',
+                  'is_active', 'first_name', 'last_name', 'password']
 
 
 class LoginCustomUserSerializer(serializers.Serializer):

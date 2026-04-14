@@ -4,6 +4,7 @@ from .comments import (
     comments_update_doc,
     comments_patch_doc,
     comments_delete_doc,
+    comments_retrieve_doc
 )
 from .likes import (
     like_list_doc,
@@ -30,5 +31,3 @@ from .custom_user import (
     user_delete_doc,
     get_me_doc,
 )
-
-

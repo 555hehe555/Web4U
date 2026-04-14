@@ -1,9 +1,7 @@
 from .comments import (
-    CreateCommentListSerializer,
-    GetCommentListSerializer,
-    DeleteCommentListSerializer,
-    PutCommentListSerializer,
-    PatchCommentListSerializer
+    CommentReadSerializer,
+    CommentCreateSerializer,
+    CommentUpdateSerializer
 )
 
 from .likes import (
@@ -33,5 +31,3 @@ from .users import (
 
     LoginCustomUserSerializer
 )
-
-

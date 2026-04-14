@@ -1,59 +1,36 @@
-from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema, OpenApiResponse, OpenApiExample
-
 from rest_framework import status
 
 from blog_api.serializers import (
     GetAllUserLikeSerializer,
-    CreateUserLikeSerializer,
-    DeleteUserLikeSerializer
+    LikePaginatedResponseSerializer,
 )
 
-
 like_list_doc = extend_schema(
-    tags=['Like'],
-    description="Like API",
-    request=CreateUserLikeSerializer,
+    tags=["Like"],
+    description="Get paginated likes for the selected post.",
+    request=None,
     responses={
         status.HTTP_200_OK: OpenApiResponse(
-            response=GetAllUserLikeSerializer,
-            description="List of likes",
+            response=LikePaginatedResponseSerializer,
+            description="Paginated likes list.",
             examples=[
                 OpenApiExample(
-                    name="List response",
-                    value=[
-                        {
-                            "id": 1,
-                            "user": 1,
-                            "post": 1,
-                            "created_at": "2026-03-18T16:00:00Z",
-                        }
-                    ],
-                )
-            ],
-        ),
-        status.HTTP_201_CREATED: OpenApiResponse(
-            response=GetAllUserLikeSerializer,
-            description="Like created",
-            examples=[
-                OpenApiExample(
-                    name="Created response",
+                    name="Success response",
                     value={
-                        "id": 2,
-                        "user": 1,
-                        "post": 2,
-                        "created_at": "2026-03-18T16:05:00Z",
+                        "count": 57,
+                        "next": "http://127.0.0.1:8000/api/posts/6/likes/?page=2",
+                        "previous": None,
+                        "results": [
+                            {
+                                "id": 9,
+                                "author": "admin",
+                                "post": 6,
+                            }
+                        ],
+                        "user_liked": True,
                     },
-                )
-            ],
-        ),
-        status.HTTP_400_BAD_REQUEST: OpenApiResponse(
-            response=OpenApiTypes.OBJECT,
-            description="Invalid data",
-            examples=[
-                OpenApiExample(
-                    name="Bad request",
-                    value={"post": ["This field is required."]},
+                    response_only=True,
                 )
             ],
         ),
@@ -61,41 +38,36 @@ like_list_doc = extend_schema(
 )
 
 like_post_doc = extend_schema(
-    tags=['Like'],
-    description="Create like API",
+    tags=["Like"],
+    description="Create like for the selected post.",
     request=None,
     responses={
-        status.HTTP_200_OK: OpenApiResponse(
+        status.HTTP_201_CREATED: OpenApiResponse(
             response=GetAllUserLikeSerializer,
-            description="Like details",
+            description="Like created successfully.",
             examples=[
                 OpenApiExample(
-                    name="Create response",
-                    value={"id": 2},
+                    name="Created response",
+                    value={
+                        "id": 9,
+                        "author": "admin",
+                        "post": 6,
+                    },
+                    response_only=True,
                 )
             ],
-        )
+        ),
     },
 )
 
 like_delete_doc = extend_schema(
-    tags=['Like'],
-    description="Delete like API",
-    request=DeleteUserLikeSerializer,
+    tags=["Like"],
+    description="Delete current user's like from the selected post.",
+    request=None,
     responses={
         status.HTTP_204_NO_CONTENT: OpenApiResponse(
             response=None,
-            description="Like deleted successfully",
-        ),
-        status.HTTP_404_NOT_FOUND: OpenApiResponse(
-            response=OpenApiTypes.OBJECT,
-            description="Like not found",
-            examples=[
-                OpenApiExample(
-                    name="Not found",
-                    value={"detail": "Like not found"},
-                )
-            ],
+            description="Like deleted successfully.",
         ),
     },
-)   
+)

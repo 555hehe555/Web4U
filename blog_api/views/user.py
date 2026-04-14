@@ -20,7 +20,7 @@ from documentation import (
 )
 
 from ..models import CustomUser, Post
-from ..permissions import IsOwner
+from ..permissions import IsOwnerOrAdminDelete
 from ..serializers import (
     GetCustomUserSerializer,
     CreateCustomUserSerializer,
@@ -51,7 +51,7 @@ class CustomUserViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action in ['list', 'retrieve', 'create', 'post_list']:
             return [permissions.AllowAny()]
-        return [IsOwner()]
+        return [IsOwnerOrAdminDelete()]
 
     def get_serializer_class(self):
         if self.action == 'create':

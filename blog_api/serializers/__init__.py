@@ -22,9 +22,7 @@ from .posts import (
 from .users import (
     CreateCustomUserSerializer,
     GetCustomUserSerializer,
-    DeleteCustomUserSerializer,
-    PutCustomUserSerializer,
-    PatchCustomUserSerializer,
+    UpdateCustomUserSerializer,
 
     GetMeSerializer,
     GetPostOneUserSerializer,

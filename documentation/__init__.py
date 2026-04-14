@@ -25,6 +25,7 @@ from .posts import (
 )
 from .custom_user import (
     user_list_doc,
+    user_retrieve_doc,
     user_create_doc,
     user_update_doc,
     user_patch_doc,

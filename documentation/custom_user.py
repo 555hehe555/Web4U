@@ -6,79 +6,68 @@ from rest_framework import status
 from blog_api.serializers import (
     GetCustomUserSerializer,
     CreateCustomUserSerializer,
-    PutCustomUserSerializer,
-    PatchCustomUserSerializer,
-    GetMeSerializer,
+    UpdateCustomUserSerializer,
     GetPostOneUserSerializer,
+    GetMeSerializer,
 )
 
 
 user_list_doc = extend_schema(
-    tags=['User'],
-    description="User API - List and Retrieve users",
+    tags=["Users"],
+    description="Get paginated list of users.",
+    request=None,
+    responses={
+        status.HTTP_200_OK: GetCustomUserSerializer(many=True),
+    },
+)
+
+user_retrieve_doc = extend_schema(
+    tags=["Users"],
+    description="Get user details by id.",
     request=None,
     responses={
         status.HTTP_200_OK: OpenApiResponse(
             response=GetCustomUserSerializer,
-            description="List of users",
+            description="User details.",
             examples=[
                 OpenApiExample(
-                    name="List response",
-                    value=
-                    {
-                        "id": 1,
-                        "username": "username",
-                        "email": "username@example.com",
-                        "date_joined": "2026-04-04T13:39:10.037294Z",
-                        "first_name": "",
-                        "last_name": "",
-                        "last_login": "2026-04-08T14:54:50.031231Z",
+                    name="Success response",
+                    value={
+                        "id": 4,
+                        "username": "admin",
+                        "email": "admin@example.com",
+                        "date_joined": "2026-04-14T12:00:00Z",
+                        "first_name": "Admin",
+                        "last_name": "User",
+                        "last_login": "2026-04-14T13:00:00Z",
                         "is_active": True,
                         "is_staff": True,
-                        "is_superuser": True
+                        "is_superuser": True,
                     },
+                    response_only=True,
                 )
             ],
-        ),
-        status.HTTP_404_NOT_FOUND: OpenApiResponse(
-            response=OpenApiTypes.OBJECT,
-            description="User not found",
-            examples=[
-                OpenApiExample(
-                    name="User not found",
-                    value={"detail": "No CustomUser matches the given query."}
-                )
-            ]
         ),
     },
 )
 
 user_create_doc = extend_schema(
-    tags=['User'],
-    description="Create User API",
+    tags=["Users"],
+    description="Create user.",
     request=CreateCustomUserSerializer,
     responses={
         status.HTTP_201_CREATED: OpenApiResponse(
-            response=GetCustomUserSerializer,
-            description="User created successfully",
+            response=CreateCustomUserSerializer,
+            description="User created successfully.",
             examples=[
                 OpenApiExample(
-                    name="Created user",
+                    name="Created response",
                     value={
-                        "id": 2,
-                        "username": "newuser",
-                        "email": "newuser@example.com"
+                        "id": 5,
+                        "username": "new_user",
+                        "email": "new_user@example.com",
                     },
-                )
-            ],
-        ),
-        status.HTTP_400_BAD_REQUEST: OpenApiResponse(
-            response=OpenApiTypes.OBJECT,
-            description="Invalid data",
-            examples=[
-                OpenApiExample(
-                    name="Bad request",
-                    value={"username": ["This field is required."]},
+                    response_only=True,
                 )
             ],
         ),
@@ -86,188 +75,82 @@ user_create_doc = extend_schema(
 )
 
 user_update_doc = extend_schema(
-    tags=['User'],
-    description="Update User API (full update)",
-    request=PutCustomUserSerializer,
+    tags=["Users"],
+    description="Fully update user.",
+    request=UpdateCustomUserSerializer,
     responses={
         status.HTTP_200_OK: OpenApiResponse(
-            response=GetCustomUserSerializer,
-            description="User updated successfully",
+            response=UpdateCustomUserSerializer,
+            description="User updated successfully.",
             examples=[
                 OpenApiExample(
-                    name="Updated user",
+                    name="Updated response",
                     value={
-                        "id": 1,
                         "username": "updated_user",
                         "email": "updated@example.com",
                         "first_name": "Updated",
                         "last_name": "User",
                     },
+                    response_only=True,
                 )
             ],
-        ),
-        status.HTTP_403_FORBIDDEN: OpenApiResponse(
-            response=OpenApiTypes.OBJECT,
-            description="Forbidden - insufficient permissions",
-            examples=[
-                OpenApiExample(
-                    name="Forbidden",
-                    value={"detail": "You do not have permission to perform this action."}
-                )
-            ],
-        ),
-        status.HTTP_404_NOT_FOUND: OpenApiResponse(
-            response=OpenApiTypes.OBJECT,
-            description="User not found",
-            examples=[
-                OpenApiExample(
-                    name="User not found",
-                    value={"detail": "No CustomUser matches the given query."}
-                )
-            ]
         ),
     },
 )
 
 user_patch_doc = extend_schema(
-    tags=['User'],
-    description="Partial Update User API",
-    request=PatchCustomUserSerializer,
+    tags=["Users"],
+    description="Partially update user.",
+    request=UpdateCustomUserSerializer,
     responses={
         status.HTTP_200_OK: OpenApiResponse(
-            response=GetCustomUserSerializer,
-            description="User updated successfully",
+            response=UpdateCustomUserSerializer,
+            description="User partially updated successfully.",
             examples=[
                 OpenApiExample(
-                    name="Updated user",
+                    name="Patched response",
                     value={
-                        "id": 1,
-                        "username": "updated_user",
-                        "email": "updated@example.com",
-                        "first_name": "Updated",
+                        "username": "patched_user",
+                        "email": "patched@example.com",
+                        "first_name": "Patched",
                         "last_name": "User",
                     },
+                    response_only=True,
                 )
             ],
-        ),
-        status.HTTP_403_FORBIDDEN: OpenApiResponse(
-            response=OpenApiTypes.OBJECT,
-            description="Forbidden - insufficient permissions",
-            examples=[
-                OpenApiExample(
-                    name="Forbidden",
-                    value={"detail": "You do not have permission to perform this action."}
-                )
-            ],
-        ),
-        status.HTTP_404_NOT_FOUND: OpenApiResponse(
-            response=OpenApiTypes.OBJECT,
-            description="User not found",
-            examples=[
-                OpenApiExample(
-                    name="User not found",
-                    value={"detail": "No CustomUser matches the given query."}
-                )
-            ]
         ),
     },
 )
 
 user_delete_doc = extend_schema(
-    tags=['User'],
-    description="Delete User API",
+    tags=["Users"],
+    description="Delete user.",
     request=None,
     responses={
         status.HTTP_204_NO_CONTENT: OpenApiResponse(
             response=None,
-            description="User deleted successfully",
-        ),
-        status.HTTP_403_FORBIDDEN: OpenApiResponse(
-            response=OpenApiTypes.OBJECT,
-            description="Forbidden - insufficient permissions",
-            examples=[
-                OpenApiExample(
-                    name="Forbidden",
-                    value={"detail": "You do not have permission to perform this action."}
-                )
-            ],
-        ),
-        status.HTTP_404_NOT_FOUND: OpenApiResponse(
-            response=OpenApiTypes.OBJECT,
-            description="User not found",
-            examples=[
-                OpenApiExample(
-                    name="User not found",
-                    value={"detail": "No CustomUser matches the given query."}
-                )
-            ]
+            description="User deleted successfully.",
         ),
     },
 )
 
-post_list_doc = extend_schema(
-    tags=['User'],
-    description="Get User Posts API",
+user_post_list_doc = extend_schema(
+    tags=["Users"],
+    description="Get paginated list of posts created by the selected user.",
     request=None,
     responses={
-        status.HTTP_200_OK: OpenApiResponse(
-            response=GetPostOneUserSerializer,
-            description="List of user's posts",
-            examples=[
-                OpenApiExample(
-                    name="User posts response",
-                    value=[
-                        {
-                            "id": 1,
-                            "title": "First post",
-                            "description": "Post description",
-                            "author": "aboba",
-                            "img": "image_url",
-                            "date": "2026-03-18T16:00:00Z",
-                        }
-                    ],
-                )
-            ],
-        ),
+        status.HTTP_200_OK: GetPostOneUserSerializer(many=True),
     },
 )
 
 get_me_doc = extend_schema(
-    tags=['User'],
-    description="Get current authenticated user",
+    tags=["Users"],
+    description="Get current authenticated user.",
     request=None,
     responses={
         status.HTTP_200_OK: OpenApiResponse(
             response=GetMeSerializer,
-            description="Current authenticated user details",
-            examples=[
-                OpenApiExample(
-                    name="Current user",
-                    value={
-                        "id": 1,
-                        "username": "aboba",
-                        "email": "aboba@example.com",
-                        "is_staff": False,
-                        "is_superuser": False,
-                        "date_joined": "2026-03-18T15:41:15Z",
-                        "last_login": "2026-03-18T16:04:51Z",
-                        "is_active": True,
-                        "first_name": "aboba",
-                        "last_name": "aboba",
-                        "password": "pbkdf2_sha256$720000$aboba..."
-                    },
-                )
-            ],
-        ),
-        status.HTTP_401_UNAUTHORIZED: OpenApiResponse(
-            response=OpenApiTypes.OBJECT,
-            description="Unauthorized",
-            examples=[
-                OpenApiExample(
-                    name="Unauthorized",
-                    value={"detail": "Authentication credentials were not provided."},
-                )
-            ],
+            description="Current user details.",
         ),
     },
 )

@@ -14,9 +14,7 @@ from .likes import (
 from .posts import (
     CreatePostsListSerializer,
     GetPostsListSerializer,
-    DeletePostsListSerializer,
-    PutPostsListSerializer,
-    PatchPostsListSerializer
+    UpdatePostsListSerializer
 )
 
 from .users import (

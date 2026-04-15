@@ -24,11 +24,11 @@ blog_api/migrations/*
 !*/migrations/init.py
 
 # Static / Media (якщо генерується або динамічно додається)
-/media/image/temp/*
-!/media/image/temp/.gitkeep
-
-/media/image/avatars/*
-!/media/image/avatars/.gitkeep
+#/media/image/temp/*
+#!/media/image/temp/.gitkeep
+#
+#/media/image/avatars/*
+#!/media/image/avatars/.gitkeep
 
 /media/image/users_media/*
 !/media/image/users_media/.gitkeep

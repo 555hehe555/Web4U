@@ -25,13 +25,13 @@ class UpdateCustomUserSerializer(serializers.ModelSerializer):
         model = CustomUser
         fields = ["username", 'description', 'avatar', "email", "first_name", "last_name", "password"]
         extra_kwargs = {
-            "username":    {"required": True},
+            "username": {"required": True},
             "description": {"required": True},
-            "avatar":      {"required": True},
-            "email":       {"required": True},
-            "first_name":  {"required": True},
-            "last_name":   {"required": True},
-            "password":    {"write_only": True, "required": False},
+            "avatar": {"required": True},
+            "email": {"required": True},
+            "first_name": {"required": True},
+            "last_name": {"required": True},
+            "password": {"write_only": True, "required": False},
         }
 
     def update(self, instance, validated_data):
@@ -58,7 +58,8 @@ class GetPostOneUserSerializer(serializers.ModelSerializer):
 class GetMeSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'avatar', 'email', 'is_staff', 'is_superuser', 'date_joined', 'last_login',
+        fields = ['id', 'username', 'description', 'avatar', 'email', 'is_staff', 'is_superuser', 'date_joined',
+                  'last_login',
                   'is_active', 'first_name', 'last_name', 'password']
 
 

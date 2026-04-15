@@ -1,6 +1,4 @@
-from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema, OpenApiResponse, OpenApiExample
-
 from rest_framework import status
 
 from blog_api.serializers import (
@@ -10,7 +8,6 @@ from blog_api.serializers import (
     GetPostOneUserSerializer,
     GetMeSerializer,
 )
-
 
 user_list_doc = extend_schema(
     tags=["Users"],
@@ -35,6 +32,8 @@ user_retrieve_doc = extend_schema(
                     value={
                         "id": 4,
                         "username": "admin",
+                        "description": "Admin user details.",
+                        "avatar": "example.com/.../avatar.png",
                         "email": "admin@example.com",
                         "date_joined": "2026-04-14T12:00:00Z",
                         "first_name": "Admin",
@@ -87,6 +86,8 @@ user_update_doc = extend_schema(
                     name="Updated response",
                     value={
                         "username": "updated_user",
+                        "description": "Updated user.",
+                        "avatar": "example.com/.../new_avatar.png",
                         "email": "updated@example.com",
                         "first_name": "Updated",
                         "last_name": "User",
@@ -111,6 +112,8 @@ user_patch_doc = extend_schema(
                     name="Patched response",
                     value={
                         "username": "patched_user",
+                        "description": "Updated user.",
+                        "avatar": "example.com/.../new_avatar.png",
                         "email": "patched@example.com",
                         "first_name": "Patched",
                         "last_name": "User",

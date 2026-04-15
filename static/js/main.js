@@ -1,29 +1,35 @@
 import {
+  deleteLike,
+  DeletePost,
   getAllPosts,
-  getPostByID,
   getCommentsByPostID,
-  postCreateComment,
-  postCreatePost,
   getCurrentUser,
   getLikesByPostID,
+  getPostByID,
+  getUserPostsById,
+  PatchPost,
+  PatchUser,
+  postCreateComment,
   postCreateLike,
-  deleteLike,
+  postCreatePost,
   postCreateUser,
   postLoginUser,
-  postLogoutUser,
-  getUserPostsById,
-  PatchUser,
-  PatchPost,
-  DeletePost
+  postLogoutUser
 } from "./api/index.js";
 import {
-  formatDate,
-  getShortDate,
-  getPage,
+  debug,
+  debugMode,
   deleteMarkup,
+  error,
+  formatDate,
+  getCookie,
+  getPage,
+  getShortDate,
+  info,
+  log,
+  TheAlert,
+  warn,
 } from "./utils/index.js";
-import { log, warn, error, info, debug, TheAlert,  debugMode } from "./utils/index.js";
-import { getCookie } from "./utils/index.js";
 
 // Redirect any remaining console.* calls to the project's logging helpers
 if (typeof console !== 'undefined' && debugMode()) {
@@ -63,22 +69,21 @@ function renderBlogPosts(posts) {
     if (posts.count === 0) {
       paginationContainer.style.display = "none";
       return "<img class='no-post-placeholder-img' src='/media/image/standard/no_posts_placeholder.png' width='500px' style='display: block; margin: 0 auto; border-radius: 20px'>";
-    }
-    else if (totalPages === 1) {
+    } else if (totalPages === 1) {
       paginationContainer.style.display = "none";
     } else {
       paginationContainer.style.display = "flex";
     }
 
     return posts.results
-      .map(({ id, title, img, description, author, date }) => {
+      .map(({id, title, img, description, author, date}) => {
         const hasImage = !!img;
         const imageSrc = hasImage ? img : "/media/image/standard/img_placeholder.png";
         const showImage = withoutPlaceholders ? hasImage : true;
 
         const shortDate = getShortDate(date);
-      //   Це пости на головній сторінці
-          return `
+        //   Це пости на головній сторінці
+        return `
             <div class="container-item">
 
               <div class="post">
@@ -94,11 +99,11 @@ function renderBlogPosts(posts) {
               </div>
             </div>
           `;
-        }).join("");
+      }).join("");
   } else if (!("results" in posts) && posts.length) {
     // Це пости на сторінці профілю
     return posts
-      .map(({ id, title, img, description, author, date }) => {
+      .map(({id, title, img, description, author, date}) => {
         const hasImage = !!img;
         const imageSrc = hasImage ? img : "/media/image/standard/img_placeholder.png";
         const showImage = withoutPlaceholders ? hasImage : true;
@@ -120,13 +125,15 @@ function renderBlogPosts(posts) {
           </div>
         `;
       }).join("");
-  } else {return "<img class='no-post-placeholder-img' src='/media/image/standard/no_posts_placeholder.png' width='500px' style='display: block; margin: 0 auto; border-radius: 20px'>";}
+  } else {
+    return "<img class='no-post-placeholder-img' src='/media/image/standard/no_posts_placeholder.png' width='500px' style='display: block; margin: 0 auto; border-radius: 20px'>";
+  }
 }
 
 function renderCommentsPost(comments) {
   info("main.js", 114, "renderCommentsPost comments:", comments);
   const commentsItem = comments.results
-    .map(({ id, user, text_comments, post }) => {
+    .map(({id, user, text_comments, post}) => {
       return `
       <div>
           <p class="comment-finished-user-text-comments">${user}: ${text_comments}</p>
@@ -141,11 +148,11 @@ function renderCommentsPost(comments) {
           </div>
           `)
 
-    return commentsItem.join("");
+  return commentsItem.join("");
 }
 
 async function renderPostInfo(post, comments, likes) {
-  const { id, title, img, description, author, date } = post;
+  const {id, title, img, description, author, date} = post;
 
   const countLikes = likes.count || 0;
   const commentsMarkup = renderCommentsPost(comments);
@@ -263,35 +270,35 @@ async function renderPostInfo(post, comments, likes) {
     `;
 }
 
-document.addEventListener("DOMContentLoaded", function() {
- const container = document.querySelector(".post");
- if (!container) return; // якщо контейнера нема, нічого не робимо
+document.addEventListener("DOMContentLoaded", function () {
+  const container = document.querySelector(".post");
+  if (!container) return; // якщо контейнера нема, нічого не робимо
 
- container.addEventListener("click", async function(e) {
-   const postElem = e.target.closest(".container-item-detail");
-   if (!postElem) return;
+  container.addEventListener("click", async function (e) {
+    const postElem = e.target.closest(".container-item-detail");
+    if (!postElem) return;
 
-   const postId = postElem.dataset.postId;
+    const postId = postElem.dataset.postId;
 
-   const editButton = e.target.closest("#editCurrentPost");
-   const deleteButton = e.target.closest("#deleteCurrentPost");
-
-
-   const titleElem = postElem.querySelector("#post-title");
-   const descriptionElem = postElem.querySelector("#post-description");
-
-   const titleInput = postElem.querySelector("#post-title-edit");
-   const descriptionInput = postElem.querySelector("#post-description-edit");
-
-   const prevImg = postElem.querySelector("#prev_img");
-   const imgInput = postElem.querySelector("#id_img");
+    const editButton = e.target.closest("#editCurrentPost");
+    const deleteButton = e.target.closest("#deleteCurrentPost");
 
 
-  if (editButton && !isEditing) {
-    debug("main.js", 279, "Edit button clicked");
-    isEditing = true
+    const titleElem = postElem.querySelector("#post-title");
+    const descriptionElem = postElem.querySelector("#post-description");
 
-    editButton.textContent = "Зберегти";
+    const titleInput = postElem.querySelector("#post-title-edit");
+    const descriptionInput = postElem.querySelector("#post-description-edit");
+
+    const prevImg = postElem.querySelector("#prev_img");
+    const imgInput = postElem.querySelector("#id_img");
+
+
+    if (editButton && !isEditing) {
+      debug("main.js", 279, "Edit button clicked");
+      isEditing = true
+
+      editButton.textContent = "Зберегти";
 
       titleElem.style.display = "none";
       descriptionElem.style.display = "none";
@@ -301,7 +308,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
       imgInput.disabled = false;
 
-      imgInput.addEventListener("change", function() {
+      imgInput.addEventListener("change", function () {
         const file = this.files[0];
         if (file) {
           prevImg.src = URL.createObjectURL(file);
@@ -309,9 +316,9 @@ document.addEventListener("DOMContentLoaded", function() {
           prevImg.src = "none";
         }
       });
-  } else if (editButton && isEditing) {
-    debug("main.js", 300, "Save button clicked");
-    isEditing = false
+    } else if (editButton && isEditing) {
+      debug("main.js", 300, "Save button clicked");
+      isEditing = false
 
       titleElem.style.display = "block";
       descriptionElem.style.display = "block";
@@ -329,9 +336,15 @@ document.addEventListener("DOMContentLoaded", function() {
 
       const formData = new FormData();
 
-      if (updatedTitle)       {formData.append("title", updatedTitle);}
-      if (updatedDescription) {formData.append("description", updatedDescription);}
-      if (updatedImageFile)   {formData.append("img", updatedImageFile);}
+      if (updatedTitle) {
+        formData.append("title", updatedTitle);
+      }
+      if (updatedDescription) {
+        formData.append("description", updatedDescription);
+      }
+      if (updatedImageFile) {
+        formData.append("img", updatedImageFile);
+      }
 
       const csrfToken = getCookie('csrftoken');
 
@@ -341,9 +354,8 @@ document.addEventListener("DOMContentLoaded", function() {
       descriptionElem.textContent = updatedDescription;
       editButton.textContent = "Редагувати";
       window.location.href = `/post-info/${postId}`;
-    }
-  else if (deleteButton) {
-    debug("main.js", 333, "Delete button clicked");
+    } else if (deleteButton) {
+      debug("main.js", 333, "Delete button clicked");
       if (confirm("Ви впевнені, що хочете видалити цей пост?")) {
         try {
           const csrfToken = getCookie('csrftoken');
@@ -355,8 +367,8 @@ document.addEventListener("DOMContentLoaded", function() {
           TheAlert("main.js", 342, "Сталася помилка при видаленні поста. Спробуйте ще раз.", err);
         }
       }
-   }
- })
+    }
+  })
 });
 
 async function showBlogPage() {
@@ -372,40 +384,40 @@ async function showPostInfo(id) {
     const post = await getPostByID(id);
     const comments = await getCommentsByPostID(id);
     const likes = await getLikesByPostID(id);
-    log("main.js", 362, "Post info data:", { post, comments, likes });
+    log("main.js", 362, "Post info data:", {post, comments, likes});
     postInfoContainer.innerHTML = await renderPostInfo(post, comments, likes);
   } catch (err) {
     error("main.js", 365, "Не вдалося завантажити пост:", err);
   }
 }
 
-async function createPost(){
+async function createPost() {
   const createPostForm = document.querySelector(".post_form")
-  createPostForm.addEventListener('submit', async function(e) {
+  createPostForm.addEventListener('submit', async function (e) {
     e.preventDefault()
 
-      try {
-        const formData = new FormData(this)
-        const title = formData.get('title')
-        const description = formData.get('description')
-        const image = formData.get('img')
+    try {
+      const formData = new FormData(this)
+      const title = formData.get('title')
+      const description = formData.get('description')
+      const image = formData.get('img')
 
-        const csrfToken = getCookie('csrftoken')
-        await postCreatePost(csrfToken, title, description, image)
-        alert("Пост успішно створено")
-        window.location.href = "/profile/";
-      } catch (err) {
-        error("main.js", 385, "Не вдалося створити пост:", err);
-        TheAlert("main.js", 386, "Сталася помилка при створенні поста. Спробуйте ще раз.", err);
-      }
-    });
+      const csrfToken = getCookie('csrftoken')
+      await postCreatePost(csrfToken, title, description, image)
+      alert("Пост успішно створено")
+      window.location.href = "/profile/";
+    } catch (err) {
+      error("main.js", 385, "Не вдалося створити пост:", err);
+      TheAlert("main.js", 386, "Сталася помилка при створенні поста. Спробуйте ще раз.", err);
+    }
+  });
 }
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   const container = document.querySelector(".container-detail");
   if (!container) return; // якщо контейнера нема, нічого не робимо
 
-  container.addEventListener("click", async function(e) {
+  container.addEventListener("click", async function (e) {
     const likeBtn = e.target.closest(".like-btn");
     if (!likeBtn) return;
 
@@ -415,12 +427,11 @@ document.addEventListener("DOMContentLoaded", function() {
     const postId = postElem.dataset.postId;
     if (!postId) return;
 
-    debug("main.js", 404, "Like button clicked for post", postId);
+    debug("main.js", 430, "Like button clicked for post", postId);
 
     try {
       const likes = await getLikesByPostID(postId);
       const currentUser = await getCurrentUser();
-      const userLike = likes.results.find(like => like.author === currentUser.username);
       const csrfToken = getCookie("csrftoken");
 
       if (currentUser?.detail) {
@@ -428,7 +439,7 @@ document.addEventListener("DOMContentLoaded", function() {
         return;
       }
 
-      if (userLike) {
+      if (likes.user_liked) {
         await deleteLike(csrfToken, postId);
       } else {
         await postCreateLike(csrfToken, postId);
@@ -437,28 +448,28 @@ document.addEventListener("DOMContentLoaded", function() {
       // оновлюємо UI
       const updatedLikes = await getLikesByPostID(postId);
       const img = likeBtn.querySelector("img");
-      const userLiked = updatedLikes.results.some(like => like.author === currentUser.username);
-      img.src = userLiked ? "/media/image/standard/like.png" : "/media/image/standard/no_like.png";
+      img.src = updatedLikes.user_liked ?
+        "/media/image/standard/like.png" : "/media/image/standard/no_like.png";
 
       const countElem = postElem.querySelector(".like-count");
       if (countElem) countElem.textContent = updatedLikes.count || 0;
     } catch (err) {
-      error("main.js", 433, "Не вдалося оновити лайк:", err);
+      error("main.js", 457, "Не вдалося оновити лайк:", err);
     }
   });
 });
 
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   const container = document.querySelector(".container-detail");
   if (!container) return; // якщо контейнера нема, нічого не робимо
 
-  container.addEventListener("click", async function(e) {
+  container.addEventListener("click", async function (e) {
     const commentSubmitBtn = e.target.closest(".comment-submit-btn");
     if (!commentSubmitBtn) return;
 
     const commentInput = document.querySelector(".comment-input");
-    debug("main.js", 447, "Comment submit button clicked", { commentInput, commentSubmitBtn });
+    debug("main.js", 447, "Comment submit button clicked", {commentInput, commentSubmitBtn});
 
 
     const postElem = commentSubmitBtn.closest(".container-item-detail");
@@ -478,109 +489,109 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     try {
-        const csrfToken = getCookie("csrftoken");
-        warn("main.js", 469, "Submitting comment with:", csrfToken, postId, commentText);
-        await postCreateComment(csrfToken, postId, commentText);
-        commentInput.value = ""; // очищаємо поле вводу
+      const csrfToken = getCookie("csrftoken");
+      warn("main.js", 469, "Submitting comment with:", csrfToken, postId, commentText);
+      await postCreateComment(csrfToken, postId, commentText);
+      commentInput.value = ""; // очищаємо поле вводу
 
-        // Оновлюємо список коментарів
-        const comments = await getCommentsByPostID(postId);
-        const commentsContainer = document.querySelector(".comment-finished");
-        if (commentsContainer) {
-          commentsContainer.innerHTML = `
+      // Оновлюємо список коментарів
+      const comments = await getCommentsByPostID(postId);
+      const commentsContainer = document.querySelector(".comment-finished");
+      if (commentsContainer) {
+        commentsContainer.innerHTML = `
             <h2 class="comment-finished-title"><br>Comment<br></h2>
             ${renderCommentsPost(comments)}
           `;
-        }
-      } catch (err) {
-        error("main.js", 483, "Не вдалося додати коментар:", err);
-        TheAlert("main.js", 484, "Сталася помилка при додаванні коментаря. Спробуйте ще раз.", err);
       }
+    } catch (err) {
+      error("main.js", 483, "Не вдалося додати коментар:", err);
+      TheAlert("main.js", 484, "Сталася помилка при додаванні коментаря. Спробуйте ще раз.", err);
+    }
   });
 });
 
 
-async function createUser(){
+async function createUser() {
   debug("main.js", 490, "createUser function called");
   const registerForm = document.querySelector(".login-form")
 
-  registerForm.addEventListener('submit', async function(e) {
+  registerForm.addEventListener('submit', async function (e) {
     e.preventDefault()
     debug("main.js", 495, "createUser event listener called");
 
-      try {
-        const formData = new FormData(this)
-        const username = formData.get('username')
-        const password = formData.get('password1')
-        const password2 = formData.get('password2')
-        const email = formData.get('email')
+    try {
+      const formData = new FormData(this)
+      const username = formData.get('username')
+      const password = formData.get('password1')
+      const password2 = formData.get('password2')
+      const email = formData.get('email')
 
-        if (password !== password2) {
-          alert("Паролі не співпадають")
-          return
-        }
-
-        const csrfToken = getCookie('csrftoken')
-        warn("main.js", 511, "Register submit values:", csrfToken, username, password, email)
-        await postCreateUser(csrfToken, username, password, email)
-        alert("Користувача успішно створено")
-        await postLoginUser(csrfToken, username, password)
-        window.location.href = "/profile/";
-        
-
-      } catch (error) {
-        error("main.js", 519, "Не вдалося створити користувача:", error);
-        TheAlert("main.js", 520, "Сталася помилка при створенні користувача. Спробуйте ще раз.", error);
+      if (password !== password2) {
+        alert("Паролі не співпадають")
+        return
       }
-    });
+
+      const csrfToken = getCookie('csrftoken')
+      warn("main.js", 511, "Register submit values:", csrfToken, username, password, email)
+      await postCreateUser(csrfToken, username, password, email)
+      alert("Користувача успішно створено")
+      await postLoginUser(csrfToken, username, password)
+      window.location.href = "/profile/";
+
+
+    } catch (error) {
+      error("main.js", 519, "Не вдалося створити користувача:", error);
+      TheAlert("main.js", 520, "Сталася помилка при створенні користувача. Спробуйте ще раз.", error);
+    }
+  });
 }
 
-async function loginUser(){
+async function loginUser() {
   debug("main.js", 524, "loginUser function called");
   const loginForm = document.querySelector(".login-form")
 
-  loginForm.addEventListener('submit', async function(e) {
+  loginForm.addEventListener('submit', async function (e) {
     e.preventDefault()
     debug("main.js", 529, "Login form submitted");
 
-      try {
-        const formData = new FormData(this)
-        const username = formData.get('username')
-        const password = formData.get('password')
+    try {
+      const formData = new FormData(this)
+      const username = formData.get('username')
+      const password = formData.get('password')
 
-        const csrfToken = getCookie('csrftoken')
-        warn("main.js", 539, "Login submit values:", csrfToken, username, password)
-        await postLoginUser(csrfToken, username, password)
-        alert("Вхід успішний")
-        window.location.href = "/profile/";
+      const csrfToken = getCookie('csrftoken')
+      warn("main.js", 539, "Login submit values:", csrfToken, username, password)
+      await postLoginUser(csrfToken, username, password)
+      alert("Вхід успішний")
+      window.location.href = "/profile/";
 
-      } catch (error) {
-        error("main.js", 544, "Не вдалося увійти:", error);
-        TheAlert("main.js", 546, "Сталася помилка при вході. Спробуйте ще раз.", error);
-      }
-    });
+    } catch (error) {
+      error("main.js", 544, "Не вдалося увійти:", error);
+      TheAlert("main.js", 546, "Сталася помилка при вході. Спробуйте ще раз.", error);
+    }
+  });
 }
 
-async function logoutUser(){
+async function logoutUser() {
   const logoutBtn = document.querySelector(".logout-btn")
   if (!logoutBtn) return;
 
-  logoutBtn.addEventListener('click', async function(e) {
+  logoutBtn.addEventListener('click', async function (e) {
     e.preventDefault()
     debug("main.js", 554, "Logout button clicked");
 
-      try {
-        const csrfToken = getCookie('csrftoken')
-        warn("main.js", 561, "Logout csrf token:", csrfToken)
-        await postLogoutUser(csrfToken)
-        alert("Вихід успішний")
-        window.location.href = "/login/";
+    try {
+      const csrfToken = getCookie('csrftoken')
+      warn("main.js", 561, "Logout csrf token:", csrfToken)
+      await postLogoutUser(csrfToken)
+      alert("Вихід успішний")
+      window.location.href = "/login/";
 
-      } catch (error) {
-        error("main.js", 567, "Не вдалося вийти:", error);
-        TheAlert("main.js", 568, "Не вдалося вийти. Спробуйте ще раз.", error);
-      }
-    });
+    } catch (error) {
+      error("main.js", 567, "Не вдалося вийти:", error);
+      TheAlert("main.js", 568, "Не вдалося вийти. Спробуйте ще раз.", error);
+    }
+  });
 }
 
 async function profileUser() {
@@ -590,19 +601,21 @@ async function profileUser() {
   const infoUserContainer = document.querySelector(".profile-info");
   if (!infoUserContainer) return;
 
+  const previewInfoContainer = document.querySelector(".preview-info");
+  if (!previewInfoContainer) return;
+
   const currentUser = await getCurrentUser();
 
   document.querySelector(".username").innerText = currentUser.username;
 
   const infoUser = [
     ["Ваш id", currentUser.id, false, "user-id"],
-    ["Ваш нік", currentUser.username, true, "user-username"],
     ["Ваш пароль", '********', true, "user-password"],
     ["Ваша пошта", currentUser.email, false, "user-email"],
     ["Ваша дата реєстрації", formatDate(currentUser.date_joined), false, "user-date-joined"],
     ["Ваше імʼя", currentUser.first_name, true, "user-first-name"],
     ["Ваше прізвище", currentUser.last_name, true, "user-last-name"],
-    ["Роль", currentUser.is_staff ? "адміністратор" : "користувач", false, "user-is-staff" ],
+    ["Роль", currentUser.is_staff ? "адміністратор" : "користувач", false, "user-is-staff"],
   ];
 
   renderUserData(infoUser, infoUserContainer);
@@ -650,6 +663,12 @@ function renderUserData(infoUser, container) {
       </div>
     </div>
   `;
+
+
+  const previewInputImg = document.querySelector("#prev_input_img");
+
+  const username = document.querySelector("#prev_username_h");
+  const description = document.querySelector("#prev_description_p");
 }
 
 async function editProfileUser(e) {
@@ -701,7 +720,7 @@ async function editProfileUser(e) {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-  const { pageType, id } = getPage();
+  const {pageType, id} = getPage();
 
   if (pageType === undefined) {
     await showBlogPage();

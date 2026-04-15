@@ -601,24 +601,11 @@ async function profileUser() {
   const infoUserContainer = document.querySelector(".profile-info");
   if (!infoUserContainer) return;
 
-  const previewInfoContainer = document.querySelector(".preview-info");
-  if (!previewInfoContainer) return;
-
   const currentUser = await getCurrentUser();
 
-  document.querySelector(".username").innerText = currentUser.username;
+//  document.querySelector(".username").innerText = currentUser.username;
 
-  const infoUser = [
-    ["Ваш id", currentUser.id, false, "user-id"],
-    ["Ваш пароль", '********', true, "user-password"],
-    ["Ваша пошта", currentUser.email, false, "user-email"],
-    ["Ваша дата реєстрації", formatDate(currentUser.date_joined), false, "user-date-joined"],
-    ["Ваше імʼя", currentUser.first_name, true, "user-first-name"],
-    ["Ваше прізвище", currentUser.last_name, true, "user-last-name"],
-    ["Роль", currentUser.is_staff ? "адміністратор" : "користувач", false, "user-is-staff"],
-  ];
-
-  renderUserData(infoUser, infoUserContainer);
+  renderUserData(currentUser, infoUserContainer);
 
   document
     .querySelector("#edit-profile-btn")
@@ -629,10 +616,22 @@ async function profileUser() {
   userPostsContainer.innerHTML = renderBlogPosts(data);
 }
 
-function renderUserData(infoUser, container) {
+function renderUserData(currentUser, container) {
+    const infoUser = [
+    ["Ваш id", currentUser.id, false, "user-id"],
+    ["Ваш пароль", '********', true, "user-password"],
+    ["Ваша пошта", currentUser.email, false, "user-email"],
+    ["Ваша дата реєстрації", formatDate(currentUser.date_joined), false, "user-date-joined"],
+    ["Ваше імʼя", currentUser.first_name, true, "user-first-name"],
+    ["Ваше прізвище", currentUser.last_name, true, "user-last-name"],
+    ["Роль", currentUser.is_staff ? "адміністратор" : "користувач", false, "user-is-staff"],
+  ];
+  
+  const userProfileCardInfoCont = document.querySelector(".user_profile_card_info");
+  if (!userProfileCardInfoCont) return;
+  
   container.innerHTML = infoUser.map(item => {
     const [label, value, editable, id] = item;
-
     return `
       <div class="row user-data-row" data-editable="${editable}">
         <div class="col-sm-3">
@@ -653,6 +652,32 @@ function renderUserData(infoUser, container) {
       <hr>
     `;
   }).join("");
+  
+  userProfileCardInfoCont.innerHTML += `
+    <div class="user-data-row row" data-editable="${true}"> 
+        <p class="username user-data-p">${currentUser.username}</p>
+        <input id="username" type="text"
+               class="form-control description-input user-data-input"
+               placeholder=${currentUser.username}
+               style="display:none"
+        >
+    </div>
+    <p id="prev_description_p" class="description user-data-row user-data-p">Добавте свій
+        чарівний опис</p>
+    <input id="user-data-row" type="text"
+           class="form-control description-input user-data-input"
+           placeholder=""
+           disabled
+           style="display:none"
+    >
+    
+    <a href="{% url 'create_post' %}">
+        <button type="button" class="btn btn-primary w-100 py-2 input secondary-btn">
+            Створити пост
+        </button>
+    </a>
+    <a id="logout" class="logout-btn btn btn-primary w-100 py-2 input primary-btn">Вийти</a>
+  `;
 
   container.innerHTML += `
     <div class="row">
@@ -664,11 +689,10 @@ function renderUserData(infoUser, container) {
     </div>
   `;
 
+  // const previewInputImg = document.querySelector("#prev_input_img");
 
-  const previewInputImg = document.querySelector("#prev_input_img");
-
-  const username = document.querySelector("#prev_username_h");
-  const description = document.querySelector("#prev_description_p");
+  // const username = document.querySelector("#prev_username_h");
+  // const description = document.querySelector("#prev_description_p");
 }
 
 async function editProfileUser(e) {
@@ -676,10 +700,12 @@ async function editProfileUser(e) {
 
   const rows = document.querySelectorAll(".user-data-row");
   const editBtn = document.querySelector("#edit-profile-btn");
+  console.log(rows)
 
   const dataToUpdate = {};
 
   rows.forEach(row => {
+    console.log(row)
     const editable = row.dataset.editable === "true";
     const p = row.querySelector(".user-data-p");
     const input = row.querySelector(".user-data-input");
@@ -694,6 +720,7 @@ async function editProfileUser(e) {
       if (input.value.trim() !== "") {
         dataToUpdate[input.id.replace("user-", "")] = input.value;
         p.textContent = input.value;
+        console.log(p.textContent )
       }
     } else {
       // вхід в редагування

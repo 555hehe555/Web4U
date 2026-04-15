@@ -17,59 +17,25 @@ class CreateCustomUserSerializer(serializers.ModelSerializer):
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
-        user = CustomUser(**validated_data)
-        user.set_password(validated_data['password'])
-        user.save()
-        return user
+        return CustomUser.objects.create_user(**validated_data)
 
 
-class DeleteCustomUserSerializer(serializers.ModelSerializer):
+class UpdateCustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'email']
-
-
-class PutCustomUserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CustomUser
-        fields = ['username', 'description', 'avatar', 'email', 'first_name', 'last_name', 'password']
+        fields = ["username", 'description', 'avatar', "email", "first_name", "last_name", "password"]
         extra_kwargs = {
-            'password': {'write_only': True, 'required': False},
+            "username":    {"required": True},
+            "description": {"required": True},
+            "avatar":      {"required": True},
+            "email":       {"required": True},
+            "first_name":  {"required": True},
+            "last_name":   {"required": True},
+            "password":    {"write_only": True, "required": False},
         }
 
     def update(self, instance, validated_data):
-        password = validated_data.pop('password', None)
-
-        instance.username = validated_data.get('username')
-        instance.description = validated_data.get('description')
-        instance.avatar = validated_data.get('avatar')
-        instance.email = validated_data.get('email')
-        instance.first_name = validated_data.get('first_name')
-        instance.last_name = validated_data.get('last_name')
-
-        if password:
-            instance.set_password(password)
-
-        instance.save()
-        return instance
-
-
-class PatchCustomUserSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(required=False)
-    description = serializers.CharField(required=False)
-    email = serializers.EmailField(required=False)
-    first_name = serializers.CharField(required=False)
-    last_name = serializers.CharField(required=False)
-
-    class Meta:
-        model = CustomUser
-        fields = ['username', 'description', 'avatar', 'email', 'first_name', 'last_name', 'password']
-        extra_kwargs = {
-            'password': {'write_only': True, 'required': False},
-        }
-
-    def update(self, instance, validated_data):
-        password = validated_data.pop('password', None)
+        password = validated_data.pop("password", None)
 
         for attr, value in validated_data.items():
             setattr(instance, attr, value)

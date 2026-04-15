@@ -1,36 +1,29 @@
 from .comments import (
-    CreateCommentListSerializer,
-    GetCommentListSerializer,
-    DeleteCommentListSerializer,
-    PutCommentListSerializer,
-    PatchCommentListSerializer
+    CommentReadSerializer,
+    CommentCreateSerializer,
+    CommentUpdateSerializer
 )
 
 from .likes import (
     CreateUserLikeSerializer,
     GetAllUserLikeSerializer,
-    DeleteUserLikeSerializer
+    LikeListResponseSerializer,
+    LikePaginatedResponseSerializer
 )
 
 from .posts import (
     CreatePostsListSerializer,
     GetPostsListSerializer,
-    DeletePostsListSerializer,
-    PutPostsListSerializer,
-    PatchPostsListSerializer
+    UpdatePostsListSerializer
 )
 
 from .users import (
     CreateCustomUserSerializer,
     GetCustomUserSerializer,
-    DeleteCustomUserSerializer,
-    PutCustomUserSerializer,
-    PatchCustomUserSerializer,
+    UpdateCustomUserSerializer,
 
     GetMeSerializer,
     GetPostOneUserSerializer,
 
     LoginCustomUserSerializer
 )
-
-

@@ -14,12 +14,18 @@ class CreateUserLikeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Like
         fields = ['id']
-        read_only_fields = ['id']  # user призначається через perform_create()
-
-
-class DeleteUserLikeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Like
-        fields = ['id', 'post']
         read_only_fields = ['id']
 
+
+class LikeListResponseSerializer(serializers.Serializer):
+    count = serializers.IntegerField()
+    results = GetAllUserLikeSerializer(many=True)
+    user_liked = serializers.BooleanField()
+    
+
+class LikePaginatedResponseSerializer(serializers.Serializer):
+    count = serializers.IntegerField()
+    next = serializers.URLField(allow_null=True)
+    previous = serializers.URLField(allow_null=True)
+    results = GetAllUserLikeSerializer(many=True)
+    user_liked = serializers.BooleanField()

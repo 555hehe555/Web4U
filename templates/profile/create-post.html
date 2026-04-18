@@ -20,25 +20,6 @@
                                     <img id="prev_img" src="https://i0.wp.com/corvallisddc.org/wp-content/uploads/2021/10/placeholder-664.png?fit=1200%2C800&ssl=1&w=640">
                                 </label>
                             </div>
-                            <script>
-                                const imgInput = document.getElementById('id_img');
-                                const prevImg = document.getElementById('prev_img');
-
-                                imgInput.addEventListener('change', function() {
-                                    const file = this.files[0];
-                                    if (file) {
-                                        const reader = new FileReader();
-                                        reader.onload = function(e) {
-                                            prevImg.src = e.target.result;
-                                            prevImg.style.display = 'block';
-                                        }
-                                        reader.readAsDataURL(file);
-                                    } else {
-                                        prevImg.src = '';
-                                        prevImg.style.display = 'none';
-                                        }
-                                    });
-                            </script>
 
                             <div>
                                 <input type="text" name="title" class="form-control input-style mt-2"

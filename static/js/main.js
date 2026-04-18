@@ -392,7 +392,26 @@ async function showPostInfo(id) {
 }
 
 async function createPost() {
+  const imgInput = document.getElementById('id_img');
+  const prevImg = document.getElementById('prev_img');
+
+  imgInput.addEventListener('change', function() {
+      const file = this.files[0];
+      if (file) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+              prevImg.src = e.target.result;
+              prevImg.style.display = 'block';
+          }
+          reader.readAsDataURL(file);
+      } else {
+          prevImg.src = '';
+          prevImg.style.display = 'none';
+          }
+      });
+  
   const createPostForm = document.querySelector(".post_form")
+                                    
   createPostForm.addEventListener('submit', async function (e) {
     e.preventDefault()
 
@@ -671,7 +690,7 @@ function renderUserData(currentUser, container) {
            style="display:none"
     >
     
-    <a href="{% url 'create_post' %}">
+    <a href="/create-post/">
         <button type="button" class="btn btn-primary w-100 py-2 input secondary-btn">
             Створити пост
         </button>

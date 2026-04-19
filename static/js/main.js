@@ -29,7 +29,10 @@ import {
   log,
   TheAlert,
   warn,
+  blogState
 } from "./utils/index.js";
+import {initPages} from "./initPages.js";
+
 
 // Redirect any remaining console.* calls to the project's logging helpers
 if (typeof console !== 'undefined' && debugMode()) {
@@ -44,32 +47,22 @@ if (typeof console !== 'undefined' && debugMode()) {
   }
 }
 
-
 //TODO: need refactoring and dividing to extra modules
-
-let currentPage = 1;
-let totalPages = null;
 
 let isEditing = false;
 
-let paginationContainer = document.querySelector(".pagination-container");
-
-let first = document.getElementById('first');
-let prev = document.getElementById('prev');
-let next = document.getElementById('next');
-let last = document.getElementById('last');
-let current = document.getElementById('current');
+const paginationContainer = document.querySelector(".pagination-container");
 
 function renderBlogPosts(posts) {
   const withoutPlaceholders = true
 
   if ("results" in posts) {
     info("main.js", 48, "renderBlogPosts posts:", posts);
-    totalPages = Math.ceil(posts.count / 10);
+    blogState.totalPages = Math.ceil(posts.count / 10);
     if (posts.count === 0) {
       paginationContainer.style.display = "none";
       return "<img class='no-post-placeholder-img' src='/media/image/standard/no_posts_placeholder.png' width='500px' style='display: block; margin: 0 auto; border-radius: 20px'>";
-    } else if (totalPages === 1) {
+    } else if (blogState.totalPages === 1) {
       paginationContainer.style.display = "none";
     } else {
       paginationContainer.style.display = "flex";
@@ -371,14 +364,14 @@ document.addEventListener("DOMContentLoaded", function () {
   })
 });
 
-async function showBlogPage() {
+export async function showBlogPage() {
   const postContainer = document.querySelector(".own-container");
   deleteMarkup(postContainer);
-  const data = await getAllPosts(currentPage);
+  const data = await getAllPosts(blogState.currentPage);
   postContainer.insertAdjacentHTML("beforeend", renderBlogPosts(data));
 }
 
-async function showPostInfo(id) {
+export async function showPostInfo(id) {
   try {
     const postInfoContainer = document.querySelector(".container-detail");
     const post = await getPostByID(id);
@@ -391,7 +384,7 @@ async function showPostInfo(id) {
   }
 }
 
-async function createPost() {
+export async function createPost() {
   const imgInput = document.getElementById('id_img');
   const prevImg = document.getElementById('prev_img');
 
@@ -529,8 +522,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-
-async function createUser() {
+export async function createUser() {
   debug("main.js", 490, "createUser function called");
   const registerForm = document.querySelector(".login-form")
 
@@ -557,7 +549,6 @@ async function createUser() {
       await postLoginUser(csrfToken, username, password)
       window.location.href = "/profile/";
 
-
     } catch (error) {
       error("main.js", 519, "Не вдалося створити користувача:", error);
       TheAlert("main.js", 520, "Сталася помилка при створенні користувача. Спробуйте ще раз.", error);
@@ -565,7 +556,7 @@ async function createUser() {
   });
 }
 
-async function loginUser() {
+export async function loginUser() {
   debug("main.js", 524, "loginUser function called");
   const loginForm = document.querySelector(".login-form")
 
@@ -584,14 +575,15 @@ async function loginUser() {
       alert("Вхід успішний")
       window.location.href = "/profile/";
 
-    } catch (error) {
-      error("main.js", 544, "Не вдалося увійти:", error);
-      TheAlert("main.js", 546, "Сталася помилка при вході. Спробуйте ще раз.", error);
+    } catch (errorName) {
+      error("main.js", 544, "Не вдалося увійти:", errorName);
+      TheAlert("main.js", 546, "Сталася помилка при вході. Спробуйте ще раз.", errorName);
+      throw new Error('Помилка ходу.');
     }
   });
 }
 
-async function logoutUser() {
+export async function logoutUser() {
   const logoutBtn = document.querySelector(".logout-btn")
   if (!logoutBtn) return;
 
@@ -613,7 +605,7 @@ async function logoutUser() {
   });
 }
 
-async function profileUser() {
+export async function profileUser() {
   const profileContainer = document.querySelector(".main-profile");
   if (!profileContainer) return;
 
@@ -765,40 +757,4 @@ async function editProfileUser(e) {
   isEditing = !isEditing;
 }
 
-document.addEventListener("DOMContentLoaded", async () => {
-  const {pageType, id} = getPage();
-
-  if (pageType === undefined) {
-    await showBlogPage();
-
-    for (let i of [first, prev, next, last]) {
-      i.addEventListener('click', async function (e) {
-        e.preventDefault();
-        if (i.id === 'first') {
-          currentPage = 1;
-        } else if (i.id === 'prev') {
-          currentPage = currentPage > 1 ? currentPage - 1 : 1;
-        } else if (i.id === 'next') {
-          currentPage = currentPage != totalPages ? currentPage + 1 : totalPages;
-        } else if (i.id === 'last') {
-          currentPage = totalPages;
-        }
-        current.textContent = currentPage;
-        await showBlogPage();
-      });
-    }
-  } else if (pageType === "post-info" && id) {
-    await showPostInfo(id);
-  } else if (pageType === "create-post") {
-    await createPost();
-  } else if (pageType === "register") {
-    await createUser();
-  } else if (pageType === "login") {
-    await loginUser();
-  } else if (pageType === "profile") {
-    await profileUser();
-    await logoutUser();
-  } else {
-    error("main.js", 724, "Unknown page type or missing ID");
-  }
-});
+document.addEventListener("DOMContentLoaded", initPages);

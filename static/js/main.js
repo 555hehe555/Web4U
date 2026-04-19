@@ -633,8 +633,8 @@ function renderUserData(currentUser, container) {
     ["Ваш пароль", '********', true, "user-password"],
     ["Ваша пошта", currentUser.email, false, "user-email"],
     ["Ваша дата реєстрації", formatDate(currentUser.date_joined), false, "user-date-joined"],
-    ["Ваше імʼя", currentUser.first_name, true, "user-first-name"],
-    ["Ваше прізвище", currentUser.last_name, true, "user-last-name"],
+    ["Ваше імʼя", currentUser.first_name, true, "user-first_name"],
+    ["Ваше прізвище", currentUser.last_name, true, "user-last_name"],
     ["Роль", currentUser.is_staff ? "адміністратор" : "користувач", false, "user-is-staff"],
   ];
   
@@ -673,14 +673,17 @@ function renderUserData(currentUser, container) {
                style="display:none"
         >
     </div>
-    <p id="prev_description_p" class="description user-data-row user-data-p">Добавте свій
-        чарівний опис</p>
-    <input id="user-data-row" type="text"
-           class="form-control description-input user-data-input"
-           placeholder=""
-           disabled
-           style="display:none"
-    >
+    
+    <p style="margin:15px">Опис профілю:</p>
+    
+    <div class="user-data-row row" data-editable="${true}">
+        <p class="description user-data-p">${currentUser.description ? currentUser.description : ""}</p>
+        <input id="description" type="text"
+               class="form-control description-input user-data-input"
+               placeholder='${currentUser.description ? currentUser.description : ""}'
+               style="display:none"
+        >
+    </div>
     
     <a href="/create-post/">
         <button type="button" class="btn btn-primary w-100 py-2 input secondary-btn">

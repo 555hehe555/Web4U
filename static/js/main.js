@@ -674,7 +674,7 @@ function renderUserData(currentUser, container) {
         >
     </div>
     
-    <p style="margin:15px">Опис профілю:</p>
+    <p style="margin:10px">Опис профілю:</p>
     
     <div class="user-data-row row" data-editable="${true}">
         <p class="description user-data-p">${currentUser.description ? currentUser.description : ""}</p>
@@ -702,11 +702,6 @@ function renderUserData(currentUser, container) {
       </div>
     </div>
   `;
-
-  // const previewInputImg = document.querySelector("#prev_input_img");
-
-  // const username = document.querySelector("#prev_username_h");
-  // const description = document.querySelector("#prev_description_p");
 }
 
 async function editProfileUser(e) {
